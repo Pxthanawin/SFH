@@ -1,7 +1,4 @@
 -- Script
-if getgenv().ScriptRunning then return end
-getgenv().ScriptRunning = true
-
 repeat wait() until game:IsLoaded()
 
 -- White Screen
@@ -9,6 +6,9 @@ if white_screen then
 	local RunService = game:GetService("RunService")
 	RunService:Set3dRenderingEnabled(false)
 end
+
+if getgenv().ScriptRunning then return end
+getgenv().ScriptRunning = true
 
 -- Check Money and Level
 while task.wait() do

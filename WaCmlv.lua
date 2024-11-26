@@ -1,7 +1,3 @@
--- Config
-getgenv().wait_time = 300
-getgenv().white_screen = true
-
 -- Script
 if getgenv().ScriptRunning then return end
 getgenv().ScriptRunning = true

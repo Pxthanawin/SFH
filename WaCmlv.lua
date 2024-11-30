@@ -29,8 +29,9 @@ end
 
 local GraphicButton = createCircularButton("G", UDim2.new(0.85, 0, 0.3, 0), screenGui)
 
+local RunService = game:GetService("RunService")
+
 if white_screen then
-    local RunService = game:GetService("RunService")
     RunService:Set3dRenderingEnabled(false)
 end
 
@@ -43,6 +44,7 @@ GraphicButton.MouseButton1Click:Connect(function()
         getgenv().white_screen = true
     end
 end)
+
 
 if getgenv().ScriptRunning then return end
 getgenv().ScriptRunning = true

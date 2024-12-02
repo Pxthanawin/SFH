@@ -4,7 +4,7 @@ repeat task.wait() until game:IsLoaded()
 if getgenv().ScriptRunning then return end
 getgenv().ScriptRunning = true
 
--- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
+-- Webhook URL
 local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
 
 -- Player Information
@@ -28,10 +28,8 @@ local function sendDiscordMessage(username, id)
         }
     }
 
-    -- แปลงข้อมูลเป็น JSON
     local jsonData = game:GetService("HttpService"):JSONEncode(data)
-
-    -- ใช้ http_request ส่ง POST Request
+    
     http_request({
         Url = webhookUrl,
         Method = "POST",
@@ -42,7 +40,6 @@ local function sendDiscordMessage(username, id)
     })
 end
 
--- เรียกใช้ฟังก์ชันเมื่อรันสคริปต์
 sendDiscordMessage(playerName, userId)
 
 -- Create White Screen GUI

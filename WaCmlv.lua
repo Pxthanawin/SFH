@@ -1,51 +1,17 @@
+-- Configurations
+getgenv().white_screen = true
+getgenv().wait_time = 15
+
 -- Script Initialization
 repeat task.wait() until game:IsLoaded()
 
 if getgenv().ScriptRunning then return end
 getgenv().ScriptRunning = true
 
--- Webhook URL
-local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
-
--- Player Information
-local playerName = game.Players.LocalPlayer.Name
-local userId = game.Players.LocalPlayer.UserId
-
--- Function to Send Discord Message
-local function sendDiscordMessage(username, id)
-    local data = {
-        ["content"] = "",
-        ["embeds"] = {
-            {
-                ["title"] = "A player has executed the script!",
-                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d", username, id),
-                ["color"] = 16711680, -- สีแดง
-                ["footer"] = {
-                    ["text"] = "Script Execution Monitor",
-                },
-                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ") -- เวลาปัจจุบัน (UTC)
-            }
-        }
-    }
-
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
-    
-    http_request({
-        Url = webhookUrl,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = jsonData
-    })
-end
-
-sendDiscordMessage(playerName, userId)
-
 -- Create White Screen GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "CircularButtons"
-screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGui.Parent = game:GetService("CoreGui") -- เปลี่ยน Parent เป็น CoreGui
 
 local function createCircularButton(name, position, parent)
     local button = Instance.new("TextButton")
@@ -82,6 +48,7 @@ graphicButton.MouseButton1Click:Connect(function()
     RunService:Set3dRenderingEnabled(not getgenv().white_screen)
 end)
 
+
 -- Monitor Money and Level Changes
 task.spawn(function()
     local countM = 0
@@ -112,3 +79,44 @@ task.spawn(function()
         end
     end
 end)
+
+--
+
+-- Webhook URL
+local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
+
+-- Player Information
+local playerName = game.Players.LocalPlayer.Name
+local userId = game.Players.LocalPlayer.UserId
+
+-- Function to Send Discord Message
+local function sendDiscordMessage(username, id)
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "A player has executed the script!",
+                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d", username, id),
+                ["color"] = 16711680,
+                ["footer"] = {
+                    ["text"] = "Script Execution Monitor",
+                },
+                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+    }
+
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+
+    http_request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
+
+-- เรียกใช้ฟังก์ชันเมื่อรันสคริปต์
+sendDiscordMessage(playerName, userId)

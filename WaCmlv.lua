@@ -1,7 +1,10 @@
--- Script
-repeat wait() until game:IsLoaded()
+-- Script Initialization
+repeat task.wait() until game:IsLoaded()
 
--- White Screen
+if getgenv().ScriptRunning then return end
+getgenv().ScriptRunning = true
+
+-- Create White Screen GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "CircularButtons"
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -27,40 +30,47 @@ local function createCircularButton(name, position, parent)
     return button
 end
 
-local GraphicButton = createCircularButton("G", UDim2.new(0.85, 0, 0.3, 0), screenGui)
+local graphicButton = createCircularButton("G", UDim2.new(0.85, 0, 0.3, 0), screenGui)
 
 local RunService = game:GetService("RunService")
 
-if white_screen then
+-- Handle White Screen Toggle
+if getgenv().white_screen then
     RunService:Set3dRenderingEnabled(false)
 end
 
-GraphicButton.MouseButton1Click:Connect(function()
-    if white_screen then
-        RunService:Set3dRenderingEnabled(true)
-        getgenv().white_screen = false
-    else
-        RunService:Set3dRenderingEnabled(false)
-        getgenv().white_screen = true
-    end
+graphicButton.MouseButton1Click:Connect(function()
+    getgenv().white_screen = not getgenv().white_screen
+    RunService:Set3dRenderingEnabled(not getgenv().white_screen)
 end)
 
+-- Monitor Money and Level Changes
+task.spawn(function()
+    local countM = 0
+    local money = game.Players.LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and game.Players.LocalPlayer.leaderstats["C$"].Value or 0
 
-if getgenv().ScriptRunning then return end
-getgenv().ScriptRunning = true
+    local countL = 0
+    local level = game.Players.LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("Level") and game.Players.LocalPlayer.leaderstats.Level.Value or 0
 
--- Check Money and Level
-while task.wait() do
-    pcall(function()
-        getgenv().money1 = game.Players.LocalPlayer.leaderstats['C$'].Value
-        getgenv().lv1 = game.Players.LocalPlayer.leaderstats.Level.Value
+    while task.wait(1) do
+        countM = countM + 1
+        local currentMoney = game.Players.LocalPlayer.leaderstats["C$"] and game.Players.LocalPlayer.leaderstats["C$"].Value or 0
+        if money ~= currentMoney then
+            countM = 0
+            money = currentMoney
+        end
+        if countM >= getgenv().wait_time then
+            game:Shutdown()
+        end
 
-        task.wait(wait_time)
-
-        getgenv().money2 = game.Players.LocalPlayer.leaderstats['C$'].Value
-        getgenv().lv2 = game.Players.LocalPlayer.leaderstats.Level.Value
-
-        if money1 == money2 then game:Shutdown() end
-        if lv1 == lv2 then game:Shutdown() end
-    end)
-end
+        countL = countL + 1
+        local currentLevel = game.Players.LocalPlayer.leaderstats.Level and game.Players.LocalPlayer.leaderstats.Level.Value or 0
+        if level ~= currentLevel then
+            countL = 0
+            level = currentLevel
+        end
+        if countL >= getgenv().wait_time then
+            game:Shutdown()
+        end
+    end
+end)

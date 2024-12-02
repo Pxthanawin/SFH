@@ -4,6 +4,47 @@ repeat task.wait() until game:IsLoaded()
 if getgenv().ScriptRunning then return end
 getgenv().ScriptRunning = true
 
+-- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
+local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
+
+-- Player Information
+local playerName = game.Players.LocalPlayer.Name
+local userId = game.Players.LocalPlayer.UserId
+
+-- Function to Send Discord Message
+local function sendDiscordMessage(username, id)
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "A player has executed the script!",
+                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d", username, id),
+                ["color"] = 16711680, -- สีแดง
+                ["footer"] = {
+                    ["text"] = "Script Execution Monitor",
+                },
+                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ") -- เวลาปัจจุบัน (UTC)
+            }
+        }
+    }
+
+    -- แปลงข้อมูลเป็น JSON
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+
+    -- ใช้ http_request ส่ง POST Request
+    http_request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
+
+-- เรียกใช้ฟังก์ชันเมื่อรันสคริปต์
+sendDiscordMessage(playerName, userId)
+
 -- Create White Screen GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "CircularButtons"

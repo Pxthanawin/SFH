@@ -31,11 +31,15 @@ local function sellAllItems()
 end
 
 -- ซื้อไอเท็ม
-purchaseItem("Carbon Rod", "Rod", 1)
-purchaseItem("Reinforced Rod", "Rod", 1)
-purchaseItem("Aurora Rod", "Rod", 1)
-purchaseItem("Trident Rod", "Rod", 1)
-purchaseItem("Kings Rod", "Rod", 1)
+while task.wait(3) do
+    pcall(function()
+        purchaseItem("Carbon Rod", "Rod", 1)
+        purchaseItem("Reinforced Rod", "Rod", 1)
+        if AuroraRod then purchaseItem("Aurora Rod", "Rod", 1) end
+        if TridentRod then purchaseItem("Trident Rod", "Rod", 1) end
+        if KingsRod then purchaseItem("Kings Rod", "Rod", 1) end
+    end)
+end
 
 -- วนลูปขายไอเท็มทุก 120 วินาที
 while task.wait(120) do

@@ -99,7 +99,7 @@ task.spawn(function()
         end
         if countM >= 15 then
             pcall(LocalPlayer.Character:FindFirstChild(rodNameCache).events.reset:FireServer())
-            task.wait(9)
+            task.wait(11)
         end
     end
 end)

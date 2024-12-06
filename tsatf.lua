@@ -87,17 +87,17 @@ task.spawn(farmFish)
 -- Monitor Money and Level Changes
 task.spawn(function()
     repeat task.wait(1) until ScriptRunning
-    local countM = 0
-    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
+    local ccountM = 0
+    local moneyy = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
     while task.wait(1) do
-        countM += 1
-        local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-        if money ~= currentMoney then
-            countM = 0
-            money = currentMoney
+        ccountM += 1
+        local currentMoneyy = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+        if moneyy ~= currentMoneyy then
+            ccountM = 0
+            moneyy = currentMoneyy
         end
-        if countM >= 20 then
+        if ccountM >= 20 then
             pcall(LocalPlayer.Character:FindFirstChild(rodNameCache).events.reset:FireServer())
             task.wait(20)
         end

@@ -67,7 +67,7 @@ local function farmFish()
             end
         else
             rod.events.cast:FireServer(100)
-            task.wait(0.1)
+            task.wait(0.5)
         end
     end
 end
@@ -83,3 +83,22 @@ end)
 
 -- Spawn the fishing loop
 task.spawn(farmFish)
+
+-- Monitor Money and Level Changes
+task.spawn(function()
+    repeat task.wait(1) until ScriptRunning
+    local countM = 0
+    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
+
+    while task.wait(1) do
+        countM += 1
+        local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+        if money ~= currentMoney then
+            countM = 0
+            money = currentMoney
+        end
+        if countM >= 10 then
+            pcall(LocalPlayer.Character:FindFirstChild(rodNameCache).events.reset:FireServer())
+        end
+    end
+end)

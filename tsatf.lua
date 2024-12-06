@@ -67,7 +67,7 @@ local function farmFish()
             end
         else
             rod.events.cast:FireServer(100)
-            task.wait(0.5)
+            task.wait(0.3)
         end
     end
 end
@@ -99,6 +99,7 @@ task.spawn(function()
         end
         if countM >= 15 then
             pcall(LocalPlayer.Character:FindFirstChild(rodNameCache).events.reset:FireServer())
+            task.wait(9)
         end
     end
 end)

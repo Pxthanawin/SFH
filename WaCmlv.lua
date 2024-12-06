@@ -1,7 +1,3 @@
--- Configurations
-getgenv().white_screen = true
-getgenv().wait_time = 15
-
 -- Script Initialization
 repeat task.wait() until game:IsLoaded()
 

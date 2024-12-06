@@ -97,9 +97,9 @@ task.spawn(function()
             countM = 0
             money = currentMoney
         end
-        if countM >= 15 then
+        if countM >= 20 then
             pcall(LocalPlayer.Character:FindFirstChild(rodNameCache).events.reset:FireServer())
-            task.wait(11)
+            task.wait(20)
         end
     end
 end)

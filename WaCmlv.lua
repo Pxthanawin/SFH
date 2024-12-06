@@ -54,11 +54,11 @@ task.spawn(function()
     local countM = 0
     local money = game.Players.LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and game.Players.LocalPlayer.leaderstats["C$"].Value or 0
 
-    local countL = 0
-    local level = game.Players.LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("Level") and game.Players.LocalPlayer.leaderstats.Level.Value or 0
+    -- local countL = 0
+    -- local level = game.Players.LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("Level") and game.Players.LocalPlayer.leaderstats.Level.Value or 0
 
     while task.wait(1) do
-        countM = countM + 1
+        countM += 1
         local currentMoney = game.Players.LocalPlayer.leaderstats["C$"] and game.Players.LocalPlayer.leaderstats["C$"].Value or 0
         if money ~= currentMoney then
             countM = 0
@@ -68,7 +68,8 @@ task.spawn(function()
             game:Shutdown()
         end
 
-        countL = countL + 1
+        --[[
+        countL += 1
         local currentLevel = game.Players.LocalPlayer.leaderstats.Level and game.Players.LocalPlayer.leaderstats.Level.Value or 0
         if level ~= currentLevel then
             countL = 0
@@ -76,7 +77,7 @@ task.spawn(function()
         end
         if countL >= getgenv().wait_time then
             game:Shutdown()
-        end
+        end]]
     end
 end)
 

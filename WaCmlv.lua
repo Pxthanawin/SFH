@@ -1,3 +1,9 @@
+-- Configurations
+-- getgenv().white_screen = true
+-- getgenv().OptimizePerformance = true
+-- getgenv().wait_time = 300
+
+
 -- Script Initialization
 repeat task.wait() until game:IsLoaded()
 
@@ -44,7 +50,6 @@ graphicButton.MouseButton1Click:Connect(function()
     RunService:Set3dRenderingEnabled(not getgenv().white_screen)
 end)
 
-
 -- Monitor Money and Level Changes
 task.spawn(function()
     local countM = 0
@@ -76,3 +81,117 @@ task.spawn(function()
         end]]
     end
 end)
+
+local function OptimizeGamePerformance()
+    if not game:IsLoaded() then repeat wait() until game:IsLoaded() end
+
+    -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
+    local function optimizeObject(obj)
+        pcall(function()
+            if obj:IsA("BasePart") then
+                obj.Material = Enum.Material.Plastic
+                obj.Reflectance = 0
+                obj.TopSurface = Enum.SurfaceType.Smooth
+                obj.CastShadow = false
+            elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                obj.Transparency = 1
+            elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
+                obj.Enabled = false
+            elseif obj:IsA("Sound") then
+                obj:Stop()
+                obj.Volume = 0
+            elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+                obj.Enabled = false
+            end
+        end)
+    end
+
+    -- ปรับแต่ง Lighting
+    local Lighting = game:GetService("Lighting")
+    Lighting.GlobalShadows = false
+    Lighting.Brightness = 1
+    Lighting.FogEnd = 1e6
+    Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+    Lighting.EnvironmentSpecularScale = 0
+    Lighting.EnvironmentDiffuseScale = 0
+
+    for _, effect in ipairs(Lighting:GetChildren()) do
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
+            effect.Enabled = false
+        end
+    end
+
+    -- ปรับแต่ง Terrain
+    local Terrain = workspace:FindFirstChild("Terrain")
+    if Terrain then
+        Terrain.WaterWaveSize = 0
+        Terrain.WaterWaveSpeed = 0
+        Terrain.WaterReflectance = 0
+        Terrain.WaterTransparency = 1
+        for _, child in ipairs(Terrain:GetChildren()) do
+            optimizeObject(child)
+        end
+        Terrain.ChildAdded:Connect(optimizeObject)
+    end
+
+    -- Hook ระบบเพื่อลดการสร้างข้อมูลที่ไม่จำเป็น (ถ้ามี)
+    if hookfunction and setreadonly then
+        local mt = getrawmetatable(game)
+        local old = mt.__newindex
+        setreadonly(mt, false)
+        local sda
+        sda = hookfunction(old, function(t, k, v)
+            if k == "Material" then
+                if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
+                    v = Enum.Material.Plastic
+                end
+            elseif k == "TopSurface" then
+                v = "Smooth"
+            elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
+                v = 0
+            elseif k == "WaterTransparency" then
+                v = 1
+            elseif k == "GlobalShadows" then
+                v = false
+            end
+            return sda(t, k, v)
+        end)
+        setreadonly(mt, true)
+    end
+
+    -- ปรับแต่งวัตถุทั้งหมดใน Workspace
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        optimizeObject(obj)
+    end
+    workspace.DescendantAdded:Connect(optimizeObject)
+
+    -- ลบ Decals และ Textures ที่ไม่ได้ใช้งาน
+    for _, texture in ipairs(workspace:GetDescendants()) do
+        if texture:IsA("Texture") or texture:IsA("Decal") then
+            if not texture.Parent then
+                texture:Destroy()
+            end
+        end
+    end
+
+    -- ลดคุณภาพการเรนเดอร์
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+    -- ลดฟิสิกส์ในเกม
+    local PhysicsService = game:GetService("PhysicsService")
+    if PhysicsService then
+        pcall(function()
+            PhysicsService.PhysicsEnvironmentalThrottle = nil
+        end)
+    else
+        warn("PhysicsService not available.")
+    end
+
+    -- ล้างหน่วยความจำ
+    game:GetService("Debris"):ClearAllChildren()
+end
+
+-- เรียกใช้ฟังก์ชัน
+if getgenv().OptimizePerformance then
+    OptimizeGamePerformance()
+end

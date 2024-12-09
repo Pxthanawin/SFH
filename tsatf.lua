@@ -252,7 +252,7 @@ end)
 -- 
 
 local function OptimizeGamePerformance()
-    return task.wait() until getgenv().ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)
         pcall(function()

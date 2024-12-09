@@ -40,7 +40,7 @@ local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
 task.spawn(function()
-    repeat task.wait() until getgenv().ScriptRunning
+    repeat task.wait() until ScriptRunning
     task.wait(1)
     humanoid.Sit = true
     humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
@@ -98,15 +98,14 @@ local function purchaseItem(itemName, itemType, quantity)
     end
 end
 
---[[]]
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
-local function EquipRod(rodName)
+local function EquipRod()
     repeat task.wait() until getgenv().ScriptRunning
-    while rodNameCache ~= rodName do
-        if StatsRod:FindFirstChild(rodName) then
-            if rodNameCache ~= rodName then
-                equiprod:FireServer(rodName)
-                rodNameCache = rodName
+    while rodNameCache ~= "Steady Rod" do
+        if StatsRod:FindFirstChild("Steady Rod") then
+            if rodNameCache ~= "Steady Rod" then
+                equiprod:FireServer("Steady Rod")
+                rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
             end
         end
         task.wait(1)
@@ -197,7 +196,7 @@ local tweenpos = function()
 end
 
 task.spawn(function()
-    repeat task.wait() until getgenv().ScriptRunning
+    repeat task.wait() until ScriptRunning
     task.wait(1)
     humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
     currentPosition = humanoidRootPart.Position
@@ -205,6 +204,7 @@ task.spawn(function()
     tweenpos()
     while task.wait(1) do
         pcall(function()
+            repeat task.wait() until getgenv().StartFarm
             local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
             local currentPosition = humanoidRootPart.Position
             Distance = (targetPosition - currentPosition).Magnitude
@@ -220,13 +220,14 @@ end)
 
 -- Spawn the fishing loop
 task.spawn(farmFish)
-task.spawn(purchaseItem("Steady Rod", "Rod", 1))
-task.spawn(EquipRod("Steady Rod"))
 task.spawn(function()
+    purchaseItem("Steady Rod", "Rod", 1)
+end)
+task.spawn(EquipRod)
+task.spawn(function()
+    repeat task.wait() until getgenv().StartFarm
     while task.wait(Sell_Every) do
-        pcall(function()
-            workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
-        end)
+        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
     end
 end)
 
@@ -253,7 +254,8 @@ end)
 -- 
 
 local function OptimizeGamePerformance()
-    repeat task.wait() until getgenv().ScriptRunning
+    if not game:IsLoaded() then repeat wait() until game:IsLoaded() end
+
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)
         pcall(function()
@@ -370,7 +372,7 @@ end
 -- Create White Screen GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "CircularButtons"
-screenGui.Parent = game:GetService("CoreGui")
+screenGui.Parent = game:GetService("CoreGui") -- เปลี่ยน Parent เป็น CoreGui
 
 local function createCircularButton(name, position, parent)
     local button = Instance.new("TextButton")

@@ -98,13 +98,14 @@ local function purchaseItem(itemName, itemType, quantity)
     end
 end
 
+--[[]]
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
-local function EquipRod()
-    repeat task.wait() until rodNameCache
-    while rodNameCache == "Steady Rod" do
-        if StatsRod:FindFirstChild("Steady Rod") then
-            if rodNameCache ~= "Steady Rod" then
-                equiprod:FireServer("Steady Rod")
+local function EquipRod(rodName)
+    repeat task.wait() until ScriptRunning
+    while rodNameCache ~= rodName do
+        if StatsRod:FindFirstChild(rodName) then
+            if rodNameCache ~= rodName then
+                equiprod:FireServer(rodName)
                 rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
             end
         end
@@ -221,7 +222,7 @@ end)
 -- Spawn the fishing loop
 task.spawn(farmFish)
 task.spawn(purchaseItem("Steady Rod", "Rod", 1))
-task.spawn(EquipRod)
+task.spawn(EquipRod("Steady Rod"))
 task.spawn(function()
     while task.wait(Sell_Every) do
         workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()

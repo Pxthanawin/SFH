@@ -103,14 +103,12 @@ local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod
 local function EquipRod(rodName)
     repeat task.wait() until ScriptRunning
     while rodNameCache ~= rodName do
-        pcall(function()
-            if StatsRod:FindFirstChild(rodName) then
-                if rodNameCache ~= rodName then
-                    equiprod:FireServer(rodName)
-                    rodNameCache = rodName
-                end
+        if StatsRod:FindFirstChild(rodName) then
+            if rodNameCache ~= rodName then
+                equiprod:FireServer(rodName)
+                rodNameCache = rodName
             end
-        end)
+        end
         task.wait(1)
     end
 end

@@ -252,8 +252,7 @@ end)
 -- 
 
 local function OptimizeGamePerformance()
-    if not game:IsLoaded() then repeat wait() until game:IsLoaded() end
-
+    return task.wait() until getgenv().ScriptRunning
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)
         pcall(function()
@@ -370,7 +369,7 @@ end
 -- Create White Screen GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "CircularButtons"
-screenGui.Parent = game:GetService("CoreGui") -- เปลี่ยน Parent เป็น CoreGui
+screenGui.Parent = game:GetService("CoreGui")
 
 local function createCircularButton(name, position, parent)
     local button = Instance.new("TextButton")

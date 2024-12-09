@@ -102,9 +102,9 @@ end
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
 local function EquipRod(rodName)
     repeat task.wait() until ScriptRunning
-    while rodNameCache ~= rodName do
+    while ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value ~= rodName do
         if StatsRod:FindFirstChild(rodName) then
-            if rodNameCache ~= rodName then
+            if ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value ~= rodName then
                 equiprod:FireServer(rodName)
                 rodNameCache = rodName
             end
@@ -225,7 +225,7 @@ task.spawn(purchaseItem("Steady Rod", "Rod", 1))
 task.spawn(EquipRod("Steady Rod"))
 task.spawn(function()
     while task.wait(Sell_Every) do
-        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
+        pcall(workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer())
     end
 end)
 

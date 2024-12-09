@@ -107,7 +107,7 @@ local function EquipRod(rodName)
             if StatsRod:FindFirstChild(rodName) then
                 if rodNameCache ~= rodName then
                     equiprod:FireServer(rodName)
-                    rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+                    rodNameCache = rodName
                 end
             end
         end)

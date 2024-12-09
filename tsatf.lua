@@ -147,6 +147,7 @@ local function farmFish()
                     if rod.values.bite.Value then
                         ReplicatedStorage.events.reelfinished:FireServer(100, true)
                         task.wait() -- Reduced delay
+                        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
                     else
                         autoClickButton()
                         RunService.Heartbeat:Wait() -- Smoother frame sync
@@ -224,12 +225,13 @@ task.spawn(function()
     purchaseItem("Steady Rod", "Rod", 1)
 end)
 task.spawn(EquipRod)
+--[[
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
     while task.wait(getgenv().Sell_Every) do
         workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
     end
-end)
+end)]]
 
 -- Monitor Money Changes
 task.spawn(function()

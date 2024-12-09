@@ -102,9 +102,9 @@ end
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
 local function EquipRod(rodName)
     repeat task.wait() until getgenv().ScriptRunning
-    while ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value ~= rodName do
+    while rodNameCache ~= rodName do
         if StatsRod:FindFirstChild(rodName) then
-            if ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value ~= rodName then
+            if rodNameCache ~= rodName then
                 equiprod:FireServer(rodName)
                 rodNameCache = rodName
             end
@@ -197,7 +197,7 @@ local tweenpos = function()
 end
 
 task.spawn(function()
-    repeat task.wait() until ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     task.wait(1)
     humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
     currentPosition = humanoidRootPart.Position
@@ -205,7 +205,6 @@ task.spawn(function()
     tweenpos()
     while task.wait(1) do
         pcall(function()
-            repeat task.wait() until getgenv().StartFarm
             local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
             local currentPosition = humanoidRootPart.Position
             Distance = (targetPosition - currentPosition).Magnitude

@@ -40,7 +40,7 @@ local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
 task.spawn(function()
-    repeat task.wait() until ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     task.wait(1)
     humanoid.Sit = true
     humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
@@ -101,7 +101,7 @@ end
 --[[]]
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
 local function EquipRod(rodName)
-    repeat task.wait() until ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     while ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value ~= rodName do
         if StatsRod:FindFirstChild(rodName) then
             if ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value ~= rodName then
@@ -225,7 +225,9 @@ task.spawn(purchaseItem("Steady Rod", "Rod", 1))
 task.spawn(EquipRod("Steady Rod"))
 task.spawn(function()
     while task.wait(Sell_Every) do
-        pcall(workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer())
+        pcall(function()
+            workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
+        end)
     end
 end)
 

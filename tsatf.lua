@@ -18,6 +18,7 @@ repeat
     VirtualInputManager:SendKeyEvent(true,"LeftControl",false,game)
     VirtualInputManager:SendKeyEvent(false,"LeftControl",false,game)
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
+if getgenv().ScriptRunning then return end
 getgenv().ScriptRunning = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

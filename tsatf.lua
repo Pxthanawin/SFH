@@ -118,9 +118,8 @@ local function farmFish()
     task.wait(1)
     while Config["Farm Fish"] do
         -- Cache rodName to avoid repeated lookups
-        if not rodNameCache then
-            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-        end
+
+        rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
         local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
 

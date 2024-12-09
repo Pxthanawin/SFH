@@ -220,13 +220,11 @@ end)
 
 -- Spawn the fishing loop
 task.spawn(farmFish)
-task.spawn(function()
-    purchaseItem("Steady Rod", "Rod", 1)
-end)
+task.spawn(purchaseItem("Steady Rod", "Rod", 1))
 task.spawn(EquipRod)
 task.spawn(function()
     while task.wait(Sell_Every) do
-        workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
     end
 end)
 

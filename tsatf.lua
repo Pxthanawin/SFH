@@ -9,9 +9,9 @@ local Config = {
 }
 
 repeat task.wait() until game:IsLoaded()
-
 task.wait(1)
 game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("finishedloading"):FireServer()
+
 repeat
     task.wait()
     local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -226,7 +226,7 @@ end)
 task.spawn(EquipRod)
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
-    while task.wait(Sell_Every) do
+    while task.wait(getgenv().Sell_Every) do
         workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
     end
 end)
@@ -234,7 +234,7 @@ end)
 -- Monitor Money Changes
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
-    task.wait(30)
+    task.wait(20)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 

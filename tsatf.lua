@@ -408,3 +408,25 @@ graphicButton.MouseButton1Click:Connect(function()
     getgenv().white_screen = not getgenv().white_screen
     RunService:Set3dRenderingEnabled(not getgenv().white_screen)
 end)
+
+-- รายการการตั้งค่าที่ต้องการเปลี่ยน
+local settings = {
+    disableCamShake = true,
+    willautosell_event = true,
+    willautosell_exotic = true,
+    willautosell_relic = true,
+    willautosell_mythical = true,
+    willautosell_legendary = true
+}
+
+-- ส่งคำสั่งเปลี่ยนการตั้งค่าทีละรายการ
+local ChangeSetting = game:GetService("Players").LocalPlayer.PlayerGui.hud.safezone.menu.menu_safezone:FindFirstChild("ChangeSetting")
+for settingName, settingValue in pairs(settings) do
+    local args = {
+        [1] = settingName,
+        [2] = settingValue
+    }
+    pcall(function()
+        ChangeSetting:FireServer(unpack(args))
+    end)
+end

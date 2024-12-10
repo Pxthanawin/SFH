@@ -414,7 +414,6 @@ local settings = {
     disableCamShake = true,
     willautosell_event = true,
     willautosell_exotic = true,
-    willautosell_relic = true,
     willautosell_mythical = true,
     willautosell_legendary = true
 }

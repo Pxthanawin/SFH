@@ -225,11 +225,9 @@ task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
     task.wait(10)
     while getgenv().Sell_Every do
-        pcall(function()
-            workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,7,0)
-            task.wait(getgenv().Sell_Every)
-            workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
-        end)
+        workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,7,0)
+        task.wait(getgenv().Sell_Every)
+        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
     end
 end)
 
@@ -247,7 +245,10 @@ task.spawn(function()
             countM = 0
             money = currentMoney
         end
-        if countM >= 30 then
+        if countM == 20 then
+            pcall(game:GetService("Players").LocalPlayer.Character:FindFirstChild("rodNameCache").events.reset:FireServer())
+        end
+        if countM >= 40 then
             game:Shutdown()
         end
     end

@@ -9,9 +9,6 @@ local Config = {
 }
 
 repeat task.wait() until game:IsLoaded()
-task.wait(1)
-game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("finishedloading"):FireServer()
-
 repeat
     task.wait()
     local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -40,7 +37,7 @@ local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
 task.spawn(function()
-    repeat task.wait() until ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     task.wait(1)
     humanoid.Sit = true
     humanoid:GetPropertyChangedSignal("Sit"):Connect(function()
@@ -91,7 +88,7 @@ end
 -- ฟังก์ชันสำหรับส่งคำขอซื้อไอเท็ม
 local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
 local function purchaseItem(itemName, itemType, quantity)
-    repeat task.wait() until ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     while not StatsRod:FindFirstChild(itemName) do
         ReplicatedStorage.events.purchase:FireServer(itemName, itemType, quantity)
         task.wait(1)
@@ -195,7 +192,7 @@ local tweenpos = function()
 end
 
 task.spawn(function()
-    repeat task.wait() until ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
     task.wait(1)
     humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
     currentPosition = humanoidRootPart.Position
@@ -204,8 +201,8 @@ task.spawn(function()
     while task.wait(1) do
         pcall(function()
             repeat task.wait() until getgenv().StartFarm
-            local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-            local currentPosition = humanoidRootPart.Position
+            humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+            currentPosition = humanoidRootPart.Position
             Distance = (targetPosition - currentPosition).Magnitude
             if Distance >= 400 then
                 tweenpos()
@@ -223,10 +220,16 @@ task.spawn(function()
     purchaseItem("Steady Rod", "Rod", 1)
 end)
 task.spawn(EquipRod)
+
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
-    while task.wait(getgenv().Sell_Every) do
-        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
+    task.wait(10)
+    while getgenv().Sell_Every do
+        pcall(function()
+            workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,7,0)
+            task.wait(getgenv().Sell_Every)
+            workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
+        end)
     end
 end)
 
@@ -253,7 +256,6 @@ end)
 -- 
 
 local function OptimizeGamePerformance()
-    if not game:IsLoaded() then repeat wait() until game:IsLoaded() end
 
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)

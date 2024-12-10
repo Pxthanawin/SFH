@@ -1,4 +1,3 @@
-
 --[[
 getgenv().Sell_Every = 120
 getgenv().white_screen = true
@@ -103,6 +102,7 @@ local function EquipRod()
         if StatsRod:FindFirstChild("Steady Rod") then
             if rodNameCache ~= "Steady Rod" then
                 equiprod:FireServer("Steady Rod")
+                rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
             end
         end
         task.wait(1)

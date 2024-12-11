@@ -136,6 +136,7 @@ local function EquipRod()
         end
         task.wait(1)
     end
+    --[[
     while rodNameCache ~= "Trident Rod" do
         if StatsRod:FindFirstChild("Trident Rod") then
             if rodNameCache ~= "Trident Rod" then
@@ -143,7 +144,7 @@ local function EquipRod()
             end
         end
         task.wait(1)
-    end
+    end]]
 end
 
 -- Main fishing function optimized

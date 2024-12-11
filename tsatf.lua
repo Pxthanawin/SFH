@@ -1,4 +1,3 @@
-task.wait(15)
 --[[
 getgenv().Sell_Every = 120
 getgenv().white_screen = true
@@ -18,6 +17,11 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualUser = game:GetService("VirtualUser")
 local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
+
+repeat
+	LocalPlayer = Players.LocalPlayer
+	wait()
+until LocalPlayer
 
 repeat
 

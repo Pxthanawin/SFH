@@ -1,4 +1,4 @@
-
+task.wait(15)
 --[[
 getgenv().Sell_Every = 120
 getgenv().white_screen = true

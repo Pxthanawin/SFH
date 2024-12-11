@@ -181,59 +181,54 @@ local tweenpos = function()
 
     tween.Completed:Connect(function()
 
-            task.wait(2)
-            LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-            task.wait(1)
-            LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-  local Players = game:GetService("Players")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local GuiService = game:GetService("GuiService")
-local LocalPlayer = Players.LocalPlayer
+        task.wait(2)
+        LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+        task.wait(1)
+        LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+        local Players = game:GetService("Players")
+        local VirtualInputManager = game:GetService("VirtualInputManager")
+        local GuiService = game:GetService("GuiService")
+        local LocalPlayer = Players.LocalPlayer
 
-for i = 1, 2 do
+        for i = 1, 2 do
 
-    local camera = workspace.Camera
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(897.047241, -767.422974, 972.87439, -0.611101508, -0.487700284, 0.623460829, 1.4901163e-08, 0.787643313, 0.616131485, -0.791552305, 0.376518875, -0.481330007)
+            local camera = workspace.Camera
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new(897.047241, -767.422974, 972.87439, -0.611101508, -0.487700284, 0.623460829, 1.4901163e-08, 0.787643313, 0.616131485, -0.791552305, 0.376518875, -0.481330007)
 
-    local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
-    if MiloMerchant then
-        MiloMerchant.HumanoidRootPart.CFrame = targetCFrame
+            local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+            if MiloMerchant then
+                MiloMerchant.HumanoidRootPart.CFrame = targetCFrame
 
-        local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
-        if dialogPrompt then
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
-            task.wait()
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
-        end
-    end
-
-    task.wait()
-
-    local options = PlayerGui:WaitForChild("options", math.huge)
-
-    local safezone = options:FindFirstChild("safezone")
-    if safezone then
-        local option2 = safezone:FindFirstChild("2option")
-        if option2 then
-            local button = option2:FindFirstChild("button")
-            if button then
-                GuiService.SelectedObject = button
-                task.wait()
-
-                if GuiService.SelectedObject == button then
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+                if dialogPrompt then
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
                     task.wait()
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
                 end
             end
-        end
-    end
 
-    task.wait()
-    GuiService.SelectedObject = nil
+            task.wait()
 
-end
+            local options = PlayerGui:WaitForChild("options", math.huge)
+
+            local safezone = options:FindFirstChild("safezone")
+            if safezone then
+                local option2 = safezone:FindFirstChild("2option")
+                if option2 then
+                    local button = option2:FindFirstChild("button")
+                    if button then
+                        GuiService.SelectedObject = button
+                        task.wait()
+
+                        if GuiService.SelectedObject == button then
+                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                            task.wait()
+                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                        end
+                    end
+                end
+            end
         
             task.wait()
             GuiService.SelectedObject = nil

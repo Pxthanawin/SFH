@@ -185,46 +185,55 @@ local tweenpos = function()
             LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
             task.wait(1)
             LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-            
-        for i = 1, 2 do
+  local Players = game:GetService("Players")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
+local LocalPlayer = Players.LocalPlayer
 
-            local camera = workspace.Camera
-            camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(897.047241, -767.422974, 972.87439, -0.611101508, -0.487700284, 0.623460829, 1.4901163e-08, 0.787643313, 0.616131485, -0.791552305, 0.376518875, -0.481330007)
-        
-            local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
-            if MiloMerchant then
-                MiloMerchant.HumanoidRootPart.CFrame = CFrame.new(893.439453, -772.387634, 975.62616, -0.610115349, 0.0653887317, 0.78960973, 0.0176754892, 0.997463942, -0.0689439476, -0.79211539, -0.0281070229, -0.609723866)
-        
-                local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
-                if dialogPrompt then
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
+for i = 1, 2 do
+
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = CFrame.new(897.047241, -767.422974, 972.87439, -0.611101508, -0.487700284, 0.623460829, 1.4901163e-08, 0.787643313, 0.616131485, -0.791552305, 0.376518875, -0.481330007)
+
+    local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+    if MiloMerchant then
+        MiloMerchant.HumanoidRootPart.CFrame = targetCFrame
+
+        local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+        if dialogPrompt then
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
+            task.wait()
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
+        end
+    end
+
+    task.wait()
+
+    local options = PlayerGui:WaitForChild("options", math.huge)
+
+    local safezone = options:FindFirstChild("safezone")
+    if safezone then
+        local option2 = safezone:FindFirstChild("2option")
+        if option2 then
+            local button = option2:FindFirstChild("button")
+            if button then
+                GuiService.SelectedObject = button
+                task.wait()
+
+                if GuiService.SelectedObject == button then
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                     task.wait()
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 end
             end
-        
-            task.wait(0.3)
-        
-            local options = PlayerGui:WaitForChild("options", math.huge)
-        
-            local safezone = options:FindFirstChild("safezone")
-            if safezone then
-                local option2 = safezone:FindFirstChild("2option")
-                if option2 then
-                    local button = option2:FindFirstChild("button")
-                    if button then
-                        GuiService.SelectedObject = button
-                        task.wait()
-        
-                        if GuiService.SelectedObject == button then
-                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                            task.wait()
-                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                        end
-                    end
-                end
-            end
+        end
+    end
+
+    task.wait()
+    GuiService.SelectedObject = nil
+
+end
         
             task.wait()
             GuiService.SelectedObject = nil

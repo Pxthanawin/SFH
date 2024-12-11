@@ -61,6 +61,10 @@ repeat
 
 until LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value
 
+repeat
+    task.wait()
+until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
+
 AssetsLoaded = true
 
 task.wait()

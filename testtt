@@ -1,5 +1,3 @@
-if getgenv().ScriptRunning then return end
-getgenv().ScriptRunning = true
 repeat task.wait() until game:IsLoaded()
 
 -- Variable zone

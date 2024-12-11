@@ -3,25 +3,26 @@ getgenv().Sell_Every = 120
 getgenv().white_screen = true
 getgenv().OptimizePerformance = true
 ]]
-
-local Config = {
-    ["Farm Fish"] = true,
-}
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Backpack = LocalPlayer:WaitForChild("Backpack")
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-local VirtualUser = game:GetService("VirtualUser")
-local tweenService = game:GetService("TweenService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-
-repeat
-	LocalPlayer = Players.LocalPlayer
-	wait()
-until LocalPlayer
+do
+	local Config = {
+	    ["Farm Fish"] = true,
+	}
+	
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local RunService = game:GetService("RunService")
+	local Players = game:GetService("Players")
+	local LocalPlayer = Players.LocalPlayer
+	local Backpack = LocalPlayer:WaitForChild("Backpack")
+	local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+	local VirtualUser = game:GetService("VirtualUser")
+	local tweenService = game:GetService("TweenService")
+	local VirtualInputManager = game:GetService("VirtualInputManager")
+	
+	repeat
+		LocalPlayer = Players.LocalPlayer
+		wait()
+	until LocalPlayer
+end
 
 repeat
 

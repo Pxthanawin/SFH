@@ -180,6 +180,11 @@ local tweenpos = function()
     local tween = tweenService:Create(humanoidRootPart, tweenInfo, {CFrame = targetCFrame})
 
     tween.Completed:Connect(function()
+
+            task.wait(2)
+            LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+            task.wait(2)
+            LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
             
         for i = 1, 2 do
 
@@ -225,7 +230,7 @@ local tweenpos = function()
             GuiService.SelectedObject = nil
     
         end
-            
+            task.wait(1)
         getgenv().StartFarm = true
             
     end)

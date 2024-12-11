@@ -9,13 +9,41 @@ local Config = {
     ["Farm Fish"] = true,
 }
 
-repeat task.wait() until game:IsLoaded()
+repeat
+
+    local skip = PlayerGui:FindFirstChild("loading") and PlayerGui.loading:FindFirstChild("loading") and PlayerGui.loading.loading:FindFirstChild("skip")
+    if skip and skip.Visible then
+
+        if not skip.Selectable then
+            skip.Selectable = true
+        end
+
+        GuiService.SelectedObject = skip
+        task.wait(0.2)
+
+        if GuiService.SelectedObject == skip then
+
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+            task.wait()
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+
+        end
+
+        task.wait(0.1)
+        GuiService.SelectedObject = nil
+
+    else
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+    end
+    task.wait()
+
+until LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value
+
 repeat
     task.wait()
-    local VirtualInputManager = game:GetService("VirtualInputManager")
-    VirtualInputManager:SendKeyEvent(true,"LeftControl",false,game)
-    VirtualInputManager:SendKeyEvent(false,"LeftControl",false,game)
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
+
 getgenv().ScriptRunning = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

@@ -1,65 +1,31 @@
+
 --[[
 getgenv().Sell_Every = 120
 getgenv().white_screen = true
 getgenv().OptimizePerformance = true
 ]]
-do
-	local Config = {
-	    ["Farm Fish"] = true,
-	}
-	
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	local RunService = game:GetService("RunService")
-	local Players = game:GetService("Players")
-	local LocalPlayer = Players.LocalPlayer
-	local Backpack = LocalPlayer:WaitForChild("Backpack")
-	local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-	local VirtualUser = game:GetService("VirtualUser")
-	local tweenService = game:GetService("TweenService")
-	local VirtualInputManager = game:GetService("VirtualInputManager")
-	
-	repeat
-		LocalPlayer = Players.LocalPlayer
-		wait()
-	until LocalPlayer
-end
 
-repeat
+local Config = {
+    ["Farm Fish"] = true,
+}
 
-    local skip = PlayerGui:FindFirstChild("loading") and PlayerGui.loading:FindFirstChild("loading") and PlayerGui.loading.loading:FindFirstChild("skip")
-    if skip and skip.Visible then
-
-        if not skip.Selectable then
-            skip.Selectable = true
-        end
-
-        GuiService.SelectedObject = skip
-        task.wait(0.2)
-
-        if GuiService.SelectedObject == skip then
-
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-            task.wait()
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-
-        end
-
-        task.wait(0.1)
-        GuiService.SelectedObject = nil
-
-    else
-        VirtualInputManager:SendKeyEvent(true, "LeftControl", false, nil)
-        VirtualInputManager:SendKeyEvent(false, "LeftControl", false, nil)
-    end
-    task.wait()
-
-until LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value
-
+repeat task.wait() until game:IsLoaded()
 repeat
     task.wait()
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    VirtualInputManager:SendKeyEvent(true,"LeftControl",false,game)
+    VirtualInputManager:SendKeyEvent(false,"LeftControl",false,game)
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
-
 getgenv().ScriptRunning = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local VirtualUser = game:GetService("VirtualUser")
+local tweenService = game:GetService("TweenService")
 
 local rodNameCache = nil
 
@@ -133,7 +99,7 @@ end
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
 local function EquipRod()
     repeat task.wait() until getgenv().ScriptRunning
-    while rodNameCache ~= "Steady Rod" and not StatsRod:FindFirstChild("Trident Rod") do
+    while rodNameCache ~= "Steady Rod" do
         if StatsRod:FindFirstChild("Steady Rod") then
             if rodNameCache ~= "Steady Rod" then
                 equiprod:FireServer("Steady Rod")
@@ -141,15 +107,6 @@ local function EquipRod()
         end
         task.wait(1)
     end
-    --[[
-    while rodNameCache ~= "Trident Rod" do
-        if StatsRod:FindFirstChild("Trident Rod") then
-            if rodNameCache ~= "Trident Rod" then
-                equiprod:FireServer("Trident Rod")
-            end
-        end
-        task.wait(1)
-    end]]
 end
 
 -- Main fishing function optimized
@@ -261,11 +218,6 @@ end)
 task.spawn(farmFish)
 task.spawn(function()
     purchaseItem("Steady Rod", "Rod", 1)
-end)
-task.spawn(function()
-    if getgenv().Trident then
-        purchaseItem("Trident Rod", "Rod", 1)
-    end
 end)
 task.spawn(EquipRod)
 

@@ -1,0 +1,70 @@
+if getgenv().ScriptRunning then return end
+getgenv().ScriptRunning = true
+repeat task.wait() until game:IsLoaded()
+
+-- Variable zone
+
+-- ---- Main Varieble
+
+local HttpService = game:GetService("HttpService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local GuiService = game:GetService("GuiService")
+local VirtualUser = game:GetService("VirtualUser")
+local tweenService = game:GetService("TweenService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+if Configurations then
+    local Configurations = HttpService:JSONDecode(Configurations)
+end
+
+-- ---- Other Variable
+
+local StartFarm = nil
+local AssetsLoaded = nil
+local zonePosition = Vector3.new(893.679871, -772.342407, 977.9375)
+local zoneCFrame = CFrame.new(893.679871, -772.342407, 977.9375, -0.467594326, 0.0559145212, 0.882172942, 0.00594715448, 0.998173773, -0.0601146892, -0.883923173, -0.0228628702, -0.467072934)
+
+-- Main Script zone
+
+-- ---- Assets Load
+
+repeat
+
+    local skip = PlayerGui:FindFirstChild("loading") and PlayerGui.loading:FindFirstChild("loading") and PlayerGui.loading.loading:FindFirstChild("skip")
+    if skip and skip.Visible then
+
+        if not skip.Selectable then
+            skip.Selectable = true
+        end
+
+        GuiService.SelectedObject = skip
+        task.wait(0.2)
+
+        if GuiService.SelectedObject == skip then
+
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+            task.wait()
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+
+        end
+
+        task.wait(0.1)
+        GuiService.SelectedObject = nil
+
+    else
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+    end
+    task.wait()
+
+until LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value
+
+AssetsLoaded = true
+
+task.wait()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/tsatf.lua"))()

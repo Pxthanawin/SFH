@@ -43,8 +43,8 @@ repeat
         GuiService.SelectedObject = nil
 
     else
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+        VirtualInputManager:SendKeyEvent(true, "LeftControl", false, nil)
+        VirtualInputManager:SendKeyEvent(false, "LeftControl", false, nil)
     end
     task.wait()
 

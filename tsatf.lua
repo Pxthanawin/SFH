@@ -128,10 +128,18 @@ end
 local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
 local function EquipRod()
     repeat task.wait() until getgenv().ScriptRunning
-    while rodNameCache ~= "Steady Rod" do
+    while rodNameCache ~= "Steady Rod" and not StatsRod:FindFirstChild("Trident Rod") do
         if StatsRod:FindFirstChild("Steady Rod") then
             if rodNameCache ~= "Steady Rod" then
                 equiprod:FireServer("Steady Rod")
+            end
+        end
+        task.wait(1)
+    end
+    while rodNameCache ~= "Trident Rod" do
+        if StatsRod:FindFirstChild("Trident Rod") then
+            if rodNameCache ~= "Trident Rod" then
+                equiprod:FireServer("Trident Rod")
             end
         end
         task.wait(1)
@@ -247,6 +255,11 @@ end)
 task.spawn(farmFish)
 task.spawn(function()
     purchaseItem("Steady Rod", "Rod", 1)
+end)
+task.spawn(function()
+    if getgenv().Trident then
+        purchaseItem("Trident Rod", "Rod", 1)
+    end
 end)
 task.spawn(EquipRod)
 

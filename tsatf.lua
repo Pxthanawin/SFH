@@ -219,33 +219,55 @@ task.spawn(function()
     task.wait(10)
     workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,0,0)
     task.wait(1)
-            -- ค้นหา NPC และ DialogPrompt
-    local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
-    if not MiloMerchant then
-        return
-    end
-    
-    local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
-    if not dialogPrompt then
-        return
-    end
-    
-    -- โต้ตอบกับ DialogPrompt โดยใช้ปุ่ม Controller (ButtonX)
-    VirtualInputManager:SendKeyEvent(
-        true,                -- กดปุ่มลง
-        Enum.KeyCode.ButtonX, -- ปุ่ม X ของ Controller
-        false,               -- ไม่ใช่การกดซ้ำ
-        nil
-    )
-    
-    task.wait(0.1) -- รอเล็กน้อย
-    
-    VirtualInputManager:SendKeyEvent(
-        false,               -- ปล่อยปุ่ม
-        Enum.KeyCode.ButtonX,
-        false,
-        nil
-    )
+local Players = game:GetService("Players")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
+local LocalPlayer = Players.LocalPlayer
+
+-- ค้นหา NPC Milo Merchant และ DialogPrompt
+local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+if not MiloMerchant then
+    warn("Milo Merchant not found!")
+    return
+end
+
+local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+if not dialogPrompt then
+    warn("DialogPrompt not found for Milo Merchant!")
+    return
+end
+
+-- คำนวณตำแหน่งหน้าจอของ NPC
+local Camera = workspace.CurrentCamera
+local npcPosition = MiloMerchant.PrimaryPart.Position
+local screenPosition, onScreen = Camera:WorldToViewportPoint(npcPosition)
+
+if not onScreen then
+    warn("Milo Merchant is not visible on the screen!")
+    return
+end
+
+-- จำลองการคลิกเมาส์ที่ตำแหน่งของ NPC
+VirtualInputManager:SendMouseButtonEvent(
+    screenPosition.X, -- ตำแหน่ง X บนหน้าจอ
+    screenPosition.Y, -- ตำแหน่ง Y บนหน้าจอ
+    0,                -- ปุ่มซ้ายเมาส์ (0)
+    true,             -- กดปุ่มลง
+    nil,
+    0
+)
+
+task.wait(0.1) -- รอเล็กน้อย
+
+VirtualInputManager:SendMouseButtonEvent(
+    screenPosition.X, -- ตำแหน่ง X บนหน้าจอ
+    screenPosition.Y, -- ตำแหน่ง Y บนหน้าจอ
+    0,                -- ปุ่มซ้ายเมาส์ (0)
+    false,            -- ปล่อยปุ่ม
+    nil,
+    0
+)
+
         
     while getgenv().Sell_Every do
         task.wait(getgenv().Sell_Every)

@@ -17,6 +17,7 @@ local Backpack = LocalPlayer:WaitForChild("Backpack")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualUser = game:GetService("VirtualUser")
 local tweenService = game:GetService("TweenService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local rodNameCache = nil
 

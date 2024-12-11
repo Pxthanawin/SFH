@@ -9,15 +9,6 @@ local Config = {
     ["Farm Fish"] = true,
 }
 
-repeat task.wait() until game:IsLoaded()
-repeat
-    task.wait()
-    local VirtualInputManager = game:GetService("VirtualInputManager")
-    VirtualInputManager:SendKeyEvent(true,"LeftControl",false,game)
-    VirtualInputManager:SendKeyEvent(false,"LeftControl",false,game)
-until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
-getgenv().ScriptRunning = true
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -36,6 +27,8 @@ local rodNameCache = nil
 
 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
+
+getgenv().ScriptRunning = true
 
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning

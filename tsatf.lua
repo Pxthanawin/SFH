@@ -155,8 +155,8 @@ local function farmFish()
     end
 end
 
-local targetPosition = Vector3.new(893.679871, -772.342407, 977.9375)
-local targetCFrame = CFrame.new(893.679871, -772.342407, 977.9375, -0.467594326, 0.0559145212, 0.882172942, 0.00594715448, 0.998173773, -0.0601146892, -0.883923173, -0.0228628702, -0.467072934)
+local targetPosition = Vector3.new(893.439453, -772.387634, 975.62616)
+local targetCFrame = CFrame.new(893.439453, -772.387634, 975.62616, -0.610115349, 0.0653887317, 0.78960973, 0.0176754892, 0.997463942, -0.0689439476, -0.79211539, -0.0281070229, -0.609723866)
 local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 local currentPosition = humanoidRootPart.Position
 local Distance = (targetPosition - currentPosition).Magnitude
@@ -179,7 +179,54 @@ local tweenpos = function()
     local tween = tweenService:Create(humanoidRootPart, tweenInfo, {CFrame = targetCFrame})
 
     tween.Completed:Connect(function()
+            
+        for i = 1, 2 do
+
+            local camera = workspace.Camera
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new(897.047241, -767.422974, 972.87439, -0.611101508, -0.487700284, 0.623460829, 1.4901163e-08, 0.787643313, 0.616131485, -0.791552305, 0.376518875, -0.481330007)
+        
+            local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+            if MiloMerchant then
+                MiloMerchant.HumanoidRootPart.CFrame = CFrame.new(893.439453, -772.387634, 975.62616, -0.610115349, 0.0653887317, 0.78960973, 0.0176754892, 0.997463942, -0.0689439476, -0.79211539, -0.0281070229, -0.609723866)
+        
+                local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+                if dialogPrompt then
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
+                    task.wait()
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
+                end
+            end
+        
+            task.wait()
+        
+            local options = PlayerGui:WaitForChild("options", math.huge)
+        
+            local safezone = options:FindFirstChild("safezone")
+            if safezone then
+                local option2 = safezone:FindFirstChild("2option")
+                if option2 then
+                    local button = option2:FindFirstChild("button")
+                    if button then
+                        GuiService.SelectedObject = button
+                        task.wait()
+        
+                        if GuiService.SelectedObject == button then
+                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                            task.wait()
+                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                        end
+                    end
+                end
+            end
+        
+            task.wait()
+            GuiService.SelectedObject = nil
+    
+        end
+            
         getgenv().StartFarm = true
+            
     end)
     tween:Play()
 end
@@ -216,59 +263,6 @@ task.spawn(EquipRod)
 
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
-    task.wait(10)
-    workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,0,0)
-    task.wait(1)
-local Players = game:GetService("Players")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local GuiService = game:GetService("GuiService")
-local LocalPlayer = Players.LocalPlayer
-
--- ค้นหา NPC Milo Merchant และ DialogPrompt
-local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
-if not MiloMerchant then
-    warn("Milo Merchant not found!")
-    return
-end
-
-local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
-if not dialogPrompt then
-    warn("DialogPrompt not found for Milo Merchant!")
-    return
-end
-
--- คำนวณตำแหน่งหน้าจอของ NPC
-local Camera = workspace.CurrentCamera
-local npcPosition = MiloMerchant.PrimaryPart.Position
-local screenPosition, onScreen = Camera:WorldToViewportPoint(npcPosition)
-
-if not onScreen then
-    warn("Milo Merchant is not visible on the screen!")
-    return
-end
-
--- จำลองการคลิกเมาส์ที่ตำแหน่งของ NPC
-VirtualInputManager:SendMouseButtonEvent(
-    screenPosition.X, -- ตำแหน่ง X บนหน้าจอ
-    screenPosition.Y, -- ตำแหน่ง Y บนหน้าจอ
-    0,                -- ปุ่มซ้ายเมาส์ (0)
-    true,             -- กดปุ่มลง
-    nil,
-    0
-)
-
-task.wait(0.1) -- รอเล็กน้อย
-
-VirtualInputManager:SendMouseButtonEvent(
-    screenPosition.X, -- ตำแหน่ง X บนหน้าจอ
-    screenPosition.Y, -- ตำแหน่ง Y บนหน้าจอ
-    0,                -- ปุ่มซ้ายเมาส์ (0)
-    false,            -- ปล่อยปุ่ม
-    nil,
-    0
-)
-
-        
     while getgenv().Sell_Every do
         task.wait(getgenv().Sell_Every)
         workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()

@@ -217,8 +217,37 @@ task.spawn(EquipRod)
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
     task.wait(10)
+    workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,0,0)
+    task.wait(1)
+            -- ค้นหา NPC และ DialogPrompt
+    local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+    if not MiloMerchant then
+        return
+    end
+    
+    local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+    if not dialogPrompt then
+        return
+    end
+    
+    -- โต้ตอบกับ DialogPrompt โดยใช้ปุ่ม Controller (ButtonX)
+    VirtualInputManager:SendKeyEvent(
+        true,                -- กดปุ่มลง
+        Enum.KeyCode.ButtonX, -- ปุ่ม X ของ Controller
+        false,               -- ไม่ใช่การกดซ้ำ
+        nil
+    )
+    
+    task.wait(0.1) -- รอเล็กน้อย
+    
+    VirtualInputManager:SendKeyEvent(
+        false,               -- ปล่อยปุ่ม
+        Enum.KeyCode.ButtonX,
+        false,
+        nil
+    )
+        
     while getgenv().Sell_Every do
-        workspace.world.npcs["Milo Merchant"].HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0,7,0)
         task.wait(getgenv().Sell_Every)
         workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
     end

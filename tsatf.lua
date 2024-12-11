@@ -364,44 +364,6 @@ end
 
 -- 
 
--- Create White Screen GUI
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "CircularButtons"
-screenGui.Parent = game:GetService("CoreGui") -- เปลี่ยน Parent เป็น CoreGui
-
-local function createCircularButton(name, position, parent)
-    local button = Instance.new("TextButton")
-    button.Name = name
-    button.Size = UDim2.new(0, 40, 0, 40)
-    button.Position = position
-    button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    button.BackgroundTransparency = 0.5
-    button.Text = name
-    button.TextColor3 = Color3.fromRGB(0, 0, 0)
-    button.Font = Enum.Font.SourceSans
-    button.TextScaled = true
-    button.BorderSizePixel = 0
-
-    local uiCorner = Instance.new("UICorner")
-    uiCorner.CornerRadius = UDim.new(1, 0)
-    uiCorner.Parent = button
-
-    button.Parent = parent
-    return button
-end
-
-local graphicButton = createCircularButton("G", UDim2.new(0.85, 0, 0.3, 0), screenGui)
-
--- Handle White Screen Toggle
-if getgenv().white_screen then
-    RunService:Set3dRenderingEnabled(false)
-end
-
-graphicButton.MouseButton1Click:Connect(function()
-    getgenv().white_screen = not getgenv().white_screen
-    RunService:Set3dRenderingEnabled(not getgenv().white_screen)
-end)
-
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน
 local settings = {
     disableCamShake = true,

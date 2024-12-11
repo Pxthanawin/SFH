@@ -183,7 +183,7 @@ local tweenpos = function()
 
             task.wait(2)
             LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-            task.wait(2)
+            task.wait(1)
             LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
             
         for i = 1, 2 do
@@ -204,7 +204,7 @@ local tweenpos = function()
                 end
             end
         
-            task.wait()
+            task.wait(0.3)
         
             local options = PlayerGui:WaitForChild("options", math.huge)
         

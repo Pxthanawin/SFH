@@ -183,8 +183,9 @@ local tweenpos = function()
             
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-        task.wait(1)
+        task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+        task.wait(2)
         Players = game:GetService("Players")
         VirtualInputManager = game:GetService("VirtualInputManager")
         GuiService = game:GetService("GuiService")

@@ -195,11 +195,11 @@ local tweenpos = function()
 
             local camera = workspace.Camera
             camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(897.047241, -767.422974, 972.87439, -0.611101508, -0.487700284, 0.623460829, 1.4901163e-08, 0.787643313, 0.616131485, -0.791552305, 0.376518875, -0.481330007)
+            camera.CFrame = CFrame.new(894.945923, -760.598389, 974.439209, -0.630745828, -0.764200389, 0.134750336, -7.45058149e-09, 0.173649698, 0.984807491, -0.775989592, 0.621163189, -0.109528817)
 
             local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
             if MiloMerchant then
-                MiloMerchant.HumanoidRootPart.CFrame = targetCFrame
+                MiloMerchant.HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0, 4, 0)
 
                 local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
                 if dialogPrompt then

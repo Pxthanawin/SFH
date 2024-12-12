@@ -180,7 +180,7 @@ local tweenpos = function()
     local tween = tweenService:Create(humanoidRootPart, tweenInfo, {CFrame = targetCFrame})
 
     tween.Completed:Connect(function()
-            pcall(function())
+            pcall(function()
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(1)

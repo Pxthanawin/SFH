@@ -180,17 +180,18 @@ local tweenpos = function()
     local tween = tweenService:Create(humanoidRootPart, tweenInfo, {CFrame = targetCFrame})
 
     tween.Completed:Connect(function()
-            pcall(function()
+            
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(1)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-        local Players = game:GetService("Players")
-        local VirtualInputManager = game:GetService("VirtualInputManager")
-        local GuiService = game:GetService("GuiService")
-        local LocalPlayer = Players.LocalPlayer
+        Players = game:GetService("Players")
+        VirtualInputManager = game:GetService("VirtualInputManager")
+        GuiService = game:GetService("GuiService")
+        LocalPlayer = Players.LocalPlayer
 
         for i = 1, 2 do
+                pcall(function()
 
             local camera = workspace.Camera
             camera.CameraType = Enum.CameraType.Scriptable

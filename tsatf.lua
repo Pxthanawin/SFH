@@ -232,10 +232,11 @@ local tweenpos = function()
         
             task.wait()
             GuiService.SelectedObject = nil
+                        end)
     
         end
             task.wait(1)
-            end)
+            
         getgenv().StartFarm = true
             
     end)

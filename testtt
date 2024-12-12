@@ -67,6 +67,6 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 
 AssetsLoaded = true
 
-task.wait()
+task.wait(10)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/tsatf.lua"))()

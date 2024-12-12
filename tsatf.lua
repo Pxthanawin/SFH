@@ -195,7 +195,7 @@ local tweenpos = function()
 
             local camera = workspace.Camera
             camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(894.945923, -760.598389, 974.439209, -0.630745828, -0.764200389, 0.134750336, -7.45058149e-09, 0.173649698, 0.984807491, -0.775989592, 0.621163189, -0.109528817)
+            camera.CFrame = CFrame.new(889.485229, -761.570251, 971.296448, -0.72676146, 0.580407798, -0.367348105, -1.49011612e-08, 0.534799099, 0.844979286, 0.686890006, 0.61409837, -0.388671309)
 
             local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
             if MiloMerchant then

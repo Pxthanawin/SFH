@@ -120,7 +120,9 @@ local function farmFish()
         end
 
         if rod.Parent == Backpack then
-            LocalPlayer.Character.Humanoid:EquipTool(rod)
+            if Backpack:FindFirstChild(RodName) then
+                LocalPlayer.Character.Humanoid:EquipTool(rod)
+            end
         end
 
         if rod:FindFirstChild("bobber") then
@@ -145,8 +147,6 @@ local function farmFish()
             end
         else
             --disableMetaReset()
-            LocalPlayer.Character.Humanoid:EquipTool(rod)
-            task.wait()
             rod.events.cast:FireServer(100)
             --  enableMetaReset(rod.events:FindFirstChild("reset"))
             task.wait(0.4)

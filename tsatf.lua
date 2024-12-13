@@ -50,7 +50,7 @@ task.spawn(function()
     end
 
     while task.wait(1) do
-        for i, player in next, Players:GetPlayers() do
+        for i, player in next, game:GetService("Players"):GetPlayers() do
             pcall(function()
                 disconnectPlayer(player)
             end)

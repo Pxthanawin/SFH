@@ -145,8 +145,6 @@ local function farmFish()
             end
         else
             --disableMetaReset()
-            LocalPlayer.Character.Humanoid:UnequipTools()
-            task.wait(0.1)
             LocalPlayer.Character.Humanoid:EquipTool(rod)
             task.wait()
             rod.events.cast:FireServer(100)
@@ -298,9 +296,9 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
-            pcall(game:GetService("Players").LocalPlayer.Character:FindFirstChild("rodNameCache").events.reset:FireServer())
+            LocalPlayer.Character.Humanoid:UnequipTools()
         end
-        if countM >= 40 then
+        if countM >= 35 then
             game:Shutdown()
         end
     end

@@ -50,12 +50,16 @@ task.spawn(function()
     end
 
     for i, player in next, Players:GetPlayers() do
-        disconnectPlayer(player)
+        pcall(function()
+            disconnectPlayer(player)
+        end)
     end
 
-    Players.PlayerAdded:Connect(function(newPlayer)
-        disconnectPlayer(newPlayer)
-    end)
+    while task.wait(1) do
+        pcall(function()
+            disconnectPlayer(newPlayer)
+        end)
+    end
 
 end)
 

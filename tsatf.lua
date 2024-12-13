@@ -360,11 +360,8 @@ end)
 -- ฟังก์ชันหลักในการปรับแต่งประสิทธิภาพ
 local function OptimizeGamePerformance()
     -- ปิดการใช้งาน Script ที่ไม่จำเป็น
-    local LocalPlayer = game.Players.LocalPlayer
-    if LocalPlayer and LocalPlayer.PlayerScripts then
-        LocalPlayer.PlayerScripts.weather.Disabled = true
-        LocalPlayer.PlayerScripts.windcontroller.Disabled = true
-    end
+    LocalPlayer.PlayerScripts.weather.Disabled = true
+    LocalPlayer.PlayerScripts.windcontroller.Disabled = true
 
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)

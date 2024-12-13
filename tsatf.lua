@@ -19,6 +19,7 @@ local VirtualUser = game:GetService("VirtualUser")
 local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
+local Workspace = game:GetService("Workspace")
 
 local rodNameCache = nil
 
@@ -33,10 +34,6 @@ local humanoid = character:WaitForChild("Humanoid")
 getgenv().ScriptRunning = true
 
 task.spawn(function()
-    local Players = game:GetService("Players")
-    local LocalPlayer = Players.LocalPlayer
-    local Workspace = game:GetService("Workspace")
-
     local function disconnectPlayer(player)
         if player == LocalPlayer then
             return

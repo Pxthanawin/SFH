@@ -1,7 +1,6 @@
 
 --[[
 getgenv().Sell_Every = 120
-getgenv().white_screen = true
 getgenv().OptimizePerformance = true
 ]]
 

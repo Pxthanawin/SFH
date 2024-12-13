@@ -49,16 +49,12 @@ task.spawn(function()
         player.Parent = nil
     end
 
-    for i, player in next, Players:GetPlayers() do
-        pcall(function()
-            disconnectPlayer(player)
-        end)
-    end
-
     while task.wait(1) do
-        pcall(function()
-            disconnectPlayer(newPlayer)
-        end)
+        for i, player in next, Players:GetPlayers() do
+            pcall(function()
+                disconnectPlayer(player)
+            end)
+        end
     end
 
 end)

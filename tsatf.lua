@@ -5,8 +5,6 @@ getgenv().white_screen = true
 getgenv().OptimizePerformance = true
 ]]
 
-getgenv().OptimizePerformance = false
-
 local Config = {
     ["Farm Fish"] = true,
 }

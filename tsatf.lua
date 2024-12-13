@@ -33,11 +33,6 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
-
 
 local function disconnectPlayer(player)
     if player == LocalPlayer then

@@ -33,7 +33,6 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-
 local function disconnectPlayer(player)
     if player == LocalPlayer then
         return
@@ -55,6 +54,8 @@ local function disconnectPlayer(player)
 
         -- Remove from Players service (Locally)
         player.Parent = nil
+
+        print("Disconnected player (locally):", player.Name)
     end)
 end
 

@@ -239,6 +239,7 @@ local tweenpos = function()
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(2)
+        LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
 
         for i = 1, 2 do
                 pcall(function()
@@ -357,10 +358,14 @@ end)
 
 -- 
 
+-- ฟังก์ชันหลักในการปรับแต่งประสิทธิภาพ
 local function OptimizeGamePerformance()
-
-    LocalPlayer.PlayerScripts.weather.Disabled = true
-    LocalPlayer.PlayerScripts.windcontroller.Disabled = true
+    -- ปิดการใช้งาน Script ที่ไม่จำเป็น
+    local LocalPlayer = game.Players.LocalPlayer
+    if LocalPlayer and LocalPlayer.PlayerScripts then
+        LocalPlayer.PlayerScripts.weather.Disabled = true
+        LocalPlayer.PlayerScripts.windcontroller.Disabled = true
+    end
 
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)
@@ -369,6 +374,7 @@ local function OptimizeGamePerformance()
                 obj.Material = Enum.Material.Plastic
                 obj.Reflectance = 0
                 obj.TopSurface = Enum.SurfaceType.Smooth
+                obj.BottomSurface = Enum.SurfaceType.Smooth
                 obj.CastShadow = false
             elseif obj:IsA("Decal") or obj:IsA("Texture") then
                 obj.Transparency = 1
@@ -379,6 +385,10 @@ local function OptimizeGamePerformance()
                 obj.Volume = 0
             elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
                 obj.Enabled = false
+            elseif obj:IsA("Humanoid") then
+                obj.AutoRotate = false
+                obj.WalkSpeed = 16
+                obj.JumpPower = 50
             end
         end)
     end
@@ -411,31 +421,6 @@ local function OptimizeGamePerformance()
         Terrain.ChildAdded:Connect(optimizeObject)
     end
 
-    -- Hook ระบบเพื่อลดการสร้างข้อมูลที่ไม่จำเป็น (ถ้ามี)
-    if hookfunction and setreadonly then
-        local mt = getrawmetatable(game)
-        local old = mt.__newindex
-        setreadonly(mt, false)
-        local sda
-        sda = hookfunction(old, function(t, k, v)
-            if k == "Material" then
-                if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
-                    v = Enum.Material.Plastic
-                end
-            elseif k == "TopSurface" then
-                v = "Smooth"
-            elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
-                v = 0
-            elseif k == "WaterTransparency" then
-                v = 1
-            elseif k == "GlobalShadows" then
-                v = false
-            end
-            return sda(t, k, v)
-        end)
-        setreadonly(mt, true)
-    end
-
     -- ปรับแต่งวัตถุทั้งหมดใน Workspace
     for _, obj in ipairs(workspace:GetDescendants()) do
         optimizeObject(obj)
@@ -458,30 +443,55 @@ local function OptimizeGamePerformance()
     local PhysicsService = game:GetService("PhysicsService")
     if PhysicsService then
         pcall(function()
-            PhysicsService.PhysicsEnvironmentalThrottle = nil
+            PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
         end)
     else
         warn("PhysicsService not available.")
     end
 
-    for _, v in pairs(game:GetDescendants()) do
-        if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") then
-            if v.Transparency ~= 1 then
-                v.Material = Enum.Material.SmoothPlastic
-            end
-        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-            v:Destroy()
+    -- ลดการใช้งาน MeshParts และ Special Meshes
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("MeshPart") then
+            v.Material = Enum.Material.SmoothPlastic
+            v.TextureID = ""
+        elseif v:IsA("SpecialMesh") then
+            v.TextureId = ""
         end
     end
 
-    for i, v in pairs(workspace.Terrain:GetChildren()) do
-        v:Destroy()
-    end
-    
-    for i, v in pairs(game.Lighting:GetChildren()) do
+    -- ลบวัตถุที่ไม่จำเป็นใน Terrain และ Lighting
+    for _, v in pairs(workspace.Terrain:GetChildren()) do
         v:Destroy()
     end
 
+    for _, v in pairs(game.Lighting:GetChildren()) do
+        v:Destroy()
+    end
+
+    -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
+    if hookfunction and setreadonly then
+        local mt = getrawmetatable(game)
+        local old = mt.__newindex
+        setreadonly(mt, false)
+        local sda
+        sda = hookfunction(old, function(t, k, v)
+            if k == "Material" then
+                if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
+                    v = Enum.Material.Plastic
+                end
+            elseif k == "TopSurface" or k == "BottomSurface" then
+                v = "Smooth"
+            elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
+                v = 0
+            elseif k == "WaterTransparency" then
+                v = 1
+            elseif k == "GlobalShadows" then
+                v = false
+            end
+            return sda(t, k, v)
+        end)
+        setreadonly(mt, true)
+    end
 end
 
 -- เรียกใช้ฟังก์ชัน

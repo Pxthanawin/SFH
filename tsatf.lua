@@ -33,26 +33,34 @@ local humanoid = character:WaitForChild("Humanoid")
 getgenv().ScriptRunning = true
 
 task.spawn(function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Workspace = game:GetService("Workspace")
 
     local function disconnectPlayer(player)
         if player == LocalPlayer then
             return
         end
-        local character = player.Character or player.CharacterAdded:Wait()
-        if character and Workspace:FindFirstChild(character.Name) then
-            character:Destroy()
-        end
-        player.Parent = nil
+
+        pcall(function() -- Wrap potentially error-causing code in a pcall
+            local character = player.Character or player.CharacterAdded:Wait()
+            if character and Workspace:FindFirstChild(character.Name) then
+                character:Destroy()
+            end
+            player.Parent = nil
+        end)
     end
 
-    for i, player in next, Players:GetPlayers() do
-        disconnectPlayer(player)
-    end
+    -- Use a pcall to handle potential errors during initial disconnection
+    local success, err = pcall(function()
+        for i, player in next, Players:GetPlayers() do
+            disconnectPlayer(player)
+        end
+    end)
 
     Players.PlayerAdded:Connect(function(newPlayer)
         disconnectPlayer(newPlayer)
     end)
-
 end)
 
 task.spawn(function()

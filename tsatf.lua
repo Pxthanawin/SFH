@@ -43,9 +43,6 @@ local function destroyCharacter(player)
     local character = player.Character or player.CharacterAdded:Wait()
     if character and Workspace:FindFirstChild(character.Name) then
         character:Destroy()
-        print("Destroyed character of player:", player.Name)
-    else
-        warn("Character for player", player.Name, "not found in Workspace or doesn't exist.")
     end
 end
 

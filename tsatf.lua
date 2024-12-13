@@ -359,6 +359,9 @@ end)
 
 local function OptimizeGamePerformance()
 
+    LocalPlayer.PlayerScripts.weather.Disabled = true
+    LocalPlayer.PlayerScripts.windcontroller.Disabled = true
+
     -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
     local function optimizeObject(obj)
         pcall(function()
@@ -461,8 +464,24 @@ local function OptimizeGamePerformance()
         warn("PhysicsService not available.")
     end
 
-    -- ล้างหน่วยความจำ
-    game:GetService("Debris"):ClearAllChildren()
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("Part") or v:IsA("UnionOperation") or v:IsA("MeshPart") then
+            if v.Transparency ~= 1 then
+                v.Material = Enum.Material.SmoothPlastic
+            end
+        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+            v:Destroy()
+        end
+    end
+
+    for i, v in pairs(workspace.Terrain:GetChildren()) do
+        v:Destroy()
+    end
+    
+    for i, v in pairs(game.Lighting:GetChildren()) do
+        v:Destroy()
+    end
+
 end
 
 -- เรียกใช้ฟังก์ชัน

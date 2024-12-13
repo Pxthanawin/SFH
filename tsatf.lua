@@ -18,6 +18,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualUser = game:GetService("VirtualUser")
 local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
 
 local rodNameCache = nil
 
@@ -30,6 +31,29 @@ local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
+
+task.spawn(function()
+
+    local function disconnectPlayer(player)
+        if player == LocalPlayer then
+            return
+        end
+        local character = player.Character or player.CharacterAdded:Wait()
+        if character and Workspace:FindFirstChild(character.Name) then
+            character:Destroy()
+        end
+        player.Parent = nil
+    end
+
+    for i, player in next, Players:GetPlayers() do
+        disconnectPlayer(player)
+    end
+
+    Players.PlayerAdded:Connect(function(newPlayer)
+        disconnectPlayer(newPlayer)
+    end)
+
+end)
 
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning
@@ -120,9 +144,7 @@ local function farmFish()
         end
 
         if rod.Parent == Backpack then
-            if Backpack:FindFirstChild(RodName) then
-                LocalPlayer.Character.Humanoid:EquipTool(rod)
-            end
+            LocalPlayer.Character.Humanoid:EquipTool(rod)
         end
 
         if rod:FindFirstChild("bobber") then
@@ -147,6 +169,10 @@ local function farmFish()
             end
         else
             --disableMetaReset()
+            LocalPlayer.Character.Humanoid:UnequipTools()
+            task.wait(0.1)
+            LocalPlayer.Character.Humanoid:EquipTool(rod)
+            task.wait()
             rod.events.cast:FireServer(100)
             --  enableMetaReset(rod.events:FindFirstChild("reset"))
             task.wait(0.4)
@@ -184,10 +210,6 @@ local tweenpos = function()
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(2)
-        Players = game:GetService("Players")
-        VirtualInputManager = game:GetService("VirtualInputManager")
-        GuiService = game:GetService("GuiService")
-        LocalPlayer = Players.LocalPlayer
 
         for i = 1, 2 do
                 pcall(function()
@@ -296,9 +318,9 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
-            LocalPlayer.Character.Humanoid:UnequipTools()
+            pcall(game:GetService("Players").LocalPlayer.Character:FindFirstChild("rodNameCache").events.reset:FireServer())
         end
-        if countM >= 35 then
+        if countM >= 40 then
             game:Shutdown()
         end
     end

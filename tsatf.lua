@@ -35,28 +35,9 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-local function destroyCharacter(player)
-    if player == LocalPlayer then
-        return  -- Skip if it's the local player
-    end
 
-    local character = player.Character or player.CharacterAdded:Wait()
-    if character and Workspace:FindFirstChild(character.Name) then
-        character:Destroy()
-    end
-end
 
--- Initial removal of existing players
-for i, player in next, Players:GetPlayers() do
-    destroyCharacter(player)
-end
 
--- Connect to PlayerAdded event to handle new players
-task.spawn(function()
-Players.PlayerAdded:Connect(function(newPlayer)
-    destroyCharacter(newPlayer)
-end)
-end)
 
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน
 local settings = {

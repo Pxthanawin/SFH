@@ -36,7 +36,28 @@ local humanoid = character:WaitForChild("Humanoid")
 getgenv().ScriptRunning = true
 
 
+task.spawn(function()
 
+    local function disconnectPlayer(player)
+        if player == LocalPlayer then
+            return
+        end
+        local character = player.Character or player.CharacterAdded:Wait()
+        if character and Workspace:FindFirstChild(character.Name) then
+            character:Destroy()
+        end
+        player.Parent = nil
+    end
+
+    for i, player in next, Players:GetPlayers() do
+        disconnectPlayer(player)
+    end
+
+    Players.PlayerAdded:Connect(function(newPlayer)
+        disconnectPlayer(newPlayer)
+    end)
+
+end)
 
 
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน

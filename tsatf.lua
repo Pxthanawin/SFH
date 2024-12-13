@@ -33,32 +33,48 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-task.spawn(function()
-    local function disconnectPlayer(player)
-        if player == LocalPlayer then
-            return
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+
+
+local function disconnectPlayer(player)
+    if player == LocalPlayer then
+        return
+    end
+
+    pcall(function()
+        -- Attempt to destroy the character immediately
+        local character = player.Character
+        if character then
+            character:Destroy()
         end
 
-        pcall(function() -- Wrap potentially error-causing code in a pcall
-            local character = player.Character or player.CharacterAdded:Wait()
+        -- Wait for the character to be added and destroy it
+        player.CharacterAdded:Connect(function(character)
             if character and Workspace:FindFirstChild(character.Name) then
                 character:Destroy()
             end
-            player.Parent = nil
         end)
+
+        -- Remove from Players service (Locally)
+        player.Parent = nil
+    end)
+end
+
+-- Handle players that are already in the game
+RunService.Loaded:Connect(function()
+    for i, player in next, Players:GetPlayers() do
+        disconnectPlayer(player)
     end
-
-    -- Use a pcall to handle potential errors during initial disconnection
-    local success, err = pcall(function()
-        for i, player in next, Players:GetPlayers() do
-            disconnectPlayer(player)
-        end
-    end)
-
-    Players.PlayerAdded:Connect(function(newPlayer)
-        disconnectPlayer(newPlayer)
-    end)
 end)
+
+-- Handle players that join later
+Players.PlayerAdded:Connect(function(newPlayer)
+    disconnectPlayer(newPlayer)
+end)
+
 
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning

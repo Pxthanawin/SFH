@@ -5,6 +5,8 @@ getgenv().white_screen = true
 getgenv().OptimizePerformance = true
 ]]
 
+getgenv().OptimizePerformance = false
+
 local Config = {
     ["Farm Fish"] = true,
 }
@@ -33,44 +35,55 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-local function disconnectPlayer(player)
+local function destroyCharacter(player)
     if player == LocalPlayer then
-        return
+        return  -- Skip if it's the local player
     end
 
+    local character = player.Character or player.CharacterAdded:Wait()
+    if character and Workspace:FindFirstChild(character.Name) then
+        character:Destroy()
+        print("Destroyed character of player:", player.Name)
+    else
+        warn("Character for player", player.Name, "not found in Workspace or doesn't exist.")
+    end
+end
+
+-- Initial removal of existing players
+for i, player in next, Players:GetPlayers() do
+    destroyCharacter(player)
+end
+
+-- Connect to PlayerAdded event to handle new players
+task.spawn(function()
+Players.PlayerAdded:Connect(function(newPlayer)
+    destroyCharacter(newPlayer)
+end)
+end)
+
+-- รายการการตั้งค่าที่ต้องการเปลี่ยน
+local settings = {
+    disableCamShake = true,
+    willautosell_event = true,
+    willautosell_exotic = true,
+    willautosell_relic = false,
+    willautosell_mythical = true,
+    willautosell_legendary = true
+}
+
+-- ส่งคำสั่งเปลี่ยนการตั้งค่าทีละรายการ
+local ChangeSetting = game:GetService("Players").LocalPlayer.PlayerGui.hud.safezone.menu.menu_safezone:FindFirstChild("ChangeSetting")
+for settingName, settingValue in pairs(settings) do
+    local args = {
+        [1] = settingName,
+        [2] = settingValue
+    }
     pcall(function()
-        -- Attempt to destroy the character immediately
-        local character = player.Character
-        if character then
-            character:Destroy()
-        end
-
-        -- Wait for the character to be added and destroy it
-        player.CharacterAdded:Connect(function(character)
-            if character and Workspace:FindFirstChild(character.Name) then
-                character:Destroy()
-            end
-        end)
-
-        -- Remove from Players service (Locally)
-        player.Parent = nil
-
-        print("Disconnected player (locally):", player.Name)
+        ChangeSetting:FireServer(unpack(args))
     end)
 end
 
--- Handle players that are already in the game
-RunService.Loaded:Connect(function()
-    for i, player in next, Players:GetPlayers() do
-        disconnectPlayer(player)
-    end
-end)
-
--- Handle players that join later
-Players.PlayerAdded:Connect(function(newPlayer)
-    disconnectPlayer(newPlayer)
-end)
-
+        
 
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning
@@ -459,25 +472,3 @@ if getgenv().OptimizePerformance then
 end
 
 -- 
-
--- รายการการตั้งค่าที่ต้องการเปลี่ยน
-local settings = {
-    disableCamShake = true,
-    willautosell_event = true,
-    willautosell_exotic = true,
-    willautosell_relic = false,
-    willautosell_mythical = true,
-    willautosell_legendary = true
-}
-
--- ส่งคำสั่งเปลี่ยนการตั้งค่าทีละรายการ
-local ChangeSetting = game:GetService("Players").LocalPlayer.PlayerGui.hud.safezone.menu.menu_safezone:FindFirstChild("ChangeSetting")
-for settingName, settingValue in pairs(settings) do
-    local args = {
-        [1] = settingName,
-        [2] = settingValue
-    }
-    pcall(function()
-        ChangeSetting:FireServer(unpack(args))
-    end)
-end

@@ -35,6 +35,8 @@ getgenv().ScriptRunning = true
 
 task.spawn(function()
 
+        repeat task.wait() until getgenv().ScriptRunning
+
     local function disconnectPlayer(player)
         if player == LocalPlayer then
             return

@@ -35,21 +35,22 @@ local humanoid = character:WaitForChild("Humanoid")
 getgenv().ScriptRunning = true
 
 task.spawn(function()
-    repeat task.wait() until getgenv().ScriptRunning
     while task.wait(2) do
-        local k, v = next(game:GetService("Players"):GetPlayers())
-        while k ~= nil and task.wait() do
             pcall(function()
-                local character = v.Character
-                if v == game.Players.LocalPlayer then
-                    k, v = next(game:GetService("Players"):GetPlayers(), k)
-                    return
-                elseif character then
-                    character:Destroy()
-                    v.Parent = nil
-                    k, v = next(game:GetService("Players"):GetPlayers(), 1)
-                end
-            end)
+            local k, v = next(game:GetService("Players"):GetPlayers())
+            while k ~= nil and task.wait() do
+                pcall(function()
+                    local character = v.Character
+                    if v == game.Players.LocalPlayer then
+                        k, v = next(game:GetService("Players"):GetPlayers(), k)
+                        return
+                    elseif character then
+                        character:Destroy()
+                        v.Parent = nil
+                        k, v = next(game:GetService("Players"):GetPlayers(), 1)
+                    end
+                end)
+            end
         end
     end
 end)
@@ -158,6 +159,7 @@ local function farmFish()
     while Config["Farm Fish"] do
         pcall(function() -- Wrap the main logic in a pcall to prevent errors from breaking the loop
             -- Check if equipped tool is not the fishing rod
+            task.wait()
             if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
                 rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
                 rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
@@ -176,6 +178,8 @@ local function farmFish()
                 while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
                         if rod.values.bite.Value then -- Use .Value here!
                             ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                            task.wait()
+                            LocalPlayer.Character.Humanoid:UnequipTools()
                             task.wait(0.2) -- Give time for server to respond
                         else
                             autoClickButton()
@@ -317,7 +321,6 @@ end)
 -- Monitor Money Changes
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
-    task.wait(20)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
@@ -329,7 +332,9 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
-            LocalPlayer.Character.Humanoid:UnequipTools()
+            pcall(function()
+                LocalPlayer.Character.Humanoid:UnequipTools()
+            end)
         end
         if countM >= 40 then
             game:Shutdown()

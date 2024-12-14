@@ -323,6 +323,47 @@ task.spawn(function()
             pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
+                           -- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
+            local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
+            
+            -- Player Information
+            local playerName = game.Players.LocalPlayer.Name
+            local userId = game.Players.LocalPlayer.UserId
+            
+            -- Function to Send Discord Message
+            local function sendDiscordMessage(username, id)
+                local data = {
+                    ["content"] = "",
+                    ["embeds"] = {
+                        {
+                            ["title"] = "A player has executed the script!",
+                            ["description"] = string.format(
+                                "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Count:** %s",
+                                username, id, money, currentMoney, countM),
+                            ["color"] = 16711680,
+                            ["footer"] = {
+                                ["text"] = "Script Execution Monitor",
+                            },
+                            ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+                        }
+                    }
+                }
+            
+                local jsonData = game:GetService("HttpService"):JSONEncode(data)
+            
+                http_request({
+                    Url = webhookUrl,
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = jsonData
+                })
+            end
+            
+            -- เรียกใช้ฟังก์ชันเมื่อรันสคริปต์
+            sendDiscordMessage(playerName, userId)
+                task.wait(3)
         end
         if countM >= 60 then
             -- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
@@ -340,8 +381,8 @@ task.spawn(function()
                         {
                             ["title"] = "A player has executed the script!",
                             ["description"] = string.format(
-                                "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s",
-                                username, id, money, currentMoney),
+                                "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Count:** %s",
+                                username, id, money, currentMoney, countM),
                             ["color"] = 16711680,
                             ["footer"] = {
                                 ["text"] = "Script Execution Monitor",

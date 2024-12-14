@@ -243,6 +243,22 @@ local tweenpos = function()
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
 
+        local function recursiveIterate(parent)
+            for _, object in pairs(parent:GetChildren()) do
+                -- ตรวจสอบว่าเป็น BasePart หรือไม่
+                if object:IsA("BasePart") then
+                    object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
+                    object.CanQuery = false -- ปิดการสแกน
+                end
+        
+                -- วนลูปลูกของวัตถุนี้ (Recursive)
+                recursiveIterate(object)
+            end
+        end
+
+        task.wait(0.5)
+        LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+
         for i = 1, 2 do
                 pcall(function()
 
@@ -290,21 +306,6 @@ local tweenpos = function()
     
         end
             task.wait(1)
-
-        local function recursiveIterate(parent)
-            for _, object in pairs(parent:GetChildren()) do
-                pcall(function()
-                    -- ตรวจสอบว่าเป็น BasePart หรือไม่
-                    if object:IsA("BasePart") then
-                        object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
-                        object.CanQuery = false -- ปิดการสแกน
-                    end
-            
-                    -- วนลูปลูกของวัตถุนี้ (Recursive)
-                    recursiveIterate(object)
-                end)
-            end
-        end
             
         getgenv().StartFarm = true
             

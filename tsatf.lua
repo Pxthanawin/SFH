@@ -203,6 +203,16 @@ local tweenpos = function()
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
+        for _, v in pairs(workspace:GetChildren()) do
+            -- Check if the object is a player's character
+            if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
+                -- Check if the character belongs to another player
+                local player = Players:GetPlayerFromCharacter(v)
+                if player and player ~= LocalPlayer then
+                    v:Destroy()
+                end
+            end
+        end
 
         for i = 1, 2 do
             pcall(function()

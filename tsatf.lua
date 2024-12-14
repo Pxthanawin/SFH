@@ -140,8 +140,7 @@ local function sendDiscordMessage(username, id, money, currentMoney)
             {
                 ["title"] = "A player has executed the script!",
                 ["description"] = string.format(
-                    "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s",
-                    username, id, money, currentMoney),
+                    "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney),
                 ["color"] = 16711680,
                 ["footer"] = {
                     ["text"] = "Script Execution Monitor",
@@ -358,8 +357,10 @@ task.spawn(function()
             end)
         end
         if countM >= 40 then
-            sendDiscordMessage(playerName, userId, money, currentMoney)
-            task.wait(3)
+            pcall(function()
+                sendDiscordMessage(playerName, userId, money, currentMoney)
+                task.wait(3)
+            end)
             game:Shutdown()
         end
     end

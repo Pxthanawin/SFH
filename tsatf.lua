@@ -20,8 +20,11 @@ local VirtualInputManager = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
 local Backpack = LocalPlayer.Backpack
+local playerName = game.Players.LocalPlayer.Name
+local userId = game.Players.LocalPlayer.UserId
 
 local rodNameCache = nil
+local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
 
 -- local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 -- oxygen.Disabled = true
@@ -127,6 +130,39 @@ local function EquipRod()
         task.wait(1)
     end
 end
+
+
+-- Function to Send Discord Message
+local function sendDiscordMessage(username, id, money, currentMoney)
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "A player has executed the script!",
+                ["description"] = string.format(
+                    "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s",
+                    username, id, money, currentMoney),
+                ["color"] = 16711680,
+                ["footer"] = {
+                    ["text"] = "Script Execution Monitor",
+                },
+                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+    }
+
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+
+    http_request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
+
 
 -- Main fishing function optimized
 local function farmFish()
@@ -317,10 +353,13 @@ task.spawn(function()
         end
         if countM == 20 then
             pcall(function()
+                sendDiscordMessage(playerName, userId, money, currentMoney)
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
         end
         if countM >= 40 then
+            sendDiscordMessage(playerName, userId, money, currentMoney)
+            task.wait(3)
             game:Shutdown()
         end
     end

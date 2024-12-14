@@ -101,6 +101,6 @@ end
 -- เรียกใช้ฟังก์ชันกับ Workspace
 recursiveIterate(workspace)
 
-task.wait(3)
+task.wait(1)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/tsatf.lua"))()

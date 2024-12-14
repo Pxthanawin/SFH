@@ -463,30 +463,6 @@ pcall(function()
             end
         end
 
-        -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
-        if hookfunction and setreadonly then
-            local mt = getrawmetatable(game)
-            local old = mt.__newindex
-            setreadonly(mt, false)
-            local sda
-            sda = hookfunction(old, function(t, k, v)
-                if k == "Material" then
-                    if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
-                        v = Enum.Material.Plastic
-                    end
-                elseif k == "TopSurface" or k == "BottomSurface" then
-                    v = "Smooth"
-                elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
-                    v = 0
-                elseif k == "WaterTransparency" then
-                    v = 1
-                elseif k == "GlobalShadows" then
-                    v = false
-                end
-                return sda(t, k, v)
-            end)
-            setreadonly(mt, true)
-        end
     end
 
     -- เรียกใช้ฟังก์ชัน

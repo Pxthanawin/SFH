@@ -34,29 +34,30 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-local function disconnectPlayer(player)
-    -- Skip the local player
-    if player == LocalPlayer then
-        return
+task.spawn(function()
+
+    local function disconnectPlayer(player)
+        if player == LocalPlayer then
+            return
+        end
+        local character = player.Character or player.CharacterAdded:Wait()
+        if character and Workspace:FindFirstChild(character.Name) then
+            character:Destroy()
+        end
+        player.Parent = nil
     end
 
-    -- Wait for the character to load if it's not already loaded
-    local character = player.Character or player.CharacterAdded:Wait()
-
-    -- Destroy the character if it exists
-    if character then
-        character:Destroy()
-    end
-end
-
--- Main loop to disconnect players
-while task.wait(1) do
-    for _, player in pairs(Players:GetPlayers()) do
+    while task.wait(1) do
         pcall(function()
-            disconnectPlayer(player)
+            for i, player in next, game:GetService("Players"):GetPlayers() do
+                pcall(function()
+                    disconnectPlayer(player)
+                end)
+            end
         end)
     end
-end
+
+end)
 
 
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน

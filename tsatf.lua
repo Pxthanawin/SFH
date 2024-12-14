@@ -324,7 +324,7 @@ task.spawn(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
         end
-        if countM >= 120 then
+        if countM >= 60 then
             -- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
             local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
             

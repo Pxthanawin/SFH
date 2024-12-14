@@ -134,7 +134,7 @@ local function farmFish()
     repeat task.wait() until getgenv().StartFarm
     task.wait(1)
 
-    while Config["Farm Fish"] do
+    while Config["Farm Fish"] and RunService.Heartbeat:Wait() do
         pcall(function() -- Wrap the main logic in a pcall to prevent errors from breaking the loop
 		local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 		if Backpack:FindFirstChild(RodName) then

@@ -81,7 +81,6 @@ for settingName, settingValue in pairs(settings) do
     end)
 end
 
-        
 
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning
@@ -357,142 +356,141 @@ end)
 
 -- 
 
--- ฟังก์ชันหลักในการปรับแต่งประสิทธิภาพ
-local function OptimizeGamePerformance()
-    -- ปิดการใช้งาน Script ที่ไม่จำเป็น
+-- 
+
+pcall(function()
+
+    -- ฟังก์ชันหลักในการปรับแต่งประสิทธิภาพ
+    local function OptimizeGamePerformance()
+
+        -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
+        local function optimizeObject(obj)
+            pcall(function()
+                if obj:IsA("BasePart") then
+                    obj.Material = Enum.Material.Plastic
+                    obj.Reflectance = 0
+                    obj.TopSurface = Enum.SurfaceType.Smooth
+                    obj.BottomSurface = Enum.SurfaceType.Smooth
+                    obj.CastShadow = false
+                elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                    obj.Transparency = 1
+                elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
+                    obj.Enabled = false
+                elseif obj:IsA("Sound") then
+                    obj:Stop()
+                    obj.Volume = 0
+                elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+                    obj.Enabled = false
+                end
+            end)
+        end
+
+        -- ปรับแต่ง Lighting
+        local Lighting = game:GetService("Lighting")
+        Lighting.GlobalShadows = false
+        Lighting.Brightness = 1
+        Lighting.FogEnd = 1e6
+        Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+        Lighting.EnvironmentSpecularScale = 0
+        Lighting.EnvironmentDiffuseScale = 0
+
+        for _, effect in ipairs(Lighting:GetChildren()) do
+            if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
+                effect.Enabled = false
+            end
+        end
+
+        -- ปรับแต่ง Terrain
+        local Terrain = workspace:FindFirstChild("Terrain")
+        if Terrain then
+            Terrain.WaterWaveSize = 0
+            Terrain.WaterWaveSpeed = 0
+            Terrain.WaterReflectance = 0
+            Terrain.WaterTransparency = 1
+            for _, child in ipairs(Terrain:GetChildren()) do
+                optimizeObject(child)
+            end
+            Terrain.ChildAdded:Connect(optimizeObject)
+        end
+
+        -- ปรับแต่งวัตถุทั้งหมดใน Workspace
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            optimizeObject(obj)
+        end
+        workspace.DescendantAdded:Connect(optimizeObject)
+
+        -- ลบ Decals และ Textures ที่ไม่ได้ใช้งาน
+        for _, texture in ipairs(workspace:GetDescendants()) do
+            if texture:IsA("Texture") or texture:IsA("Decal") then
+                if not texture.Parent then
+                    texture:Destroy()
+                end
+            end
+        end
+
+        -- ลดคุณภาพการเรนเดอร์
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+        -- ลดฟิสิกส์ในเกม
+        local PhysicsService = game:GetService("PhysicsService")
+        if PhysicsService then
+            pcall(function()
+                PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
+            end)
+        else
+            warn("PhysicsService not available.")
+        end
+
+        -- ลดการใช้งาน MeshParts และ Special Meshes
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("MeshPart") then
+                v.Material = Enum.Material.SmoothPlastic
+                v.TextureID = ""
+            elseif v:IsA("SpecialMesh") then
+                v.TextureId = ""
+            end
+        end
+
+        -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
+        if hookfunction and setreadonly then
+            local mt = getrawmetatable(game)
+            local old = mt.__newindex
+            setreadonly(mt, false)
+            local sda
+            sda = hookfunction(old, function(t, k, v)
+                if k == "Material" then
+                    if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
+                        v = Enum.Material.Plastic
+                    end
+                elseif k == "TopSurface" or k == "BottomSurface" then
+                    v = "Smooth"
+                elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
+                    v = 0
+                elseif k == "WaterTransparency" then
+                    v = 1
+                elseif k == "GlobalShadows" then
+                    v = false
+                end
+                return sda(t, k, v)
+            end)
+            setreadonly(mt, true)
+        end
+    end
+
+    -- เรียกใช้ฟังก์ชัน
+    OptimizeGamePerformance()
+
+end)
+
+if LocalPlayer and LocalPlayer.PlayerScripts then
     LocalPlayer.PlayerScripts.weather.Disabled = true
     LocalPlayer.PlayerScripts.windcontroller.Disabled = true
-
-    -- ฟังก์ชันหลักในการปรับแต่งวัตถุ
-    local function optimizeObject(obj)
-        pcall(function()
-            if obj:IsA("BasePart") then
-                obj.Material = Enum.Material.Plastic
-                obj.Reflectance = 0
-                obj.TopSurface = Enum.SurfaceType.Smooth
-                obj.BottomSurface = Enum.SurfaceType.Smooth
-                obj.CastShadow = false
-            elseif obj:IsA("Decal") or obj:IsA("Texture") then
-                obj.Transparency = 1
-            elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
-                obj.Enabled = false
-            elseif obj:IsA("Sound") then
-                obj:Stop()
-                obj.Volume = 0
-            elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
-                obj.Enabled = false
-            elseif obj:IsA("Humanoid") then
-                obj.AutoRotate = false
-                obj.WalkSpeed = 16
-                obj.JumpPower = 50
-            end
-        end)
-    end
-
-    -- ปรับแต่ง Lighting
-    local Lighting = game:GetService("Lighting")
-    Lighting.GlobalShadows = false
-    Lighting.Brightness = 1
-    Lighting.FogEnd = 1e6
-    Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
-    Lighting.EnvironmentSpecularScale = 0
-    Lighting.EnvironmentDiffuseScale = 0
-
-    for _, effect in ipairs(Lighting:GetChildren()) do
-        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
-            effect.Enabled = false
-        end
-    end
-
-    -- ปรับแต่ง Terrain
-    local Terrain = workspace:FindFirstChild("Terrain")
-    if Terrain then
-        Terrain.WaterWaveSize = 0
-        Terrain.WaterWaveSpeed = 0
-        Terrain.WaterReflectance = 0
-        Terrain.WaterTransparency = 1
-        for _, child in ipairs(Terrain:GetChildren()) do
-            optimizeObject(child)
-        end
-        Terrain.ChildAdded:Connect(optimizeObject)
-    end
-
-    -- ปรับแต่งวัตถุทั้งหมดใน Workspace
-    for _, obj in ipairs(workspace:GetDescendants()) do
-        optimizeObject(obj)
-    end
-    workspace.DescendantAdded:Connect(optimizeObject)
-
-    -- ลบ Decals และ Textures ที่ไม่ได้ใช้งาน
-    for _, texture in ipairs(workspace:GetDescendants()) do
-        if texture:IsA("Texture") or texture:IsA("Decal") then
-            if not texture.Parent then
-                texture:Destroy()
-            end
-        end
-    end
-
-    -- ลดคุณภาพการเรนเดอร์
-    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-
-    -- ลดฟิสิกส์ในเกม
-    local PhysicsService = game:GetService("PhysicsService")
-    if PhysicsService then
-        pcall(function()
-            PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
-        end)
-    else
-        warn("PhysicsService not available.")
-    end
-
-    -- ลดการใช้งาน MeshParts และ Special Meshes
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v:IsA("MeshPart") then
-            v.Material = Enum.Material.SmoothPlastic
-            v.TextureID = ""
-        elseif v:IsA("SpecialMesh") then
-            v.TextureId = ""
-        end
-    end
-
-    -- ลบวัตถุที่ไม่จำเป็นใน Terrain และ Lighting
-    for _, v in pairs(workspace.Terrain:GetChildren()) do
-        v:Destroy()
-    end
-
-    for _, v in pairs(game.Lighting:GetChildren()) do
-        v:Destroy()
-    end
-
-    -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
-    if hookfunction and setreadonly then
-        local mt = getrawmetatable(game)
-        local old = mt.__newindex
-        setreadonly(mt, false)
-        local sda
-        sda = hookfunction(old, function(t, k, v)
-            if k == "Material" then
-                if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
-                    v = Enum.Material.Plastic
-                end
-            elseif k == "TopSurface" or k == "BottomSurface" then
-                v = "Smooth"
-            elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
-                v = 0
-            elseif k == "WaterTransparency" then
-                v = 1
-            elseif k == "GlobalShadows" then
-                v = false
-            end
-            return sda(t, k, v)
-        end)
-        setreadonly(mt, true)
-    end
 end
 
--- เรียกใช้ฟังก์ชัน
-if getgenv().OptimizePerformance then
-    OptimizeGamePerformance()
+for _, v in pairs(workspace.Terrain:GetChildren()) do
+    v:Destroy()
 end
 
--- 
+for _, v in pairs(game.Lighting:GetChildren()) do
+    v:Destroy()
+end

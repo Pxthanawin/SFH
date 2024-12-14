@@ -36,23 +36,19 @@ getgenv().ScriptRunning = true
 
 task.spawn(function()
 
-    local function disconnectPlayer(player)
-        if player == LocalPlayer then
-            return
-        end
-        local character = player.Character or player.CharacterAdded:Wait()
-        if character and Workspace:FindFirstChild(character.Name) then
-            character:Destroy()
-        end
-        player.Parent = nil
-    end
-
     while task.wait(1) do
         pcall(function()
             for i, player in next, game:GetService("Players"):GetPlayers() do
-                pcall(function()
-                    disconnectPlayer(player)
-                end)
+                        pcall(function()
+                if player == LocalPlayer then
+                    return
+                end
+                local character = player.Character or player.CharacterAdded:Wait()
+                if character and Workspace:FindFirstChild(character.Name) then
+                    character:Destroy()
+                end
+                player.Parent = nil
+                        end)
             end
         end)
     end

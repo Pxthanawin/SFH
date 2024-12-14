@@ -359,7 +359,7 @@ task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning
     task.wait(15)
     local countM = 0
-    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
+    local money = LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
     while task.wait(1) do
         countM += 1

@@ -67,6 +67,23 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 
 AssetsLoaded = true
 
+while task.wait(0.2) do
+    pcall(function()
+        local k, v = next(game:GetService("Players"):GetPlayers())
+        local character = v.Character
+        if v == game.Players.LocalPlayer then
+            k, v = next(game:GetService("Players"):GetPlayers(), k)
+            character = v.Character
+            character:Destroy()
+            v.Parent = nil
+            return
+        elseif character then
+            character:Destroy()
+            v.Parent = nil
+        end
+    end)
+end
+
 task.wait(10)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/tsatf.lua"))()

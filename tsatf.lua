@@ -322,7 +322,7 @@ task.spawn(function()
             countM = 0
             money = currentMoney
         end
-        if (countM % 20) == 0 then
+        if (countM % 20) == 0 and countM > 1 then
             pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)

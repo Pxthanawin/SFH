@@ -83,6 +83,6 @@ task.spawn(function()
     end
 end)
 
-task.wait(7)
+task.wait(4)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/tsatf.lua"))()

@@ -19,6 +19,7 @@ local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
+local Backpack = LocalPlayer.Backpack
 
 local rodNameCache = nil
 
@@ -143,7 +144,7 @@ local function farmFish()
             return
         end
 
-        if rod.Parent == Backpack then
+        if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
             LocalPlayer.Character.Humanoid:EquipTool(rod)
         end
 
@@ -315,7 +316,9 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
-            LocalPlayer.Character.Humanoid:UnequipTools()
+            pcall(function()
+                LocalPlayer.Character.Humanoid:UnequipTools()
+            end)
         end
         if countM >= 40 then
             game:Shutdown()

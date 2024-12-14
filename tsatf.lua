@@ -494,3 +494,15 @@ end
 for _, v in pairs(game.Lighting:GetChildren()) do
     v:Destroy()
 end
+
+
+for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
+    if v:IsA("Animation") then
+        v:Destroy()
+    end
+    for __, vv in pairs(v:GetDescendants()) do -- ใช้ GetDescendants() แทน GetChildren()
+        vv:Destroy()
+    end
+end
+
+ReplicatedStorage.modules.fx:Destroy()

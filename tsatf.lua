@@ -19,6 +19,7 @@ local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
+local Backpack = LocalPlayer:WaitForChild("Backpack")
 
 local rodNameCache = nil
 local rod = nil
@@ -40,7 +41,7 @@ local function disconnectPlayer(player)
     end
 
     -- Wait for the character to load if it's not already loaded
-    local character = player.Character or player.CharacterAdded:Wait()
+    local character = player.Character
 
     -- Destroy the character if it exists
     if character then
@@ -48,19 +49,19 @@ local function disconnectPlayer(player)
     end
 end
 
+-- Handle players who are already in the game when the script starts (except the LocalPlayer)
+for _, player in pairs(Players:GetPlayers()) do
+    pcall(function()
+        disconnectPlayer(player)
+    end)
+end
+
 -- Connect to the PlayerAdded event to disconnect new players (except the LocalPlayer)
 Players.PlayerAdded:Connect(function(player)
-    if player ~= LocalPlayer then
+    pcall(function()
         disconnectPlayer(player)
-    end
+    end)
 end)
-
--- Handle players who are already in the game when the script starts (except the LocalPlayer)
-for _, player in ipairs(Players:GetPlayers()) do
-    if player ~= LocalPlayer then
-        disconnectPlayer(player)
-    end
-end
 
 
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน
@@ -162,47 +163,39 @@ end
 local function farmFish()
     repeat task.wait() until getgenv().StartFarm
     task.wait(1)
+
     while Config["Farm Fish"] do
-        -- Cache rodName to avoid repeated lookups
-
-        if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
-            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.DPadLeft, false, nil)
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.DPadLeft, false, nil)
-            task.wait()
-            return
-        end
-        rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
-        if not rod then
-            RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
-            return
-        end
-
-        if rod:FindFirstChild("bobber") then
-            -- wait(0.1)
-            --if rod.bobber.BobberWeld.Enabled then
-                --wait(0.2)
-                --rod.bobber.BobberWeld.Enabled = false
-            --end
-            -- rod.bobber.CanCollide = false
-            -- task.wait(0.1)
-            -- rod.bobber.Anchored = true
-            while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
-                pcall(function()
-                    if rod.values.bite then
-                        ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                        task.wait() -- Reduced delay
-                    else
-                        autoClickButton()
-                        RunService.Heartbeat:Wait() -- Smoother frame sync
-                    end
-                end)
+        pcall(function() -- Wrap the main logic in a pcall to prevent errors from breaking the loop
+            -- Check if equipped tool is not the fishing rod
+            if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
+                rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+                rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.DPadLeft, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.DPadLeft, false, nil)
+                task.wait(0.5)
+                return -- Stop current iteration if inventory slot needs updating
             end
-        else
-            rod.events.cast:FireServer(100)
-            --  enableMetaReset(rod.events:FindFirstChild("reset"))
-            task.wait(0.4)
-        end
+
+            if not rod then
+                RunService.Heartbeat:Wait()
+                return -- Stop current iteration if rod not found
+            end
+
+            if rod:FindFirstChild("bobber") then
+                while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
+                        if rod.values.bite.Value then -- Use .Value here!
+                            ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                            task.wait(0.2) -- Give time for server to respond
+                        else
+                            autoClickButton()
+                            RunService.Heartbeat:Wait()
+                        end
+                end
+            else
+                rod.events.cast:FireServer(100)
+                task.wait(0.4)
+            end
+        end)
     end
 end
 
@@ -450,30 +443,6 @@ pcall(function()
             end
         end
 
-        -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
-        if hookfunction and setreadonly then
-            local mt = getrawmetatable(game)
-            local old = mt.__newindex
-            setreadonly(mt, false)
-            local sda
-            sda = hookfunction(old, function(t, k, v)
-                if k == "Material" then
-                    if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
-                        v = Enum.Material.Plastic
-                    end
-                elseif k == "TopSurface" or k == "BottomSurface" then
-                    v = "Smooth"
-                elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
-                    v = 0
-                elseif k == "WaterTransparency" then
-                    v = 1
-                elseif k == "GlobalShadows" then
-                    v = false
-                end
-                return sda(t, k, v)
-            end)
-            setreadonly(mt, true)
-        end
     end
 
     -- เรียกใช้ฟังก์ชัน
@@ -487,11 +456,11 @@ if LocalPlayer and LocalPlayer.PlayerScripts then
 end
 
 for _, v in pairs(workspace.Terrain:GetChildren()) do
-    pcall(v:Destroy())
+    v:Destroy()
 end
 
 for _, v in pairs(game.Lighting:GetChildren()) do
-    pcall(v:Destroy())
+    v:Destroy()
 end
 
 

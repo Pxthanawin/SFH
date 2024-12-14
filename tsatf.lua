@@ -255,6 +255,9 @@ local tweenpos = function()
                 recursiveIterate(object)
             end
         end
+        
+        -- เรียกใช้ฟังก์ชันกับ Workspace
+        recursiveIterate(workspace)
 
         task.wait(0.5)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame

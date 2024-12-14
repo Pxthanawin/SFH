@@ -136,38 +136,36 @@ local function farmFish()
 
     while Config["Farm Fish"] do
         pcall(function() -- Wrap the main logic in a pcall to prevent errors from breaking the loop
-            -- Check if equipped tool is not the fishing rod
-            task.wait()
-            if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
-                rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-                rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.DPadLeft, false, nil)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.DPadLeft, false, nil)
-                task.wait(0.5)
-                return -- Stop current iteration if inventory slot needs updating
-            end
-
-            if not rod then
-                RunService.Heartbeat:Wait()
-                return -- Stop current iteration if rod not found
-            end
-
-            if rod:FindFirstChild("bobber") then
-                while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
-                    pcall(function()
-                        if rod.values.bite.Value then -- Use .Value here!
-                            ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                            task.wait(0.2)
-                        else
-                            autoClickButton()
-                            RunService.Heartbeat:Wait()
-                        end
-                    end)
-                end
-            else
-                rod.events.cast:FireServer(100)
-                task.wait(0.4)
-            end
+		local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+		if Backpack:FindFirstChild(RodName) then
+			LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+		end
+		if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
+			local XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
+			XyzClone.Parent = game.Players.LocalPlayer.PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
+			XyzClone.Name = "Lure"
+			XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
+			repeat
+				pcall(function()
+					PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
+					game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+					game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+				end)
+				XyzClone.Text = "<font color='#ff4949'>Lure </font>: "..tostring(ExportValue(tostring(LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value), 2)).."%"
+				RunService.Heartbeat:Wait()
+			until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not Config['Farm Fish']
+			XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
+			delay(1.5, function()
+				XyzClone:Destroy()
+			end)
+			repeat
+				ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
+				task.wait(.5)
+			until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not Config['Farm Fish']
+		else
+			LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
+			task.wait(2)
+		end
         end)
     end
 end

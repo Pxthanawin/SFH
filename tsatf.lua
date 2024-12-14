@@ -158,8 +158,6 @@ local function farmFish()
                         if rod.values.bite.Value then -- Use .Value here!
                             ReplicatedStorage.events.reelfinished:FireServer(100, true)
                             task.wait(0.2)
-                            LocalPlayer.Character.Humanoid:UnequipTools()
-                            task.wait(0.1) -- Give time for server to respond
                         else
                             autoClickButton()
                             RunService.Heartbeat:Wait()

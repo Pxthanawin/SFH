@@ -21,6 +21,7 @@ local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
 
 local rodNameCache = nil
+local rod = nil
 
 -- local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 -- oxygen.Disabled = true
@@ -163,17 +164,18 @@ local function farmFish()
     while Config["Farm Fish"] do
         -- Cache rodName to avoid repeated lookups
 
-        rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-
-        local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
+        if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
+            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+            rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.DPadLeft, false, nil)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.DPadLeft, false, nil)
+            task.wait()
+            return
+        end
 
         if not rod then
             RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
             return
-        end
-
-        if rod.Parent == Backpack then
-            LocalPlayer.Character.Humanoid:EquipTool(rod)
         end
 
         if rod:FindFirstChild("bobber") then
@@ -197,7 +199,6 @@ local function farmFish()
                 end)
             end
         else
-            task.wait()
             rod.events.cast:FireServer(100)
             --  enableMetaReset(rod.events:FindFirstChild("reset"))
             task.wait(0.4)

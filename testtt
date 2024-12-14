@@ -68,7 +68,7 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 AssetsLoaded = true
 
 task.spawn(function()
-    while task.wait(3) do
+    while task.wait(2) do
         for _, v in pairs(workspace:GetChildren()) do
             -- Check if the object is a player's character
             if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
@@ -77,6 +77,7 @@ task.spawn(function()
                 if player and player ~= LocalPlayer then
                     v:Destroy()
                 end
+                task.wait()
             end
         end
     end

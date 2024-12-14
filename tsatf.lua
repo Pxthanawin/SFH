@@ -33,33 +33,34 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-
-task.spawn(function()
-
-    repeat task.wait() until getgenv().ScriptRunning
-
-    local function disconnectPlayer(player)
-        if player == LocalPlayer then
-            return
-        end
-        local character = player.Character or player.CharacterAdded:Wait()
-        if character and Workspace:FindFirstChild(character.Name) then
-            character:Destroy()
-        end
-        player.Parent = nil
+local function disconnectPlayer(player)
+    -- Skip the local player
+    if player == LocalPlayer then
+        return
     end
 
-    while task.wait(1) do
-        pcall(function()
-            for i, player in next, game:GetService("Players"):GetPlayers() do
-                pcall(function()
-                    disconnectPlayer(player)
-                end)
-            end
-        end)
-    end
+    -- Wait for the character to load if it's not already loaded
+    local character = player.Character or player.CharacterAdded:Wait()
 
+    -- Destroy the character if it exists
+    if character then
+        character:Destroy()
+    end
+end
+
+-- Connect to the PlayerAdded event to disconnect new players (except the LocalPlayer)
+Players.PlayerAdded:Connect(function(player)
+    if player ~= LocalPlayer then
+        disconnectPlayer(player)
+    end
 end)
+
+-- Handle players who are already in the game when the script starts (except the LocalPlayer)
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        disconnectPlayer(player)
+    end
+end
 
 
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน
@@ -486,11 +487,11 @@ if LocalPlayer and LocalPlayer.PlayerScripts then
 end
 
 for _, v in pairs(workspace.Terrain:GetChildren()) do
-    v:Destroy()
+    pcall(v:Destroy())
 end
 
 for _, v in pairs(game.Lighting:GetChildren()) do
-    v:Destroy()
+    pcall(v:Destroy())
 end
 
 

@@ -309,12 +309,12 @@ task.spawn(function()
             countM = 0
             money = currentMoney
         end
-        if countM == 20 then
+        if countM == 25 then
             pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
         end
-        if countM >= 40 then
+        if countM >= 50 then
             game:Shutdown()
         end
     end

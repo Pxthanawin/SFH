@@ -292,6 +292,21 @@ local tweenpos = function()
             task.wait(1)
             
         getgenv().StartFarm = true
+
+        local function recursiveIterate(parent)
+            for _, object in pairs(parent:GetChildren()) do
+                -- ตรวจสอบว่าเป็น BasePart หรือไม่
+                if object:IsA("BasePart") then
+                    object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
+                    object.CanQuery = false -- ปิดการสแกน
+                end
+        
+                -- วนลูปลูกของวัตถุนี้ (Recursive)
+                recursiveIterate(object)
+            end
+        end
+        
+        recursiveIterate(workspace)
             
     end)
     tween:Play()

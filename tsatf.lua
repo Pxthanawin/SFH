@@ -34,26 +34,6 @@ local humanoid = character:WaitForChild("Humanoid")
 
 getgenv().ScriptRunning = true
 
-task.spawn(function()
-    while task.wait(2) do
-        local k, v = next(game:GetService("Players"):GetPlayers())
-        while k ~= nil and task.wait() do
-            pcall(function()
-                local character = v.Character
-                if v == game.Players.LocalPlayer then
-                    k, v = next(game:GetService("Players"):GetPlayers(), k)
-                    return
-                elseif character then
-                    character:Destroy()
-                    v.Parent = nil
-                    k, v = next(game:GetService("Players"):GetPlayers(), 1)
-                end
-            end)
-        end
-    end
-end)
-
-
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน
 local settings = {
     disableCamShake = true,

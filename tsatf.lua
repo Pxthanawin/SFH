@@ -342,7 +342,7 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
-            pcall(game:GetService("Players").LocalPlayer.Character:FindFirstChild("rodNameCache").events.reset:FireServer())
+            LocalPlayer.Character.Humanoid:UnequipTools()
         end
         if countM >= 40 then
             game:Shutdown()

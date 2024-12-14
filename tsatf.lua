@@ -35,7 +35,7 @@ local humanoid = character:WaitForChild("Humanoid")
 getgenv().ScriptRunning = true
 
 task.spawn(function()
-
+    repeat task.wait() until getgenv().ScriptRunning
     while task.wait(1) do
         pcall(function()
             for i, player in next, game:GetService("Players"):GetPlayers() do

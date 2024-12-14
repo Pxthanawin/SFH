@@ -41,7 +41,7 @@ local function disconnectPlayer(player)
     end
 
     -- Wait for the character to load if it's not already loaded
-    local character = player.Character
+    local character = player.Character or player.CharacterAdded:Wait()
 
     -- Destroy the character if it exists
     if character then
@@ -49,19 +49,14 @@ local function disconnectPlayer(player)
     end
 end
 
--- Handle players who are already in the game when the script starts (except the LocalPlayer)
-for _, player in pairs(Players:GetPlayers()) do
-    pcall(function()
-        disconnectPlayer(player)
-    end)
+-- Main loop to disconnect players
+while task.wait(1) do
+    for _, player in pairs(Players:GetPlayers()) do
+        pcall(function()
+            disconnectPlayer(player)
+        end)
+    end
 end
-
--- Connect to the PlayerAdded event to disconnect new players (except the LocalPlayer)
-Players.PlayerAdded:Connect(function(player)
-    pcall(function()
-        disconnectPlayer(player)
-    end)
-end)
 
 
 -- รายการการตั้งค่าที่ต้องการเปลี่ยน

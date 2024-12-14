@@ -213,6 +213,7 @@ local tweenpos = function()
                 end
             end
         end
+            task.wait()
 
         for i = 1, 2 do
             pcall(function()

@@ -36,23 +36,22 @@ getgenv().ScriptRunning = true
 
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning
-    while task.wait(1) do
-        pcall(function()
-            for i, player in next, game:GetService("Players"):GetPlayers() do
-                        pcall(function()
-                if player == LocalPlayer then
+    while task.wait(2) do
+        local k, v = next(game:GetService("Players"):GetPlayers())
+        while k ~= nil and task.wait() do
+            pcall(function()
+                local character = v.Character
+                if v == game.Players.LocalPlayer then
+                    k, v = next(game:GetService("Players"):GetPlayers(), k)
                     return
-                end
-                local character = player.Character or player.CharacterAdded:Wait()
-                if character and Workspace:FindFirstChild(character.Name) then
+                elseif character then
                     character:Destroy()
+                    v.Parent = nil
+                    k, v = next(game:GetService("Players"):GetPlayers(), 1)
                 end
-                player.Parent = nil
-                        end)
-            end
-        end)
+            end)
+        end
     end
-
 end)
 
 

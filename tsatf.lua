@@ -19,10 +19,8 @@ local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
-local Backpack = LocalPlayer:WaitForChild("Backpack")
 
 local rodNameCache = nil
-local rod = nil
 
 -- local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 -- oxygen.Disabled = true
@@ -133,40 +131,48 @@ end
 local function farmFish()
     repeat task.wait() until getgenv().StartFarm
     task.wait(1)
+    while Config["Farm Fish"] do
+        -- Cache rodName to avoid repeated lookups
 
-    while Config["Farm Fish"] and RunService.Heartbeat:Wait() do
-        pcall(function() -- Wrap the main logic in a pcall to prevent errors from breaking the loop
-		local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-		if Backpack:FindFirstChild(RodName) then
-			LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
-		end
-		if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
-			local XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
-			XyzClone.Parent = game.Players.LocalPlayer.PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
-			XyzClone.Name = "Lure"
-			XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
-			repeat
-				pcall(function()
-					PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
-					game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
-					game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
-				end)
-				XyzClone.Text = "<font color='#ff4949'>Lure </font>: "..tostring(ExportValue(tostring(LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value), 2)).."%"
-				RunService.Heartbeat:Wait()
-			until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not Config['Farm Fish']
-			XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
-			delay(1.5, function()
-				XyzClone:Destroy()
-			end)
-			repeat
-				ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
-				task.wait(.5)
-			until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not Config['Farm Fish']
-		else
-			LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
-			task.wait(2)
-		end
-        end)
+        rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+
+        local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
+
+        if not rod then
+            RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
+            return
+        end
+
+        if rod.Parent == Backpack then
+            LocalPlayer.Character.Humanoid:EquipTool(rod)
+        end
+
+        if rod:FindFirstChild("bobber") then
+            -- wait(0.1)
+            --if rod.bobber.BobberWeld.Enabled then
+                --wait(0.2)
+                --rod.bobber.BobberWeld.Enabled = false
+            --end
+            -- rod.bobber.CanCollide = false
+            -- task.wait(0.1)
+            -- rod.bobber.Anchored = true
+            while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
+                pcall(function()
+                    if rod.values.bite.Value then
+                        ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                        task.wait() -- Reduced delay
+                    else
+                        autoClickButton()
+                        RunService.Heartbeat:Wait() -- Smoother frame sync
+                    end
+                end)
+            end
+        else
+            task.wait()
+            rod.events.cast:FireServer(100)
+            --  enableMetaReset(rod.events:FindFirstChild("reset"))
+            task.wait(0.4)
+        end
     end
 end
 
@@ -201,62 +207,51 @@ local tweenpos = function()
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-        for _, v in pairs(workspace:GetChildren()) do
-            -- Check if the object is a player's character
-            if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
-                -- Check if the character belongs to another player
-                local player = Players:GetPlayerFromCharacter(v)
-                if player and player ~= LocalPlayer then
-                    v:Destroy()
-                end
-            end
-        end
-            task.wait()
 
         for i = 1, 2 do
-            pcall(function()
+                pcall(function()
 
-                local camera = workspace.Camera
-                camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(889.485229, -761.570251, 971.296448, -0.72676146, 0.580407798, -0.367348105, -1.49011612e-08, 0.534799099, 0.844979286, 0.686890006, 0.61409837, -0.388671309)
+            local camera = workspace.Camera
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new(889.485229, -761.570251, 971.296448, -0.72676146, 0.580407798, -0.367348105, -1.49011612e-08, 0.534799099, 0.844979286, 0.686890006, 0.61409837, -0.388671309)
 
-                local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
-                if MiloMerchant then
-                    MiloMerchant.HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0, 4, 0)
+            local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+            if MiloMerchant then
+                MiloMerchant.HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0, 4, 0)
 
-                    local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
-                    if dialogPrompt then
-                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
-                        task.wait()
-                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
-                    end
+                local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+                if dialogPrompt then
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
+                    task.wait()
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
                 end
+            end
 
-                task.wait()
+            task.wait()
 
-                local options = PlayerGui:WaitForChild("options", math.huge)
+            local options = PlayerGui:WaitForChild("options", math.huge)
 
-                local safezone = options:FindFirstChild("safezone")
-                if safezone then
-                    local option2 = safezone:FindFirstChild("2option")
-                    if option2 then
-                        local button = option2:FindFirstChild("button")
-                        if button then
-                            GuiService.SelectedObject = button
+            local safezone = options:FindFirstChild("safezone")
+            if safezone then
+                local option2 = safezone:FindFirstChild("2option")
+                if option2 then
+                    local button = option2:FindFirstChild("button")
+                    if button then
+                        GuiService.SelectedObject = button
+                        task.wait()
+
+                        if GuiService.SelectedObject == button then
+                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                             task.wait()
-
-                            if GuiService.SelectedObject == button then
-                                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                                task.wait()
-                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                            end
+                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                         end
                     end
                 end
-            
-                task.wait()
-                GuiService.SelectedObject = nil
-            end)
+            end
+        
+            task.wait()
+            GuiService.SelectedObject = nil
+                        end)
     
         end
             task.wait(1)
@@ -308,6 +303,7 @@ end)
 -- Monitor Money Changes
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
+    task.wait(20)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
@@ -318,94 +314,10 @@ task.spawn(function()
             countM = 0
             money = currentMoney
         end
-        if (countM % 20) == 0 and countM > 1 then
-            pcall(function()
-                LocalPlayer.Character.Humanoid:UnequipTools()
-            end)
-                           -- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
-            local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
-            
-            -- Player Information
-            local playerName = game.Players.LocalPlayer.Name
-            local userId = game.Players.LocalPlayer.UserId
-            
-            -- Function to Send Discord Message
-            local function sendDiscordMessage(username, id)
-                local data = {
-                    ["content"] = "",
-                    ["embeds"] = {
-                        {
-                            ["title"] = "A player has executed the script!",
-                            ["description"] = string.format(
-                                "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Count:** %s",
-                                username, id, money, currentMoney, countM),
-                            ["color"] = 16711680,
-                            ["footer"] = {
-                                ["text"] = "Script Execution Monitor",
-                            },
-                            ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
-                        }
-                    }
-                }
-            
-                local jsonData = game:GetService("HttpService"):JSONEncode(data)
-            
-                http_request({
-                    Url = webhookUrl,
-                    Method = "POST",
-                    Headers = {
-                        ["Content-Type"] = "application/json"
-                    },
-                    Body = jsonData
-                })
-            end
-            
-            -- เรียกใช้ฟังก์ชันเมื่อรันสคริปต์
-            sendDiscordMessage(playerName, userId)
-                task.wait(3)
+        if countM == 20 then
+            LocalPlayer.Character.Humanoid:UnequipTools()
         end
-        if countM >= 60 then
-            -- Webhook URL (ใส่ Webhook URL ของคุณที่นี่)
-            local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
-            
-            -- Player Information
-            local playerName = game.Players.LocalPlayer.Name
-            local userId = game.Players.LocalPlayer.UserId
-            
-            -- Function to Send Discord Message
-            local function sendDiscordMessage(username, id)
-                local data = {
-                    ["content"] = "",
-                    ["embeds"] = {
-                        {
-                            ["title"] = "A player has executed the script!",
-                            ["description"] = string.format(
-                                "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Count:** %s",
-                                username, id, money, currentMoney, countM),
-                            ["color"] = 16711680,
-                            ["footer"] = {
-                                ["text"] = "Script Execution Monitor",
-                            },
-                            ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
-                        }
-                    }
-                }
-            
-                local jsonData = game:GetService("HttpService"):JSONEncode(data)
-            
-                http_request({
-                    Url = webhookUrl,
-                    Method = "POST",
-                    Headers = {
-                        ["Content-Type"] = "application/json"
-                    },
-                    Body = jsonData
-                })
-            end
-            
-            -- เรียกใช้ฟังก์ชันเมื่อรันสคริปต์
-            sendDiscordMessage(playerName, userId)
-                task.wait(3)
+        if countM >= 40 then
             game:Shutdown()
         end
     end
@@ -508,6 +420,30 @@ pcall(function()
             end
         end
 
+        -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
+        if hookfunction and setreadonly then
+            local mt = getrawmetatable(game)
+            local old = mt.__newindex
+            setreadonly(mt, false)
+            local sda
+            sda = hookfunction(old, function(t, k, v)
+                if k == "Material" then
+                    if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
+                        v = Enum.Material.Plastic
+                    end
+                elseif k == "TopSurface" or k == "BottomSurface" then
+                    v = "Smooth"
+                elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
+                    v = 0
+                elseif k == "WaterTransparency" then
+                    v = 1
+                elseif k == "GlobalShadows" then
+                    v = false
+                end
+                return sda(t, k, v)
+            end)
+            setreadonly(mt, true)
+        end
     end
 
     -- เรียกใช้ฟังก์ชัน

@@ -96,7 +96,7 @@ local function recursiveIterate(parent)
     
             -- วนลูปลูกของวัตถุนี้ (Recursive)
             recursiveIterate(object)
-        end
+        end)
     end
 end
 

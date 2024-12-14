@@ -36,7 +36,7 @@ getgenv().ScriptRunning = true
 
 task.spawn(function()
 
-        repeat task.wait() until getgenv().ScriptRunning
+    repeat task.wait() until getgenv().ScriptRunning
 
     local function disconnectPlayer(player)
         if player == LocalPlayer then
@@ -50,13 +50,13 @@ task.spawn(function()
     end
 
     while task.wait(1) do
-            pcall(function()
-        for i, player in next, game:GetService("Players"):GetPlayers() do
-            pcall(function()
-                disconnectPlayer(player)
-            end)
-        end
+        pcall(function()
+            for i, player in next, game:GetService("Players"):GetPlayers() do
+                pcall(function()
+                    disconnectPlayer(player)
                 end)
+            end
+        end)
     end
 
 end)
@@ -166,13 +166,12 @@ local function farmFish()
 
         if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
             rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-            rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
             VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.DPadLeft, false, nil)
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.DPadLeft, false, nil)
             task.wait()
             return
         end
-
+        rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
         if not rod then
             RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
             return
@@ -189,7 +188,7 @@ local function farmFish()
             -- rod.bobber.Anchored = true
             while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
                 pcall(function()
-                    if rod.values.bite.Value then
+                    if rod.values.bite then
                         ReplicatedStorage.events.reelfinished:FireServer(100, true)
                         task.wait() -- Reduced delay
                     else
@@ -239,49 +238,49 @@ local tweenpos = function()
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
 
         for i = 1, 2 do
-                pcall(function()
+            pcall(function()
 
-            local camera = workspace.Camera
-            camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(889.485229, -761.570251, 971.296448, -0.72676146, 0.580407798, -0.367348105, -1.49011612e-08, 0.534799099, 0.844979286, 0.686890006, 0.61409837, -0.388671309)
+                local camera = workspace.Camera
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(889.485229, -761.570251, 971.296448, -0.72676146, 0.580407798, -0.367348105, -1.49011612e-08, 0.534799099, 0.844979286, 0.686890006, 0.61409837, -0.388671309)
 
-            local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
-            if MiloMerchant then
-                MiloMerchant.HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0, 4, 0)
+                local MiloMerchant = workspace.world.npcs:FindFirstChild("Milo Merchant")
+                if MiloMerchant then
+                    MiloMerchant.HumanoidRootPart.CFrame = targetCFrame*CFrame.new(0, 4, 0)
 
-                local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
-                if dialogPrompt then
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
-                    task.wait()
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
-                end
-            end
-
-            task.wait()
-
-            local options = PlayerGui:WaitForChild("options", math.huge)
-
-            local safezone = options:FindFirstChild("safezone")
-            if safezone then
-                local option2 = safezone:FindFirstChild("2option")
-                if option2 then
-                    local button = option2:FindFirstChild("button")
-                    if button then
-                        GuiService.SelectedObject = button
+                    local dialogPrompt = MiloMerchant:FindFirstChild("dialogprompt")
+                    if dialogPrompt then
+                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.ButtonX, false, nil)
                         task.wait()
+                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.ButtonX, false, nil)
+                    end
+                end
 
-                        if GuiService.SelectedObject == button then
-                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                task.wait()
+
+                local options = PlayerGui:WaitForChild("options", math.huge)
+
+                local safezone = options:FindFirstChild("safezone")
+                if safezone then
+                    local option2 = safezone:FindFirstChild("2option")
+                    if option2 then
+                        local button = option2:FindFirstChild("button")
+                        if button then
+                            GuiService.SelectedObject = button
                             task.wait()
-                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+
+                            if GuiService.SelectedObject == button then
+                                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                                task.wait()
+                                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                            end
                         end
                     end
                 end
-            end
-        
-            task.wait()
-            GuiService.SelectedObject = nil
-                        end)
+            
+                task.wait()
+                GuiService.SelectedObject = nil
+            end)
     
         end
             task.wait(1)

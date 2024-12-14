@@ -154,6 +154,7 @@ local function farmFish()
 
             if rod:FindFirstChild("bobber") then
                 while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
+                    pcall(function()
                         if rod.values.bite.Value then -- Use .Value here!
                             ReplicatedStorage.events.reelfinished:FireServer(100, true)
                             task.wait()
@@ -163,6 +164,7 @@ local function farmFish()
                             autoClickButton()
                             RunService.Heartbeat:Wait()
                         end
+                    end)
                 end
             else
                 rod.events.cast:FireServer(100)

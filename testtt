@@ -1,4 +1,5 @@
 repeat task.wait() until game:IsLoaded()
+if game.PlaceId == 4483381587 then return end
 
 -- Variable zone
 
@@ -68,6 +69,7 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 AssetsLoaded = true
 
 task.spawn(function()
+    if game.PlaceId == 4483381587 then return end
     while task.wait(2) do
         for _, v in pairs(workspace:GetChildren()) do
             -- Check if the object is a player's character

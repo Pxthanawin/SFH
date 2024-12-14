@@ -134,44 +134,29 @@ local function farmFish()
     repeat task.wait() until getgenv().StartFarm
     task.wait(1)
 
-    while Config["Farm Fish"] do
-        pcall(function() -- Wrap the main logic in a pcall to prevent errors from breaking the loop
-            -- Check if equipped tool is not the fishing rod
-            task.wait()
-            if PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
-                rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-                rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.DPadLeft, false, nil)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.DPadLeft, false, nil)
-                task.wait(0.5)
-                return -- Stop current iteration if inventory slot needs updating
-            end
-
-            if not rod then
-                RunService.Heartbeat:Wait()
-                return -- Stop current iteration if rod not found
-            end
-
-            if rod:FindFirstChild("bobber") then
-                while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
-                    pcall(function()
-                        if rod.values.bite.Value then -- Use .Value here!
-                            ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                            task.wait()
-                            LocalPlayer.Character.Humanoid:UnequipTools()
-                            task.wait(0.2) -- Give time for server to respond
-                        else
-                            autoClickButton()
-                            RunService.Heartbeat:Wait()
-                        end
-                    end)
-                end
-            else
-                rod.events.cast:FireServer(100)
-                task.wait(0.4)
-            end
-        end)
-    end
+	local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+	while Config['Farm Fish'] and task.wait() do
+		if Backpack:FindFirstChild(RodName) then
+			LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+		end
+		if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
+			repeat
+				pcall(function()
+					PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
+					game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+					game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+				end)
+				RunService.Heartbeat:Wait()
+			until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not Config['Farm Fish']
+			repeat
+				ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
+				task.wait(.5)
+			until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not Config['Farm Fish']
+		else
+			LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
+			task.wait(2)
+		end
+	end
 end
 
 local targetPosition = Vector3.new(893.439453, -772.387634, 975.62616)

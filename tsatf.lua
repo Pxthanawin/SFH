@@ -133,14 +133,15 @@ end
 
 
 -- Function to Send Discord Message
-local function sendDiscordMessage(username, id, money, currentMoney)
+local function sendDiscordMessage(username, id, money, currentMoney, countM)
     local data = {
         ["content"] = "",
         ["embeds"] = {
             {
                 ["title"] = "A player has executed the script!",
                 ["description"] = string.format(
-                    "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney),
+                    "**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s",
+                    username, id, money, currentMoney, countM),
                 ["color"] = 16711680,
                 ["footer"] = {
                     ["text"] = "Script Execution Monitor",
@@ -352,13 +353,13 @@ task.spawn(function()
         end
         if countM == 20 then
             pcall(function()
-                sendDiscordMessage(playerName, userId, money, currentMoney)
+                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
         end
         if countM >= 40 then
             pcall(function()
-                sendDiscordMessage(playerName, userId, money, currentMoney)
+                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
                 task.wait(3)
             end)
             game:Shutdown()

@@ -68,24 +68,20 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 AssetsLoaded = true
 
 task.spawn(function()
-    while task.wait(0.2) do
-        pcall(function()
-            local k, v = next(game:GetService("Players"):GetPlayers())
-            local character = v.Character
-            if v == game.Players.LocalPlayer then
-                k, v = next(game:GetService("Players"):GetPlayers(), k)
-                character = v.Character
-                character:Destroy()
-                v.Parent = nil
-                return
-            elseif character then
-                character:Destroy()
-                v.Parent = nil
+    while task.wait(2) do
+        for _, v in pairs(workspace:GetChildren()) do
+            -- Check if the object is a player's character
+            if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
+                -- Check if the character belongs to another player
+                local player = Players:GetPlayerFromCharacter(v)
+                if player and player ~= LocalPlayer then
+                    v:Destroy()
+                end
             end
-        end)
+        end
     end
 end)
 
-task.wait(10)
+task.wait(7)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/tsatf.lua"))()

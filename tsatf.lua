@@ -354,35 +354,6 @@ task.spawn(function()
     end
 end)
 
--- Monitor Money Changes
-task.spawn(function()
-    repeat task.wait() until getgenv().ScriptRunning
-    task.wait(5)
-    local countM = 0
-    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
-
-    while task.wait(1) do
-        countM += 1
-        local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-        if money ~= currentMoney then
-            countM = 0
-            money = currentMoney
-        end
-        if countM == 20 then
-            pcall(function()
-                LocalPlayer.Character.Humanoid:UnequipTools()
-            end)
-        end
-        if countM >= 40 then
-            pcall(function()
-                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
-                task.wait(3)
-            end)
-            game:Shutdown()
-        end
-    end
-end)
-
 -- 
 
 -- 

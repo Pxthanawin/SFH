@@ -337,8 +337,8 @@ end)
 
 -- Monitor Money Changes
 task.spawn(function()
-    repeat task.wait() until getgenv().StartFarm
-    task.wait(5)
+    repeat task.wait() until getgenv().ScriptRunning
+    task.wait(20)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 

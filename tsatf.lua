@@ -509,4 +509,3 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     end
 end
 
-ReplicatedStorage.modules.fx:Destroy()

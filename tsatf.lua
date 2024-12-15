@@ -243,25 +243,6 @@ local tweenpos = function()
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
 
-        local function recursiveIterate(parent)
-            for _, object in pairs(parent:GetChildren()) do
-                -- ตรวจสอบว่าเป็น BasePart หรือไม่
-                if object:IsA("BasePart") then
-                    object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
-                    object.CanQuery = false -- ปิดการสแกน
-                end
-        
-                -- วนลูปลูกของวัตถุนี้ (Recursive)
-                recursiveIterate(object)
-            end
-        end
-        
-        -- เรียกใช้ฟังก์ชันกับ Workspace
-        recursiveIterate(workspace)
-
-        task.wait(0.5)
-        LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
-
         for i = 1, 2 do
                 pcall(function()
 
@@ -309,6 +290,21 @@ local tweenpos = function()
     
         end
             task.wait(1)
+
+        local function recursiveIterate(parent)
+            for _, object in pairs(parent:GetChildren()) do
+                pcall(function()
+                    -- ตรวจสอบว่าเป็น BasePart หรือไม่
+                    if object:IsA("BasePart") then
+                        object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
+                        object.CanQuery = false -- ปิดการสแกน
+                    end
+            
+                    -- วนลูปลูกของวัตถุนี้ (Recursive)
+                    recursiveIterate(object)
+                end)
+            end
+        end
             
         getgenv().StartFarm = true
             
@@ -356,10 +352,10 @@ end)
 
 -- Monitor Money Changes
 task.spawn(function()
-    repeat task.wait() until getgenv().ScriptRunning
-    task.wait(15)
+    repeat task.wait() until getgenv().StartFarm
+    task.wait(5)
     local countM = 0
-    local money = LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
+    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
     while task.wait(1) do
         countM += 1

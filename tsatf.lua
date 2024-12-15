@@ -144,7 +144,7 @@ local function sendDiscordMessage(username, id, money, currentMoney, countM)
                 ["description"] = string.format("**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney, countM),
                 ["color"] = 16711680,
                 ["footer"] = {
-                    ["text"] = "Script Execution Monitor",
+                    ["text"] = "version 20241215b",
                 },
                 ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
             }
@@ -170,47 +170,47 @@ local function farmFish()
     task.wait(1)
     while Config["Farm Fish"] do
         pcall(function()
-        -- Cache rodName to avoid repeated lookups
-
-        rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-
-        local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
-
-        if not rod then
-            RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
-            return
-        end
-
-        if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
-            LocalPlayer.Character.Humanoid:EquipTool(rod)
-        end
-
-        if rod:FindFirstChild("bobber") then
-            -- wait(0.1)
-            --if rod.bobber.BobberWeld.Enabled then
-                --wait(0.2)
-                --rod.bobber.BobberWeld.Enabled = false
-            --end
-            -- rod.bobber.CanCollide = false
-            -- task.wait(0.1)
-            -- rod.bobber.Anchored = true
-            while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
-                pcall(function()
-                    if rod.values.bite.Value then
-                        ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                        task.wait() -- Reduced delay
-                    else
-                        autoClickButton()
-                        RunService.Heartbeat:Wait() -- Smoother frame sync
-                    end
-                end)
+            -- Cache rodName to avoid repeated lookups
+    
+            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+    
+            local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
+    
+            if not rod then
+                RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
+                return
             end
-        else
-            task.wait()
-            rod.events.cast:FireServer(100)
-            --  enableMetaReset(rod.events:FindFirstChild("reset"))
-            task.wait(0.4)
-        end
+    
+            if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
+                LocalPlayer.Character.Humanoid:EquipTool(rod)
+            end
+    
+            if rod:FindFirstChild("bobber") then
+                -- wait(0.1)
+                --if rod.bobber.BobberWeld.Enabled then
+                    --wait(0.2)
+                    --rod.bobber.BobberWeld.Enabled = false
+                --end
+                -- rod.bobber.CanCollide = false
+                -- task.wait(0.1)
+                -- rod.bobber.Anchored = true
+                while Config["Farm Fish"] and rod:FindFirstChild("bobber") do
+                    pcall(function()
+                        if rod.values.bite.Value then
+                            ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                            task.wait() -- Reduced delay
+                        else
+                            autoClickButton()
+                            RunService.Heartbeat:Wait() -- Smoother frame sync
+                        end
+                    end)
+                end
+            else
+                task.wait()
+                rod.events.cast:FireServer(100)
+                --  enableMetaReset(rod.events:FindFirstChild("reset"))
+                task.wait(0.4)
+            end
         end)
     end
 end
@@ -369,9 +369,6 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
-            pcall(function()
-                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
-            end)
             pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)

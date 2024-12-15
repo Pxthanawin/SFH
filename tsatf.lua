@@ -131,37 +131,6 @@ local function EquipRod()
     end
 end
 
-
--- Function to Send Discord Message
-local function sendDiscordMessage(username, id, money, currentMoney, countM)
-    local data = {
-        ["content"] = "",
-        ["embeds"] = {
-            {
-                ["title"] = "A player has executed the script!",
-                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney, countM),
-                ["color"] = 16711680,
-                ["footer"] = {
-                    ["text"] = "Script Execution Monitor",
-                },
-                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
-            }
-        }
-    }
-
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
-
-    http_request({
-        Url = webhookUrl,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = jsonData
-    })
-end
-
-
 -- Main fishing function optimized
 local function farmFish()
     repeat task.wait() until getgenv().StartFarm
@@ -290,21 +259,6 @@ local tweenpos = function()
     
         end
             task.wait(1)
-
-        local function recursiveIterate(parent)
-            for _, object in pairs(parent:GetChildren()) do
-                pcall(function()
-                    -- ตรวจสอบว่าเป็น BasePart หรือไม่
-                    if object:IsA("BasePart") then
-                        object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
-                        object.CanQuery = false -- ปิดการสแกน
-                    end
-            
-                    -- วนลูปลูกของวัตถุนี้ (Recursive)
-                    recursiveIterate(object)
-                end)
-            end
-        end
             
         getgenv().StartFarm = true
             
@@ -353,7 +307,7 @@ end)
 -- Monitor Money Changes
 task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
-    task.wait(5)
+    task.wait(20)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
@@ -370,10 +324,7 @@ task.spawn(function()
             end)
         end
         if countM >= 40 then
-            pcall(function()
-                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
-                task.wait(3)
-            end)
+            task.wait(3)
             game:Shutdown()
         end
     end
@@ -466,18 +417,6 @@ pcall(function()
             warn("PhysicsService not available.")
         end
 
-        -- ลดการใช้งาน MeshParts และ Special Meshes
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("MeshPart") then
-                v.Material = Enum.Material.SmoothPlastic
-                v.TextureID = ""
-            elseif v:IsA("SpecialMesh") then
-                v.TextureId = ""
-            end
-        end
-
-    end
-
     -- เรียกใช้ฟังก์ชัน
     OptimizeGamePerformance()
 
@@ -505,4 +444,3 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
         vv:Destroy()
     end
 end
-

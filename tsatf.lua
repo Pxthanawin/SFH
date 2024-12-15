@@ -203,10 +203,9 @@ local function farmFish()
                 end)
             end
         else
-            task.wait()
             rod.events.cast:FireServer(100)
             --  enableMetaReset(rod.events:FindFirstChild("reset"))
-            task.wait(0.3)
+            task.wait(0.4)
         end
     end
 end

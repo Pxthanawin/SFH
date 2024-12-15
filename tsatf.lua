@@ -175,7 +175,7 @@ local function farmFish()
 
         if not rod then
             RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
-            continue
+            return
         end
 
         if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
@@ -206,7 +206,7 @@ local function farmFish()
             task.wait()
             rod.events.cast:FireServer(100)
             --  enableMetaReset(rod.events:FindFirstChild("reset"))
-            task.wait(0.3)
+            task.wait(0.4)
         end
     end
 end
@@ -369,6 +369,9 @@ task.spawn(function()
             money = currentMoney
         end
         if countM == 20 then
+            pcall(function()
+                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
+            end)
             pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)

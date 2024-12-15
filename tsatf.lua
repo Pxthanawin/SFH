@@ -1,4 +1,4 @@
--- version 20241215c
+-- version 20241216a
 
 --[[
 getgenv().Sell_Every = 120
@@ -449,3 +449,5 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
         vv:Destroy()
     end
 end
+
+ReplicatedStorage.modules.fx:Destroy()

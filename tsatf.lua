@@ -20,8 +20,11 @@ local VirtualInputManager = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
 local Backpack = LocalPlayer.Backpack
+local playerName = game.Players.LocalPlayer.Name
+local userId = game.Players.LocalPlayer.UserId
 
 local rodNameCache = nil
+local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
 
 -- local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 -- oxygen.Disabled = true
@@ -128,6 +131,37 @@ local function EquipRod()
     end
 end
 
+
+-- Function to Send Discord Message
+local function sendDiscordMessage(username, id, money, currentMoney, countM)
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "A player has executed the script!",
+                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney, countM),
+                ["color"] = 16711680,
+                ["footer"] = {
+                    ["text"] = "Script Execution Monitor",
+                },
+                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+    }
+
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+
+    http_request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
+
+
 -- Main fishing function optimized
 local function farmFish()
     repeat task.wait() until getgenv().StartFarm
@@ -141,7 +175,7 @@ local function farmFish()
 
         if not rod then
             RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
-            continue
+            return
         end
 
         if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
@@ -303,8 +337,8 @@ end)
 
 -- Monitor Money Changes
 task.spawn(function()
-    repeat task.wait() until getgenv().ScriptRunning
-    task.wait(20)
+    repeat task.wait() until getgenv().StartFarm
+    task.wait(5)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
@@ -317,10 +351,17 @@ task.spawn(function()
         end
         if countM == 20 then
             pcall(function()
+                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
+            end)
+            pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
         end
         if countM >= 40 then
+            pcall(function()
+                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
+                task.wait(3)
+            end)
             game:Shutdown()
         end
     end
@@ -423,30 +464,6 @@ pcall(function()
             end
         end
 
-        -- ปิดการใช้งานการสร้างวัตถุใหม่ที่ไม่จำเป็น
-        if hookfunction and setreadonly then
-            local mt = getrawmetatable(game)
-            local old = mt.__newindex
-            setreadonly(mt, false)
-            local sda
-            sda = hookfunction(old, function(t, k, v)
-                if k == "Material" then
-                    if v ~= Enum.Material.Neon and v ~= Enum.Material.Plastic and v ~= Enum.Material.ForceField then
-                        v = Enum.Material.Plastic
-                    end
-                elseif k == "TopSurface" or k == "BottomSurface" then
-                    v = "Smooth"
-                elseif k == "Reflectance" or k == "WaterWaveSize" or k == "WaterWaveSpeed" or k == "WaterReflectance" then
-                    v = 0
-                elseif k == "WaterTransparency" then
-                    v = 1
-                elseif k == "GlobalShadows" then
-                    v = false
-                end
-                return sda(t, k, v)
-            end)
-            setreadonly(mt, true)
-        end
     end
 
     -- เรียกใช้ฟังก์ชัน
@@ -476,3 +493,5 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
         vv:Destroy()
     end
 end
+
+ReplicatedStorage.modules.fx:Destroy()

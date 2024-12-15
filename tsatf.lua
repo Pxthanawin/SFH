@@ -175,7 +175,7 @@ local function farmFish()
 
         if not rod then
             RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
-            return
+            continue
         end
 
         if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then

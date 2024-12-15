@@ -370,9 +370,6 @@ task.spawn(function()
         end
         if countM == 20 then
             pcall(function()
-                sendDiscordMessage(playerName, userId, money, currentMoney, countM)
-            end)
-            pcall(function()
                 LocalPlayer.Character.Humanoid:UnequipTools()
             end)
         end

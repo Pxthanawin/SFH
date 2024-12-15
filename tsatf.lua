@@ -1,5 +1,4 @@
--- version 20241215b
--- fix Delete modules
+-- version 20241215c
 
 --[[
 getgenv().Sell_Every = 120
@@ -131,36 +130,6 @@ local function EquipRod()
         end
         task.wait(1)
     end
-end
-
-
--- Function to Send Discord Message
-local function sendDiscordMessage(username, id, money, currentMoney, countM)
-    local data = {
-        ["content"] = "",
-        ["embeds"] = {
-            {
-                ["title"] = "A player has executed the script!",
-                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney, countM),
-                ["color"] = 16711680,
-                ["footer"] = {
-                    ["text"] = "version 20241215b",
-                },
-                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
-            }
-        }
-    }
-
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
-
-    http_request({
-        Url = webhookUrl,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = jsonData
-    })
 end
 
 

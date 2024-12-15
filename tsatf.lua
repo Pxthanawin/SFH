@@ -1,4 +1,5 @@
--- version 20241215a
+-- version 20241215b
+-- fix Delete modules
 
 --[[
 getgenv().Sell_Every = 120
@@ -511,5 +512,3 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
         vv:Destroy()
     end
 end
-
-ReplicatedStorage.modules.fx:Destroy()

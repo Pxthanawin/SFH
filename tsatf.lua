@@ -1,3 +1,4 @@
+-- version 20241215a
 
 --[[
 getgenv().Sell_Every = 120

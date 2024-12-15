@@ -118,7 +118,7 @@ local function sendDiscordMessage(username, id, money, currentMoney, countM)
                 ["description"] = string.format("**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney, countM),
                 ["color"] = 16711680,
                 ["footer"] = {
-                    ["text"] = "version 20241215c",
+                    ["text"] = "version 20241216a",
                 },
                 ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
             }

@@ -167,6 +167,7 @@ local function farmFish()
     repeat task.wait() until getgenv().StartFarm
     task.wait(1)
     while Config["Farm Fish"] do
+        pcall(function()
         -- Cache rodName to avoid repeated lookups
 
         rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
@@ -175,7 +176,7 @@ local function farmFish()
 
         if not rod then
             RunService.Heartbeat:Wait() -- Shorter wait than task.wait()
-            continue
+            return
         end
 
         if rod.Parent == Backpack and PlayerGui.hud.safezone.backpack.hotbar["1"].stroke.Color == Color3.new(0, 0, 0) then
@@ -208,6 +209,7 @@ local function farmFish()
             --  enableMetaReset(rod.events:FindFirstChild("reset"))
             task.wait(0.4)
         end
+        end)
     end
 end
 
@@ -338,7 +340,7 @@ end)
 -- Monitor Money Changes
 task.spawn(function()
     repeat task.wait() until getgenv().ScriptRunning
-    task.wait(20)
+    task.wait(5)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 

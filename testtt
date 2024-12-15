@@ -22,6 +22,12 @@ end
 
 -- ---- Other Variable
 
+local playerName = game.Players.LocalPlayer.Name
+local userId = game.Players.LocalPlayer.UserId
+
+local rodNameCache = nil
+local webhookUrl = "https://discord.com/api/webhooks/1313075518727393310/qFe8ooPPvaJnbD1QbL3sYd3LZCVrqyVyheY47Wm7zwDlsPbKq2-llKLg6p48jD98ex4k"
+
 local StartFarm = nil
 local AssetsLoaded = nil
 local zonePosition = Vector3.new(893.679871, -772.342407, 977.9375)
@@ -100,6 +106,64 @@ end
 
 -- เรียกใช้ฟังก์ชันกับ Workspace
 recursiveIterate(workspace)
+
+
+-- Function to Send Discord Message
+local function sendDiscordMessage(username, id, money, currentMoney, countM)
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "A player has executed the script!",
+                ["description"] = string.format("**Player Name:** %s\n**User ID:** %d\n**Money:** %s\n**Current Money:** %s\n**Counting:** %s", username, id, money, currentMoney, countM),
+                ["color"] = 16711680,
+                ["footer"] = {
+                    ["text"] = "version 20241215c",
+                },
+                ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+            }
+        }
+    }
+
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+
+    http_request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
+
+
+-- Monitor Money Changes
+task.spawn(function()
+    repeat task.wait() until game:IsLoaded()
+    task.wait(30)
+    local countM = 0
+    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
+
+    while task.wait(1) do
+        pcall(function()
+            countM += 1
+            local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+            if money ~= currentMoney then
+                countM = 0
+                money = currentMoney
+            end
+            if countM == 20 then
+                    LocalPlayer.Character.Humanoid:UnequipTools()
+            end
+            if countM >= 40 then
+                    sendDiscordMessage(playerName, userId, money, currentMoney, countM)
+                    task.wait(3)
+                game:Shutdown()
+            end
+        end)
+    end
+end)
 
 task.wait(7)
 

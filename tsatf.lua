@@ -241,6 +241,21 @@ local tweenpos = function()
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(2)
+        local function recursiveIterate(parent)
+            for _, object in pairs(parent:GetChildren()) do
+                -- ตรวจสอบว่าเป็น BasePart หรือไม่
+                if object:IsA("BasePart") then
+                    object.Transparency = 1 -- ทำให้วัตถุโปร่งแสง (ซ่อน)
+                    object.CanQuery = false -- ปิดการสแกน
+                end
+        
+                -- วนลูปลูกของวัตถุนี้ (Recursive)
+                recursiveIterate(object)
+            end
+        end
+        
+        -- เรียกใช้ฟังก์ชันกับ Workspace
+        recursiveIterate(workspace)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame
         task.wait(2)
         LocalPlayer.Character.HumanoidRootPart.CFrame = targetCFrame

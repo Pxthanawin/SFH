@@ -84,6 +84,7 @@ task.spawn(function()
                 local player = Players:GetPlayerFromCharacter(v)
                 if player and player ~= LocalPlayer then
                     v:Destroy()
+                    player:Destroy()
                 end
                 task.wait()
             end

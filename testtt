@@ -142,7 +142,7 @@ end
 -- Monitor Money Changes
 task.spawn(function()
     repeat task.wait() until game:IsLoaded()
-    task.wait(40)
+    task.wait(60)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 

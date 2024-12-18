@@ -63,7 +63,7 @@ local AssetsLoaded
 -- function
 
 local function extractNumber(String)
-    return String:gsub("[^%d]", "")
+    return tonumber((String:gsub("[^%d]", "")))
 end
 
 -- Main Script zone

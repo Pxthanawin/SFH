@@ -146,7 +146,9 @@ local destroyPlayer = function()
                 local player = Players:GetPlayerFromCharacter(v)
                 if player and player ~= LocalPlayer then
                     v:Destroy()
-                    player:Destroy()
+                    pcall(function()
+                        player:Destroy()
+                    end)
                 end
             end
         end)

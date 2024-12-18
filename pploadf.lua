@@ -157,7 +157,7 @@ task.spawn(function()
     while task.wait(5) do
         destroyPlayer()
     end
-end
+end)
 
 workspace.DescendantAdded:Connect(function(descendant)
     applySettings(descendant)

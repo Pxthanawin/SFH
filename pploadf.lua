@@ -156,6 +156,7 @@ local destroyPlayer = function()
 end
 destroyPlayer()
 task.spawn(function()
+    repeat task.wait() until AssetsLoaded
     while task.wait(5) do
         destroyPlayer()
     end

@@ -117,7 +117,7 @@ FpsPart.CanCollide = false
 FpsPart.Parent = workspace
 FpsPart.Transparency = 0
 
-local oxygen = Character.client:FindFirstChild("oxygen")
+local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 oxygen.Disabled = true
 
 workspace.Gravity = 0

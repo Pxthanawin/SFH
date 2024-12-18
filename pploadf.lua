@@ -133,7 +133,7 @@ local function applySettings(object)
         if player and player ~= LocalPlayer then
             object:Destroy()
             pcall(function()
-                player.Parent = nil
+                player = nil
             end)
         end
     end

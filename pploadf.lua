@@ -139,8 +139,24 @@ local function recursiveIterate(parent)
 end
 recursiveIterate(workspace)
 
+local destroyPlayer = function()
+    for _, v in pairs(workspace:GetChildren()) do
+        pcall(function()
+            if v:IsA("Model") and v:FindFirstChild("HumanoidRootPart") then
+                local player = Players:GetPlayerFromCharacter(v)
+                if player and player ~= LocalPlayer then
+                    v:Destroy()
+                    player:Destroy()
+                end
+            end
+        end)
+    end
+end
+destroyPlayer()
+
 workspace.DescendantAdded:Connect(function(descendant)
     applySettings(descendant)
+    destroyPlayer()
 end)
 
 -- Monitor Money Changes

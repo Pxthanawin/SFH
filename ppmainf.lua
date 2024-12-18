@@ -101,7 +101,7 @@ local setZone = function(ZoneName)
         end
     else
         local tpservice = game:GetService("TeleportService")
-        tpservice:Teleport(game.PlaceId, game.Players.LocalPlayer)
+        game:Shutdown()
     end
 
 end

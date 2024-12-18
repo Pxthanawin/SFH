@@ -169,7 +169,7 @@ end)
 task.spawn(function()
     repeat task.wait() until game:IsLoaded()
     if game.PlaceId == 4483381587 then return end
-    task.wait(40)
+    task.wait(100)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 

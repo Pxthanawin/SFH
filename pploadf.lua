@@ -39,19 +39,19 @@ if game.PlaceId == 4483381587 then return end
 
 -- ---- Main Varieble
 
-HttpService = game:GetService("HttpService")
-ReplicatedStorage = game:GetService("ReplicatedStorage")
-RunService = game:GetService("RunService")
-GuiService = game:GetService("GuiService")
-VirtualUser = game:GetService("VirtualUser")
-tweenService = game:GetService("TweenService")
-VirtualInputManager = game:GetService("VirtualInputManager")
-Workspace = game:GetService("Workspace")
+local HttpService = game:GetService("HttpService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local GuiService = game:GetService("GuiService")
+local VirtualUser = game:GetService("VirtualUser")
+local tweenService = game:GetService("TweenService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Workspace = game:GetService("Workspace")
 
-Players = game:GetService("Players")
-LocalPlayer = Players.LocalPlayer
-Backpack = LocalPlayer:WaitForChild("Backpack")
-PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- ---- Other Variable
 

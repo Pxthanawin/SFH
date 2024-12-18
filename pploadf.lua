@@ -308,3 +308,24 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
         vv:Destroy()
     end
 end
+
+
+local settings = {
+    disableCamShake = true,
+    willautosell_event = true,
+    willautosell_exotic = true,
+    willautosell_relic = false,
+    willautosell_mythical = true,
+    willautosell_legendary = true
+}
+
+local ChangeSetting = game:GetService("Players").LocalPlayer.PlayerGui.hud.safezone.menu.menu_safezone:FindFirstChild("ChangeSetting")
+for settingName, settingValue in pairs(settings) do
+    local args = {
+        [1] = settingName,
+        [2] = settingValue
+    }
+    pcall(function()
+        ChangeSetting:FireServer(unpack(args))
+    end)
+end

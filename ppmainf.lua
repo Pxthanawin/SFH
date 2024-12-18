@@ -88,17 +88,6 @@ local setZone = function(ZoneName)
             dialog:InputHoldBegin()
             dialog:InputHoldEnd()
             bodyPosition:Destroy()
-
-            local newPart = Instance.new("Part")
-            newPart.Name = "FPSBOOST"
-            newPart.Position = Vector3.new(0.9315884709358215, 138.69482421875, 0.6082026362419128)
-            newPart.Size = Vector3.new(30, 1, 30)
-            newPart.Color = Color3.fromRGB(0,0,0)
-            newPart.Anchored = true
-            newPart.CanCollide = false
-            newPart.Parent = workspace
-            newPart.Transparency = 0
-
             StartFarm = true
         end
     else
@@ -215,4 +204,6 @@ local autoFish = function()
     bodyPosition:Destroy()
 end
 
-task.spawn(autoFish)
+if config.AutoFish then
+    task.spawn(autoFish)
+end

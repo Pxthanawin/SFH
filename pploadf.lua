@@ -1,6 +1,6 @@
 Configurations = string.gsub(Configurations, "[%s#*-]", "")
 
-local config = {}
+getgenv().config = {}
 config.PurchaseRod = {}
 
 local enabled = {
@@ -39,24 +39,26 @@ if game.PlaceId == 4483381587 then return end
 
 -- ---- Main Varieble
 
-local HttpService = game:GetService("HttpService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Backpack = LocalPlayer:WaitForChild("Backpack")
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-local GuiService = game:GetService("GuiService")
-local VirtualUser = game:GetService("VirtualUser")
-local tweenService = game:GetService("TweenService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
+HttpService = game:GetService("HttpService")
+ReplicatedStorage = game:GetService("ReplicatedStorage")
+RunService = game:GetService("RunService")
+GuiService = game:GetService("GuiService")
+VirtualUser = game:GetService("VirtualUser")
+tweenService = game:GetService("TweenService")
+VirtualInputManager = game:GetService("VirtualInputManager")
+Workspace = game:GetService("Workspace")
+
+Players = game:GetService("Players")
+LocalPlayer = Players.LocalPlayer
+Backpack = LocalPlayer:WaitForChild("Backpack")
+PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- ---- Other Variable
 
-local playerName = game.Players.LocalPlayer.Name
-local userId = game.Players.LocalPlayer.UserId
+local playerName = LocalPlayer.Name
+local userId = LocalPlayer.UserId
 
-local AssetsLoaded = nil
+local AssetsLoaded
 
 -- function
 

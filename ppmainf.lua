@@ -16,7 +16,6 @@ local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
 local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
-local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
 local StartFarm
 
@@ -124,22 +123,6 @@ task.spawn(function()
 end)
 
 
-local function EquipRod()
-    repeat
-        task.wait(1)
-    until rodNameCache
-    while rodNameCache ~= "Steady Rod" do
-        if StatsRod:FindFirstChild("Steady Rod") then
-            if rodNameCache ~= "Steady Rod" then
-                ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
-            end
-        end
-        task.wait(3)
-    end
-end
-task.spawn(EquipRod)
-
-
 -- Main auto Fish
 local autoFish = function()
     local zone = "The Depths"
@@ -165,14 +148,21 @@ local autoFish = function()
 
     while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
-            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+            local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+
+            if rodNameCache ~= "Steady Rod" then
+                if StatsRod:FindFirstChild("Steady Rod") then
+                    ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
+                    LocalPlayer.Character.Humanoid:UnequipTools()
+                    return
+                end
+            end
 
             local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
     
             if not rod then
                 return
             end
-            
     
             if rod.Parent == Backpack then
                 Character.Humanoid:EquipTool(rod)
@@ -204,6 +194,8 @@ local autoFish = function()
                 if config.AutoSell then
                     zone.npc.merchant.sellall:InvokeServer()
                 end
+
+                LocalPlayer.Character.Humanoid:UnequipTools()
 
             else
                 rod.events.cast:FireServer(100)

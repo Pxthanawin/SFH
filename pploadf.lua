@@ -153,10 +153,14 @@ local destroyPlayer = function()
     end
 end
 destroyPlayer()
+task.spawn(function()
+    while task.wait(5) do
+        destroyPlayer()
+    end
+end
 
 workspace.DescendantAdded:Connect(function(descendant)
     applySettings(descendant)
-    destroyPlayer()
 end)
 
 -- Monitor Money Changes

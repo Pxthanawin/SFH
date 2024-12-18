@@ -129,9 +129,12 @@ local function applySettings(object)
         object.CanCollide = false
         object.CanQuery = false
     elseif object:IsA("Model") and object:FindFirstChild("HumanoidRootPart") then
-        local player = Players:GetPlayerFromCharacter(v)
+        local player = Players:GetPlayerFromCharacter(object)
         if player and player ~= LocalPlayer then
             object:Destroy()
+            pcall(function()
+                player.Parent = nil
+            end)
         end
     end
 end

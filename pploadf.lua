@@ -156,8 +156,7 @@ local destroyPlayer = function()
 end
 destroyPlayer()
 task.spawn(function()
-    repeat task.wait() until AssetsLoaded
-    while task.wait(5) do
+    while task.wait(2) do
         destroyPlayer()
     end
 end)
@@ -187,7 +186,7 @@ task.spawn(function()
             end
             if countM >= 40 then
                 local tpservice = game:GetService("TeleportService")
-                tpservice:Teleport(game.PlaceId, game.Players.LocalPlayer)
+                game:Shutdown()
             end
         end)
     end

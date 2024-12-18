@@ -71,16 +71,17 @@ local setZone = function(ZoneName)
     bodyPosition.Parent = HumanoidRootPart
 
     zone = zoneList(ZoneName, true)
-    local Highlight = zone.npc:WaitForChild("Highlight", 10)
-    local dialog = zone.npc:FindFirstChild("dialogprompt")
 
-    repeat task.wait() until (HumanoidRootPart.Position - zone.npc.HumanoidRootPart.Position).Magnitude <= 6
+    repeat task.wait() until (HumanoidRootPart.Position - zone.npcpos).Magnitude <= 6
 
     local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = zone.SellCam
     HumanoidRootPart.CFrame = zone.SellCFrame
-    task.wait(1)
+
+    local Highlight = zone.npc:WaitForChild("Highlight", 10)
+    local dialog = zone.npc:FindFirstChild("dialogprompt")
+
     if Highlight then
         if dialog then
             dialog.HoldDuration = 0

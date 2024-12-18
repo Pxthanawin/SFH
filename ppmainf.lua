@@ -159,12 +159,14 @@ local autoFish = function()
 
     local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
-    if StatsRod:FindFirstChild("Steady Rod") then
-        if rodNameCache ~= "Steady Rod" then
-            ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
-            RunService.Heartbeat:Wait()
+    pcall(function()
+        if StatsRod:FindFirstChild("Steady Rod") then
+            if rodNameCache ~= "Steady Rod" then
+                ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
+                RunService.Heartbeat:Wait()
+            end
         end
-    end
+    end)
 
     while config.AutoFish do
         pcall(function()
@@ -178,7 +180,6 @@ local autoFish = function()
     
             if rod.Parent == Backpack then
                 Character.Humanoid:EquipTool(rod)
-                RunService.Heartbeat:Wait()
             end
     
             if rod:FindFirstChild("bobber") then

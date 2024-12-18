@@ -159,13 +159,12 @@ local autoFish = function()
 
     local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
-    pcall(function()
-        if StatsRod:FindFirstChild("Steady Rod") then
-            if rodNameCache ~= "Steady Rod" then
-                ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
-            end
+    if StatsRod:FindFirstChild("Steady Rod") then
+        if rodNameCache ~= "Steady Rod" then
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
+            RunService.Heartbeat:Wait()
         end
-    end)
+    end
 
     while config.AutoFish do
         pcall(function()

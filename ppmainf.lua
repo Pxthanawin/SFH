@@ -17,16 +17,16 @@ local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
 local StartFarm
 
-local PriceRod = {
-    ["CarbonRod"] = 2000,
-    ["NocturnalRod"] = 11000,
-    ["SteadyRod"] = 7000,
-    ["MagnetRod"] = 15000,
-    ["RapidRod"] = 14000,
-    ["AuroraRod"] = 90000,
-    ["MythicalRod"] = 110000,
-    ["TridentRod"] = 150000,
-    ["KingsRod"] = 120000
+local ListRod = {
+    ["CarbonRod"] = {"Carbon Rod", 2000},
+    ["NocturnalRod"] = {"Nocturnal Rod", 11000},
+    ["SteadyRod"] = {"Steady Rod", 7000},
+    ["MagnetRod"] = {"Magnet Rod", 15000},
+    ["RapidRod"] = {"Rapid Rod", 14000},
+    ["AuroraRod"] = {"Aurora Rod", 90000},
+    ["MythicalRod"] = {"Mythical Rod", 110000},
+    ["TridentRod"] = {"Trident Rod", 150000},
+    ["KingsRod"] = {"Kings Rod", 120000}
 }
 
 local zoneList = function(ZoneName, LoadData)
@@ -121,7 +121,7 @@ task.spawn(function()
     while #List > 0 do
         local newList = {}
         for i, v in ipairs(List) do
-            if purchaseRod(v, PriceRod[v]) then
+            if purchaseRod(ListRod[v][1], ListRod[v][2]) then
                 table.insert(newList, v)
             end
         end

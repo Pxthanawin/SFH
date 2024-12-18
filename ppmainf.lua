@@ -163,7 +163,7 @@ local autoFish = function()
         if StatsRod:FindFirstChild("Steady Rod") then
             if rodNameCache ~= "Steady Rod" then
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
-                RunService.Heartbeat:Wait()
+                task.wait(1)
             end
         end
     end)

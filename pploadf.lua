@@ -156,7 +156,7 @@ local destroyPlayer = function()
 end
 destroyPlayer()
 task.spawn(function()
-    while task.wait(2) do
+    while task.wait(5) do
         destroyPlayer()
     end
 end)

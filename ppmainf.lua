@@ -47,7 +47,7 @@ local zoneList = function(ZoneName, LoadData)
 end
 
 local function extractNumber(String)
-    return tonumber(String:gsub("[^%d]", ""))
+    return tonumber((String:gsub("[^%d]", "")))
 end
 
 
@@ -104,19 +104,20 @@ local setZone = function(ZoneName)
 end
 
 
-local purchaseAllRod = function(List)
-    local purchaseRod = function(RodName, Price)
-        local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
-        local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        if StatsRod:FindFirstChild(RodName) then
-            return false
-        elseif Price <= money then 
-            ReplicatedStorage.events.purchase:FireServer(RodName, "Rod", 1)
-            return false
-        else
-            return true
-        end
+local purchaseRod = function(RodName, Price)
+    local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
+    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+    if StatsRod:FindFirstChild(RodName) then
+        return false
+    elseif Price <= money then 
+        ReplicatedStorage.events.purchase:FireServer(RodName, "Rod", 1)
+        return false
+    else
+        return true
     end
+end
+task.spawn(function()
+    local List = config.PurchaseRod
     while #List > 0 do
         local newList = {}
         for i, v in ipairs(List) do
@@ -127,8 +128,8 @@ local purchaseAllRod = function(List)
         List = newList
         task.wait(4)
     end
-end
-task.spawn(purchaseAllRod(config.PurchaseRod))
+end)
+
 
 
 -- Main auto Fish

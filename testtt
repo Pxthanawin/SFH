@@ -16,9 +16,6 @@ local GuiService = game:GetService("GuiService")
 local VirtualUser = game:GetService("VirtualUser")
 local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-if Configurations then
-    local Configurations = HttpService:JSONDecode(Configurations)
-end
 
 -- ---- Other Variable
 

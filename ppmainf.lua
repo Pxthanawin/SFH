@@ -79,6 +79,7 @@ local setZone = function(ZoneName)
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = zone.SellCam
     HumanoidRootPart.CFrame = zone.SellCFrame
+    task.wait(1)
 
     if Highlight then
         if dialog then

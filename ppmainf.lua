@@ -15,6 +15,8 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
+local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
+
 local StartFarm
 
 local ListRod = {
@@ -26,7 +28,8 @@ local ListRod = {
     ["AuroraRod"] = {"Aurora Rod", 90000},
     ["MythicalRod"] = {"Mythical Rod", 110000},
     ["TridentRod"] = {"Trident Rod", 150000},
-    ["KingsRod"] = {"Kings Rod", 120000}
+    ["KingsRod"] = {"Kings Rod", 120000},
+    ["DestinyRod"] = {"Destiny Rod", 190000}
 }
 
 local zoneList = function(ZoneName, LoadData)
@@ -105,7 +108,6 @@ end
 
 
 local purchaseRod = function(RodName, Price)
-    local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     if StatsRod:FindFirstChild(RodName) then
         return false
@@ -154,6 +156,14 @@ local autoFish = function()
 
     Character.Torso.Anchored = true
     Character.Humanoid.Sit = true
+
+    local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+
+    if StatsRod:FindFirstChild("Steady Rod") then
+        if rodNameCache ~= "Steady Rod" then
+            equiprod:FireServer("Steady Rod")
+        end
+    end
 
     while config.AutoFish do
         pcall(function()

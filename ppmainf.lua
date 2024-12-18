@@ -161,13 +161,13 @@ local autoFish = function()
 
     if StatsRod:FindFirstChild("Steady Rod") then
         if rodNameCache ~= "Steady Rod" then
-            equiprod:FireServer("Steady Rod")
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
         end
     end
 
     while config.AutoFish do
         pcall(function()
-            local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
             local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
     
             if not rod then

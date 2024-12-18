@@ -16,6 +16,7 @@ local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
 local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
+local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
 local StartFarm
 
@@ -132,7 +133,19 @@ task.spawn(function()
     end
 end)
 
-
+local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
+local function EquipRod()
+    repeat task.wait() until getgenv().ScriptRunning
+    while rodNameCache ~= "Steady Rod" do
+        if StatsRod:FindFirstChild("Steady Rod") then
+            if rodNameCache ~= "Steady Rod" then
+                ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
+            end
+        end
+        task.wait(1)
+    end
+end
+task.spawn(equiprod)
 
 -- Main auto Fish
 local autoFish = function()
@@ -159,13 +172,7 @@ local autoFish = function()
 
     while config.AutoFish do
         pcall(function()
-            local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-
-            if rodNameCache ~= "Steady Rod" then
-                if StatsRod:FindFirstChild("Steady Rod") then
-                    ReplicatedStorage.events.equiprod:FireServer("Steady Rod")
-                end
-            end
+            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
             local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
     

@@ -133,20 +133,6 @@ task.spawn(function()
     end
 end)
 
-local equiprod = ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod")
-local function EquipRod()
-    repeat task.wait() until getgenv().ScriptRunning
-    while rodNameCache ~= "Steady Rod" do
-        if StatsRod:FindFirstChild("Steady Rod") then
-            if rodNameCache ~= "Steady Rod" then
-                ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
-            end
-        end
-        task.wait(1)
-    end
-end
-task.spawn(equiprod)
-
 -- Main auto Fish
 local autoFish = function()
     local zone = "The Depths"
@@ -170,14 +156,19 @@ local autoFish = function()
     Character.Torso.Anchored = true
     Character.Humanoid.Sit = true
 
-    while config.AutoFish do
+    if StatsRod:FindFirstChild("Steady Rod") then
+        if rodNameCache ~= "Steady Rod" then
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
+        end
+    end
+
+    while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
             rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
             local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
     
             if not rod then
-                RunService.Heartbeat:Wait()
                 return
             end
             
@@ -215,7 +206,6 @@ local autoFish = function()
 
             else
                 rod.events.cast:FireServer(100)
-                RunService.Heartbeat:Wait()
             end
         end)
     end

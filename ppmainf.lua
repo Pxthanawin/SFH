@@ -18,15 +18,15 @@ local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local StartFarm
 
 local PriceRod = {
-    ["Carbon Rod"] = 2000,
-    ["Nocturnal Rod"] = 11000,
-    ["Steady Rod"] = 7000,
-    ["Magnet Rod"] = 15000,
-    ["Rapid Rod"] = 14000,
-    ["Aurora Rod"] = 90000,
-    ["Mythical Rod"] = 110000,
-    ["Trident Rod"] = 150000,
-    ["Kings Rod"] = 120000
+    ["CarbonRod"] = 2000,
+    ["NocturnalRod"] = 11000,
+    ["SteadyRod"] = 7000,
+    ["MagnetRod"] = 15000,
+    ["RapidRod"] = 14000,
+    ["AuroraRod"] = 90000,
+    ["MythicalRod"] = 110000,
+    ["TridentRod"] = 150000,
+    ["KingsRod"] = 120000
 }
 
 local zoneList = function(ZoneName, LoadData)

@@ -156,7 +156,7 @@ local enchantRod = function(RodName, value)
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
-    local ProximityPrompt = workspace.world.interactables["Enchant Altar"].ProximityPrompt
+    local ProximityPrompt = workspace.world:WaitForChild("interactables",math.huge)["Enchant Altar"].ProximityPrompt
 
     while StatsRod[RodName].Value == value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
         local Highlight = workspace.world.interactables["Enchant Altar"]:WaitForChild("Highlight", 10)
@@ -181,8 +181,6 @@ local enchantRod = function(RodName, value)
     if StatsRod[RodName].Value == value then
         return true
     end
-
-    return
 
 end
 

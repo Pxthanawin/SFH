@@ -185,7 +185,7 @@ local enchantRod = function(RodName, value)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 print(10)
-                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                task.wait(0.5)
                 print(11)
                 GuiService.SelectedObject = nil
                 print(12)

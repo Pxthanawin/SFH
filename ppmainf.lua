@@ -109,6 +109,16 @@ local setZone = function(ZoneName)
 
 end
 
+local enctRelic = function()
+    for _, v in pairs(Backpack:GetChildren()) do
+        if v.Name == "Enchant Relic" then
+            if #StatsInventory[tostring(v.link.Value)]:GetChildren() == 2 then
+                return {StatsInventory[tostring(v.link.Value)].Stack, v}
+            end
+        end
+    end
+    return
+end
 
 local enchantRod = function(RodName, value)
 
@@ -125,17 +135,6 @@ local enchantRod = function(RodName, value)
         else
             return
         end
-    end
-
-    local enctRelic = function()
-        for _, v in pairs(Backpack:GetChildren()) do
-            if v.Name == "Enchant Relic" then
-                if #StatsInventory[tostring(v.link.Value)]:GetChildren() == 2 then
-                    return {StatsInventory[tostring(v.link.Value)].Stack, v}
-                end
-            end
-        end
-        return
     end
 
     Character.Humanoid:UnequipTools()
@@ -161,8 +160,12 @@ local enchantRod = function(RodName, value)
     if not interactable then return end
     local ProximityPrompt = interactable.ProximityPrompt
 
-    while StatsRod[RodName].Value ~= value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
-        local Highlight = interactable:WaitForChild("Highlight", 20)
+    while StatsRod[RodName].Value ~= value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait(1) do
+        
+        local Highlight = interactable:WaitForChild("Highlight", math.huge)
+        if StatsRod[RodName].Value == value then
+            return true
+        end
         if Highlight then
             if ProximityPrompt then
                 ProximityPrompt.HoldDuration = 0
@@ -175,11 +178,11 @@ local enchantRod = function(RodName, value)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
                 GuiService.SelectedObject = nil
-                task.wait(1)
             end
         else
             return
         end
+
     end
 
     if StatsRod[RodName].Value == value then
@@ -320,16 +323,24 @@ if config.AutoFish then
 end
 
 task.spawn(function()
+    local key1 = true
     while task.wait(1) do
-        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            if checkDayNight() == "Night" then
-                morefunction1 = true
-            end
-            if not config.AutoFish then
-                if enchantRod("Aurora Rod", "Mutated") then
-                    config.AutoFish = true
-                    morefunction1 = false
-                    task.spawn(autoFish)
+        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" and key1 then
+            local enctr = enctRelic()
+            if enctr and enctr[1].Value > 6 then
+                if checkDayNight() == "Night" then
+                    morefunction1 = true
+                end
+                if not config.AutoFish then
+                    if enchantRod("Aurora Rod", "Mutated") then
+                        config.AutoFish = true
+                        morefunction1 = false
+                        task.spawn(autoFish)
+                    else
+                        config.AutoFish = true
+                        morefunction1 = false
+                        task.spawn(autoFish)
+                    end
                 end
             end
         end

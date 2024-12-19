@@ -156,38 +156,28 @@ local enchantRod = function(RodName, value)
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
-    print(1)
-
     local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", 10)
     if not interactable then return end
     local ProximityPrompt = interactable.ProximityPrompt
-    print(2)
+
     while StatsRod[RodName].Value ~= value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait(1) do
-        print(3)
+        
         local Highlight = interactable:WaitForChild("Highlight", math.huge)
         if StatsRod[RodName].Value == value then
             return true
         end
-        print(4)
         if Highlight then
-            print(5)
             if ProximityPrompt then
-                print(6)
                 ProximityPrompt.HoldDuration = 0
                 ProximityPrompt:InputHoldBegin()
                 ProximityPrompt:InputHoldEnd()
                 local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
                 if not button then return end
-                print(8)
                 GuiService.SelectedObject = button
-                print(9)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                print(10)
                 repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                print(11)
                 GuiService.SelectedObject = nil
-                print(12)
             end
         else
             return

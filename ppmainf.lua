@@ -151,26 +151,24 @@ local enchantRod = function(RodName, value)
     bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
     bodyPosition.Parent = HumanoidRootPart
     repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
-    print(0)
+
     local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
-    local ProximityPrompt = workspace.world:WaitForChild("interactables",math.huge)["Enchant Altar"].ProximityPrompt
+    local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", 10)
+    if not interactable then return end
+    local ProximityPrompt = interactable.ProximityPrompt
 
     while StatsRod[RodName].Value == value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
-        print(1)
-        local Highlight = workspace.world.interactables["Enchant Altar"]:WaitForChild("Highlight", 10)
-        print(2)
+        local Highlight = interactable.Highlight
         if Highlight then
             if ProximityPrompt then
                 ProximityPrompt.HoldDuration = 0
                 ProximityPrompt:InputHoldBegin()
                 ProximityPrompt:InputHoldEnd()
-                print(5)
                 local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
                 if not button then return end
-                print(4)
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
@@ -178,7 +176,6 @@ local enchantRod = function(RodName, value)
                 GuiService.SelectedObject = nil
             end
         else
-            print(3)
             return
         end
     end

@@ -155,7 +155,7 @@ local enchantRod = function(RodName, value)
     local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
-
+    while wait() do end
     local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", 10)
     if not interactable then return end
     local ProximityPrompt = interactable.ProximityPrompt

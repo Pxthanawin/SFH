@@ -251,11 +251,13 @@ local autoFish = function()
             if rodNameCache ~= "Aurora Rod" then
                 if StatsRod:FindFirstChild("Aurora Rod") then
                     ReplicatedStorage.events.equiprod.FireServer("Aurora Rod")
+                    task.wait()
                     return
                 else
                     if rodNameCache ~= "Steady Rod" then
                         if StatsRod:FindFirstChild("Steady Rod") then
                             ReplicatedStorage.events.equiprod.FireServer("Steady Rod")
+                            task.wait()
                             return
                         end
                     end

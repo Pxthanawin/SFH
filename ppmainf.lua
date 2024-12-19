@@ -138,6 +138,7 @@ local enchantRod = function(RodName, value)
         return
     end
 
+    Character.Humanoid:UnequipTools()
     local enctr = enctRelic()
     if not enctr then return end
     if enctr[1].Value < 6 then return end
@@ -160,7 +161,7 @@ local enchantRod = function(RodName, value)
     if not interactable then return end
     local ProximityPrompt = interactable.ProximityPrompt
 
-    while StatsRod[RodName].Value == value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
+    while StatsRod[RodName].Value ~= value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
         local Highlight = interactable:WaitForChild("Highlight", 20)
         if Highlight then
             if ProximityPrompt then
@@ -174,6 +175,7 @@ local enchantRod = function(RodName, value)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
                 GuiService.SelectedObject = nil
+                task.wait(1)
             end
         else
             return

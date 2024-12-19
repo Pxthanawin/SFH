@@ -197,7 +197,7 @@ end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
 
 -- --
-
+--[[
 pcall(function()
 
     local function OptimizeGamePerformance()
@@ -331,3 +331,4 @@ for settingName, settingValue in pairs(settings) do
         ChangeSetting:FireServer(unpack(args))
     end)
 end
+]]

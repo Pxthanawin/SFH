@@ -197,7 +197,7 @@ end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
 
 -- --
---[[
+
 pcall(function()
 
     local function OptimizeGamePerformance()
@@ -301,7 +301,7 @@ for _, v in pairs(game.Lighting:GetChildren()) do
     v:Destroy()
 end
 
-
+--[[
 for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     if v:IsA("Animation") then
         v:Destroy()
@@ -309,7 +309,7 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     for __, vv in pairs(v:GetDescendants()) do
         vv:Destroy()
     end
-end
+end]]
 
 
 local settings = {
@@ -331,4 +331,3 @@ for settingName, settingValue in pairs(settings) do
         ChangeSetting:FireServer(unpack(args))
     end)
 end
-]]

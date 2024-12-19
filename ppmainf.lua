@@ -174,9 +174,8 @@ local enchantRod = function(RodName, value)
                 local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
                 if not button then return end
                 GuiService.SelectedObject = button
-                task.wait(0.1)
+                task.wait(0.5)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                task.wait(0.1)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 repeat task.wait(0.1) until not PlayerGui.over:FindFirstChild("prompt")
                 GuiService.SelectedObject = nil

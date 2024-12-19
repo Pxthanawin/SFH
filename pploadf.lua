@@ -125,7 +125,7 @@ workspace.Gravity = 0
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
-        object.Transparency = 1
+        object.Transparency = 0
         object.CanCollide = false
         object.CanQuery = false
     end

@@ -174,6 +174,7 @@ local enchantRod = function(RodName, value)
                 local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
                 if not button then return end
                 GuiService.SelectedObject = button
+                task.wait()
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
@@ -323,9 +324,9 @@ if config.AutoFish then
 end
 
 task.spawn(function()
-    local key1 = true
+    local morefunction1
     while task.wait(1) do
-        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" and key1 then
+        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
             local enctr = enctRelic()
             if enctr and enctr[1].Value > 6 then
                 if checkDayNight() == "Night" then

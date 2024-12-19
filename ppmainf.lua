@@ -161,7 +161,7 @@ local enchantRod = function(RodName, value)
     local ProximityPrompt = interactable.ProximityPrompt
 
     while StatsRod[RodName].Value == value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
-        local Highlight = interactable.Highlight
+        local Highlight = interactable:WaitForChild("Highlight", 20)
         if Highlight then
             if ProximityPrompt then
                 ProximityPrompt.HoldDuration = 0
@@ -172,7 +172,7 @@ local enchantRod = function(RodName, value)
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                task.wait()
+                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
                 GuiService.SelectedObject = nil
             end
         else
@@ -183,6 +183,7 @@ local enchantRod = function(RodName, value)
     if StatsRod[RodName].Value == value then
         return true
     end
+    return
 
 end
 

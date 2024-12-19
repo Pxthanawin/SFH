@@ -156,7 +156,6 @@ local enchantRod = function(RodName, value)
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
-    task.wait(5)
     print(1)
 
     local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", 10)
@@ -185,7 +184,7 @@ local enchantRod = function(RodName, value)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 print(10)
-                task.wait(0.5)
+                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
                 print(11)
                 GuiService.SelectedObject = nil
                 print(12)

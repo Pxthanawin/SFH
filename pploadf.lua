@@ -125,7 +125,7 @@ workspace.Gravity = 0
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
-        object.Transparency = 0
+        object.Transparency = 1
         object.CanCollide = false
         object.CanQuery = false
     end
@@ -197,7 +197,7 @@ end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
 
 -- --
-
+return
 pcall(function()
 
     local function OptimizeGamePerformance()

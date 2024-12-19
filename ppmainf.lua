@@ -161,7 +161,7 @@ local enchantRod = function(RodName, value)
     local ProximityPrompt = interactable.ProximityPrompt
 
     while StatsRod[RodName].Value ~= value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait(1) do
-        --[[
+        
         local Highlight = interactable:WaitForChild("Highlight", math.huge)
         if StatsRod[RodName].Value == value then
             return true
@@ -181,7 +181,7 @@ local enchantRod = function(RodName, value)
             end
         else
             return
-        end]]
+        end
 
     end
 

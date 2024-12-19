@@ -197,7 +197,7 @@ end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
 
 -- --
-return
+
 pcall(function()
 
     local function OptimizeGamePerformance()

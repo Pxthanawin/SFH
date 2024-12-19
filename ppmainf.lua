@@ -154,7 +154,7 @@ local enchantRod = function(RodName, value)
 
     local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(1311.10535, -802.427063, -83.1130219, 0.20237419, 1.59500679e-08, 0.979308248, 3.0397711e-08, 1, -2.25687682e-08, -0.979308248, 3.43360682e-08, 0.20237419)
+    camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
     local ProximityPrompt = workspace.world.interactables["Enchant Altar"].ProximityPrompt
 

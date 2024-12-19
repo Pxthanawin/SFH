@@ -159,14 +159,18 @@ local enchantRod = function(RodName, value)
     local ProximityPrompt = workspace.world:WaitForChild("interactables",math.huge)["Enchant Altar"].ProximityPrompt
 
     while StatsRod[RodName].Value == value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
+        print(1)
         local Highlight = workspace.world.interactables["Enchant Altar"]:WaitForChild("Highlight", 10)
+        print(2)
         if Highlight then
             if ProximityPrompt then
                 ProximityPrompt.HoldDuration = 0
                 ProximityPrompt:InputHoldBegin()
                 ProximityPrompt:InputHoldEnd()
+                print(5)
                 local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
                 if not button then return end
+                print(4)
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
@@ -174,6 +178,7 @@ local enchantRod = function(RodName, value)
                 GuiService.SelectedObject = nil
             end
         else
+            print(3)
             return
         end
     end

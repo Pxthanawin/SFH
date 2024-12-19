@@ -121,7 +121,7 @@ local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 oxygen.Disabled = true
 
 workspace.Gravity = 0
---[[
+
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
@@ -163,7 +163,7 @@ end)
 
 workspace.DescendantAdded:Connect(function(descendant)
     applySettings(descendant)
-end)]]
+end)
 
 -- Monitor Money Changes
 task.spawn(function()
@@ -197,7 +197,7 @@ end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
 
 -- --
---[[
+
 pcall(function()
 
     local function OptimizeGamePerformance()
@@ -331,4 +331,3 @@ for settingName, settingValue in pairs(settings) do
         ChangeSetting:FireServer(unpack(args))
     end)
 end
-]]

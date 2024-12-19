@@ -175,19 +175,21 @@ task.spawn(function()
 
     while task.wait(1) do
         pcall(function()
-            countM = countM + 1
-            local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-            if money ~= currentMoney then
-                countM = 0
-                money = currentMoney
-            end
-            if countM == 20 then
-                LocalPlayer.Character.Humanoid:UnequipTools()
-            end
-            if countM >= 40 then
-                local tpservice = game:GetService("TeleportService")
-                game:Shutdown()
-            end
+                if config.AutoFish then
+                    countM = countM + 1
+                    local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+                    if money ~= currentMoney then
+                        countM = 0
+                        money = currentMoney
+                    end
+                    if countM == 20 then
+                        LocalPlayer.Character.Humanoid:UnequipTools()
+                    end
+                    if countM >= 40 then
+                        local tpservice = game:GetService("TeleportService")
+                        game:Shutdown()
+                    end
+                end
         end)
     end
 end)

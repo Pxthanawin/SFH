@@ -250,13 +250,11 @@ local autoFish = function()
 
             if rodNameCache ~= "Aurora Rod" then
                 if StatsRod:FindFirstChild("Aurora Rod") then
-                    LocalPlayer.Character.Humanoid:UnequipTools()
                     ReplicatedStorage.events.equiprod.FireServer("Aurora Rod")
                     return
                 else
                     if rodNameCache ~= "Steady Rod" then
                         if StatsRod:FindFirstChild("Steady Rod") then
-                            LocalPlayer.Character.Humanoid:UnequipTools()
                             ReplicatedStorage.events.equiprod.FireServer("Steady Rod")
                             return
                         end

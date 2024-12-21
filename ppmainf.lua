@@ -211,19 +211,6 @@ task.spawn(function()
     end
 end)
 
-local equipRod = function(RodPriority)
-    local rodNameCache = PlayerStats.Stats.rod.Value
-    for _, v in ipairs(RodPriority) do
-        if StatsRod:FindFirstChild(v) then
-            if rodNameCache ~= v then
-                ReplicatedStorage.events.equiprod:FireServer(v)
-                RunService.Heartbeat:Wait()
-            end
-            return
-        end
-    end
-end
-
 local enctRelic = function()
     for _, v in pairs(Backpack:GetChildren()) do
         if v.Name == "Enchant Relic" then
@@ -327,6 +314,21 @@ local enchantRod = function(RodName, value)
     bodyPosition:Destroy()
     return
 
+end
+
+local equipRod = function(RodPriority)
+    local rodNameCache = PlayerStats.Stats.rod.Value
+    for _, v in ipairs(RodPriority) do
+        if StatsRod:FindFirstChild(v) then
+            if rodNameCache ~= v then
+                LocalPlayer.Character.Humanoid:UnequipTools()
+                RunService.Heartbeat:Wait()
+                ReplicatedStorage.events.equiprod:FireServer(v)
+                RunService.Heartbeat:Wait()
+            end
+            return
+        end
+    end
 end
 
 -- Main auto Farm

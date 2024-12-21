@@ -108,7 +108,7 @@ repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
 
---
+AssetsLoaded = true
 
 local FpsPart = Instance.new("Part")
 FpsPart.Name = "FPSBOOST"
@@ -207,13 +207,6 @@ task.spawn(function()
             end
         end)
     end
-end)
-
-AssetsLoaded = true
-
-task.spawn(function()
-    repeat task.wait() until AssetsLoaded
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
 end)
 
 -- --
@@ -342,3 +335,5 @@ for settingName, settingValue in pairs(settings) do
         ChangeSetting:FireServer(unpack(args))
     end)
 end
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()

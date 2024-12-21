@@ -105,7 +105,7 @@ repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
 
-AssetsLoaded = true
+--
 
 local FpsPart = Instance.new("Part")
 FpsPart.Name = "FPSBOOST"
@@ -206,7 +206,10 @@ task.spawn(function()
     end
 end)
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
+task.spawn(function()
+    repeat task.wait() until AssetsLoaded
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()
+end)
 
 -- --
 

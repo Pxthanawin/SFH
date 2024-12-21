@@ -376,8 +376,10 @@ local autoFish = function(zone)
         end
 
         if rod.Parent == Backpack then
-            Character.Humanoid:EquipTool(rod)
-            equipRod(RodPriority)
+            pcall(function()
+                Character.Humanoid:EquipTool(rod)
+                equipRod(RodPriority)
+            end)
             continue
         end
 

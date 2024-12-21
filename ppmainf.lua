@@ -275,8 +275,10 @@ end)
 local equipRod = function(RodPriority)
     local rodNameCache = PlayerStats.Stats.rod.Value
     for _, v in ipairs(RodPriority) do
-        if rodNameCache ~= v and StatsRod:FindFirstChild(v) then
-            ReplicatedStorage.events.equiprod:FireServer(v)
+        if StatsRod:FindFirstChild(v) then
+            if rodNameCache ~= v then
+                ReplicatedStorage.events.equiprod:FireServer(v)
+            end
             return
         end
     end
@@ -316,11 +318,6 @@ local autoFish = function(zone)
 
     while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
-
-            if morefunction then
-                config.AutoFish = false
-                return
-            end
 
             equipRod(RodPriority)
 

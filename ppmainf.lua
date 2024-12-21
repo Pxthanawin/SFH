@@ -376,6 +376,7 @@ local autoFish = function(zone)
 
         if rod.Parent == Backpack then
             Character.Humanoid:EquipTool(rod)
+            continue
         end
 
         if rod:FindFirstChild("bobber") then

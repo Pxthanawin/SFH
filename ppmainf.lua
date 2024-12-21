@@ -70,7 +70,7 @@ local npcList = function(location, npcname, more)
     local datanpc = {}
     if location == "The Depths" then
         if npcname == "Merchant" then
-            datanpc ={
+            datanpc = {
                 pos = Vector3.new(959.983887, -711.580261, 1262.43103),
                 cframe = CFrame.new(959.983887, -711.580261, 1262.43103, -0.170621768, 1.00927435e-08, 0.985336602, 9.79065007e-08, 1, 6.71063694e-09, -0.985336602, 9.7615839e-08, -0.170621768),
                 cam = CFrame.new(947.130798, -711.47113, 1262.57898, -0.0641093925, -0.115132757, -0.991279244, 0, 0.99332267, -0.11537008, 0.997942924, -0.00739630591, -0.0636813045)
@@ -81,7 +81,7 @@ local npcList = function(location, npcname, more)
         end
     elseif location == "Ancient Isle" then
         if npcname == "Merchant" then
-            datanpc ={
+            datanpc = {
                 pos = Vector3.new(6083.28369, 194.980133, 309.774139),
                 cframe = CFrame.new(6083.28369, 194.980133, 309.774139, 0.295308411, 3.59556722e-08, 0.955401957, -2.01901749e-08, 1, -3.13934265e-08, -0.955401957, -1.00189901e-08, 0.295308411),
                 cam = CFrame.new(6066.44531, 203.267548, 302.752106, -0.401562601, 0.329215497, -0.854613841, 0, 0.933156133, 0.359471679, 0.915831566, 0.14435038, -0.374720603)
@@ -92,7 +92,7 @@ local npcList = function(location, npcname, more)
         end
     elseif location == "Sunstone Island" then
         if npcname == "Marlin" then
-            datanpc ={
+            datanpc = {
                 pos = Vector3.new(-926.718994, 223.700012, -998.751404),
                 cframe = CFrame.new(-926.718994, 223.700012, -998.751404, 0.0335294306, 8.36562108e-08, -0.999437749, -7.97742601e-08, 1, 8.10269825e-08, 0.999437749, 7.7012615e-08, 0.0335294306),
                 cam = CFrame.new(-932.332153, 227.20462, -990.165649, 0.836995304, 0.104951933, -0.537051201, 0, 0.98143512, 0.191794604, 0.547210038, -0.160531178, 0.821456611)
@@ -136,8 +136,8 @@ local setNPC = function(ZoneName, npcname)
     bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
     bodyPosition.Parent = HumanoidRootPart
 
-    zone = npcList(ZoneName, npcname, true)
-
+    npc = npcList(ZoneName, npcname, true)
+    
     repeat task.wait() until (HumanoidRootPart.Position - npc.npc.HumanoidRootPart.Position).Magnitude <= 6
 
     local camera = workspace.Camera
@@ -316,6 +316,11 @@ local autoFish = function(zone)
 
     while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
+
+            if morefunction then
+                config.AutoFish = false
+                return
+            end
 
             equipRod(RodPriority)
 

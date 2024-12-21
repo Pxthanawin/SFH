@@ -321,10 +321,7 @@ local equipRod = function(RodPriority)
     for _, v in ipairs(RodPriority) do
         if StatsRod:FindFirstChild(v) then
             if rodNameCache ~= v then
-                LocalPlayer.Character.Humanoid:UnequipTools()
-                RunService.Heartbeat:Wait()
                 ReplicatedStorage.events.equiprod:FireServer(v)
-                RunService.Heartbeat:Wait()
             end
             return
         end

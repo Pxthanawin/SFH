@@ -18,6 +18,7 @@ local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local PlayerStats = ReplicatedStorage.playerstats[LocalPlayer.Name]
 local StatsRod = PlayerStats.Rods
 local StatsInventory = PlayerStats.Inventory
+local rodNameCache = PlayerStats.Stats.rod.Value
 
 local ListRod = {
     ["CarbonRod"] = {"Carbon Rod", 2000},
@@ -317,11 +318,10 @@ local enchantRod = function(RodName, value)
 end
 
 local equipRod = function(RodPriority)
-    local rodNameCache = PlayerStats.Stats.rod.Value
     for _, v in ipairs(RodPriority) do
         if StatsRod:FindFirstChild(v) then
             if rodNameCache ~= v then
-                LocalPlayer.Character.Humanoid:UnequipTools()
+                Character.Humanoid:UnequipTools()
                 RunService.Heartbeat:Wait()
                 ReplicatedStorage.events.equiprod:FireServer(v)
                 RunService.Heartbeat:Wait()
@@ -368,9 +368,8 @@ local autoFish = function(zone)
             continue
         end
 
-        equipRod(RodPriority)
-
-        local rod = Backpack:FindFirstChild(PlayerStats.Stats.rod.Value) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(PlayerStats.Stats.rod.Value))
+        rodNameCache = PlayerStats.Stats.rod.Value
+        local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
 
         if not rod then
             continue
@@ -378,6 +377,7 @@ local autoFish = function(zone)
 
         if rod.Parent == Backpack then
             Character.Humanoid:EquipTool(rod)
+            equipRod(RodPriority)
             continue
         end
 
@@ -408,7 +408,7 @@ local autoFish = function(zone)
                 zone.sell:InvokeServer()
             end
 
-            LocalPlayer.Character.Humanoid:UnequipTools()
+            Character.Humanoid:UnequipTools()
 
         else
             rod.events.cast:FireServer(100)

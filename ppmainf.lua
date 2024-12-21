@@ -123,7 +123,7 @@ end
 
 local setNPC = function(ZoneName, npcname)
 
-    if SetNPC[ZoneName..npcname] then
+    if SetNPC[(ZoneName..npcname)] then
         return
     end
 
@@ -155,7 +155,7 @@ local setNPC = function(ZoneName, npcname)
             dialog:InputHoldEnd()
             bodyPosition:Destroy()
             camera.CameraType = Enum.CameraType.Custom
-            SetNPC[ZoneName..npcname] = true
+            SetNPC[(ZoneName..npcname)] = true
         end
     else
         game:Shutdown()
@@ -287,7 +287,7 @@ end
 -- Main auto Farm
 local autoFish = function(zone)
 
-    if (not SetNPC[zone.."Merchant"]) and config.AutoSell then
+    if (not SetNPC[(zone.."Merchant")]) and config.AutoSell then
         setNPC(zone, "Merchant")
     end
 
@@ -316,6 +316,11 @@ local autoFish = function(zone)
 
     while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
+
+            if morefunction then
+                config.AutoFish = false
+                return
+            end
 
             equipRod(RodPriority)
 

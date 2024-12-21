@@ -288,7 +288,7 @@ end
 local autoFish = function(zone)
 
     if (not SetNPC[zone.."Merchant"]) and config.AutoSell then
-        setNPC(zone)
+        setNPC(zone, "Merchant")
     end
 
     zone = zoneList(zone, true)

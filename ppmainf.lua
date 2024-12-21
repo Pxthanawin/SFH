@@ -317,11 +317,6 @@ local autoFish = function(zone)
     while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
 
-            if morefunction then
-                config.AutoFish = false
-                return
-            end
-
             equipRod(RodPriority)
 
             local rod = Backpack:FindFirstChild(PlayerStats.Stats.rod.Value) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(PlayerStats.Stats.rod.Value))

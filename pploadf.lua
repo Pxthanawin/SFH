@@ -210,95 +210,91 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/p
 
 -- --
 
-pcall(function()
+local function OptimizeGamePerformance()
 
-    local function OptimizeGamePerformance()
-
-        local function optimizeObject(obj)
-            pcall(function()
-                if obj:IsA("BasePart") then
-                    obj.Material = Enum.Material.Plastic
-                    obj.Reflectance = 0
-                    obj.TopSurface = Enum.SurfaceType.Smooth
-                    obj.BottomSurface = Enum.SurfaceType.Smooth
-                    obj.CastShadow = false
-                elseif obj:IsA("Decal") or obj:IsA("Texture") then
-                    obj.Transparency = 1
-                elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
-                    obj.Enabled = false
-                elseif obj:IsA("Sound") then
-                    obj:Stop()
-                    obj.Volume = 0
-                elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
-                    obj.Enabled = false
-                end
-            end)
-        end
-
-        local Lighting = game:GetService("Lighting")
-        Lighting.GlobalShadows = false
-        Lighting.Brightness = 1
-        Lighting.FogEnd = 1e6
-        Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
-        Lighting.EnvironmentSpecularScale = 0
-        Lighting.EnvironmentDiffuseScale = 0
-
-        for _, effect in ipairs(Lighting:GetChildren()) do
-            if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
-                effect.Enabled = false
+    local function optimizeObject(obj)
+        pcall(function()
+            if obj:IsA("BasePart") then
+                obj.Material = Enum.Material.Plastic
+                obj.Reflectance = 0
+                obj.TopSurface = Enum.SurfaceType.Smooth
+                obj.BottomSurface = Enum.SurfaceType.Smooth
+                obj.CastShadow = false
+            elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                obj.Transparency = 1
+            elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
+                obj.Enabled = false
+            elseif obj:IsA("Sound") then
+                obj:Stop()
+                obj.Volume = 0
+            elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+                obj.Enabled = false
             end
-        end
-
-        local Terrain = workspace:FindFirstChild("Terrain")
-        if Terrain then
-            Terrain.WaterWaveSize = 0
-            Terrain.WaterWaveSpeed = 0
-            Terrain.WaterReflectance = 0
-            Terrain.WaterTransparency = 1
-            for _, child in ipairs(Terrain:GetChildren()) do
-                optimizeObject(child)
-            end
-            Terrain.ChildAdded:Connect(optimizeObject)
-        end
-
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            optimizeObject(obj)
-        end
-        workspace.DescendantAdded:Connect(optimizeObject)
-
-        for _, texture in ipairs(workspace:GetDescendants()) do
-            if texture:IsA("Texture") or texture:IsA("Decal") then
-                if not texture.Parent then
-                    texture:Destroy()
-                end
-            end
-        end
-
-        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-
-        local PhysicsService = game:GetService("PhysicsService")
-        if PhysicsService then
-            pcall(function()
-                PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
-            end)
-        else
-            warn("PhysicsService not available.")
-        end
-
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("MeshPart") then
-                v.Material = Enum.Material.SmoothPlastic
-                v.TextureID = ""
-            elseif v:IsA("SpecialMesh") then
-                v.TextureId = ""
-            end
-        end
-
+        end)
     end
 
-    OptimizeGamePerformance()
+    local Lighting = game:GetService("Lighting")
+    Lighting.GlobalShadows = false
+    Lighting.Brightness = 1
+    Lighting.FogEnd = 1e6
+    Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+    Lighting.EnvironmentSpecularScale = 0
+    Lighting.EnvironmentDiffuseScale = 0
 
-end)
+    for _, effect in ipairs(Lighting:GetChildren()) do
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
+            effect.Enabled = false
+        end
+    end
+
+    local Terrain = workspace:FindFirstChild("Terrain")
+    if Terrain then
+        Terrain.WaterWaveSize = 0
+        Terrain.WaterWaveSpeed = 0
+        Terrain.WaterReflectance = 0
+        Terrain.WaterTransparency = 1
+        for _, child in ipairs(Terrain:GetChildren()) do
+            optimizeObject(child)
+        end
+        Terrain.ChildAdded:Connect(optimizeObject)
+    end
+
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        optimizeObject(obj)
+    end
+    workspace.DescendantAdded:Connect(optimizeObject)
+
+    for _, texture in ipairs(workspace:GetDescendants()) do
+        if texture:IsA("Texture") or texture:IsA("Decal") then
+            if not texture.Parent then
+                texture:Destroy()
+            end
+        end
+    end
+
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+    local PhysicsService = game:GetService("PhysicsService")
+    if PhysicsService then
+        pcall(function()
+            PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
+        end)
+    else
+        warn("PhysicsService not available.")
+    end
+
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("MeshPart") then
+            v.Material = Enum.Material.SmoothPlastic
+            v.TextureID = ""
+        elseif v:IsA("SpecialMesh") then
+            v.TextureId = ""
+        end
+    end
+
+end
+
+OptimizeGamePerformance()
 
 if LocalPlayer and LocalPlayer.PlayerScripts then
     LocalPlayer.PlayerScripts.weather.Disabled = true

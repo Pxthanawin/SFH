@@ -171,25 +171,37 @@ task.spawn(function()
     if game.PlaceId == 4483381587 then return end
     task.wait(100)
     local countM = 0
+    local countM2 = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
     while task.wait(1) do
         pcall(function()
-                if config.AutoFish then
-                    countM = countM + 1
-                    local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-                    if money ~= currentMoney then
-                        countM = 0
-                        money = currentMoney
-                    end
-                    if countM == 20 then
-                        LocalPlayer.Character.Humanoid:UnequipTools()
-                    end
-                    if countM >= 40 then
-                        local tpservice = game:GetService("TeleportService")
-                        game:Shutdown()
-                    end
+            if config.AutoFish then
+                countM = countM + 1
+                local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+                if money ~= currentMoney then
+                    countM = 0
+                    money = currentMoney
                 end
+                if countM % 20 == 0 then
+                    LocalPlayer.Character.Humanoid:UnequipTools()
+                end
+                if countM >= 80 then
+                    local tpservice = game:GetService("TeleportService")
+                    game:Shutdown()
+                end
+            else
+                countM2 = countM2 + 1
+                local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+                if money ~= currentMoney then
+                    countM2 = 0
+                    money = currentMoney
+                end
+                if countM2 >= 1000 then
+                    local tpservice = game:GetService("TeleportService")
+                    game:Shutdown()
+                end
+            end
         end)
     end
 end)
@@ -296,11 +308,6 @@ end
 for _, v in pairs(workspace.Terrain:GetChildren()) do
     v:Destroy()
 end
---[[
-for _, v in pairs(game.Lighting:GetChildren()) do
-    v:Destroy()
-end]]
-
 
 for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     if v:IsA("Animation") then

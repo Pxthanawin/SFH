@@ -1,3 +1,6 @@
+if RunScript then return end
+getgenv().RunScript = true
+
 Configurations = string.gsub(Configurations, "[%s#*-]", "")
 
 getgenv().config = {}
@@ -205,6 +208,8 @@ task.spawn(function()
         end)
     end
 end)
+
+AssetsLoaded = true
 
 task.spawn(function()
     repeat task.wait() until AssetsLoaded

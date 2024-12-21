@@ -278,6 +278,7 @@ local equipRod = function(RodPriority)
         if StatsRod:FindFirstChild(v) then
             if rodNameCache ~= v then
                 ReplicatedStorage.events.equiprod:FireServer(v)
+                RunService.Heartbeat:Wait()
             end
             return
         end

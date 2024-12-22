@@ -128,7 +128,7 @@ workspace.Gravity = 0
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
-        object.Transparency = 0
+        object.Transparency = 1
         object.CanCollide = false
         object.CanQuery = false
     end
@@ -160,7 +160,9 @@ end
 destroyPlayer()
 task.spawn(function()
     while task.wait(2) do
-        destroyPlayer()
+        pcall(function()
+            destroyPlayer()
+        end)
     end
 end)
 

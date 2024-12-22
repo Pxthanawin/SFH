@@ -177,7 +177,7 @@ local interactableList = function(interacname, more)
                         datainterac.interac = v
                     end
                 end
-            until Highlight
+            until task.wait() and Highlight
             datainterac.price = 45
         end
     end

@@ -658,7 +658,7 @@ local autoRodOfTheDepths = function()
 
         end
 
-    until task.spawn() and checkVertigoFish() == "100%"
+    until task.wait() and checkVertigoFish() == "100%"
 
 end
 

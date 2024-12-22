@@ -286,23 +286,21 @@ local setInterac = function(interacname, quantity)
                 purchaserompt.HoldDuration = 0
                 purchaserompt:InputHoldBegin()
                 purchaserompt:InputHoldEnd()
-                if interac.remote then
-                    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-                    if money > interac.price then
-                        local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
-                        if not button then
-                            bodyPosition:Destroy()
-                            return
-                        end
-                        GuiService.SelectedObject = button
-                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                        repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                        GuiService.SelectedObject = nil
-                    else
+                local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+                if money > interac.price then
+                    local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
+                    if not button then
                         bodyPosition:Destroy()
                         return
                     end
+                    GuiService.SelectedObject = button
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                    GuiService.SelectedObject = nil
+                else
+                    bodyPosition:Destroy()
+                    return
                 end
             end
         else

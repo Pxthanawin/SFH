@@ -611,24 +611,7 @@ local autoRodOfTheDepths = function()
                 end
             end
 
-            local moreFunction = function()
-                if checkVertigoFish() ~= "Vertigo" then
-                    return true
-                end
-                local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
-                if not crabcages then
-                    return
-                end
-                if crabcages:FindFirstChild("Highlight") then
-                    local prompt = crabcages:FindFirstChild("Prompt")
-                    if not prompt then return end
-                    prompt.HoldDuration = 0
-                    prompt:FindFirstChild("Prompt"):InputHoldBegin()
-                    prompt:FindFirstChild("Prompt"):InputHoldEnd()
-                end
-            end
-
-            autoFish("Vertigo", false, moreFunction)
+            autoFish("Vertigo", false)
 
         end
 

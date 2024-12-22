@@ -708,11 +708,8 @@ end
 
 --autoRodOfTheDepths()
 
-if config.AutoFish then
-    task.spawn(function()
-        autoFish("The Depths", true)
-    end)
-end
+
+autoFish("The Depths", true)
 
 
 --[[

@@ -473,97 +473,128 @@ end
 -- Main auto Farm
 local autoFish = function(zone, AutoSell, moreFunction)
 
-    if not moreFunction then
-        moreFunction = function() end
-    end
+    task.spawn(function()
 
-    if AutoSell and (not SetNPC[(zone.."Merchant")]) then
-        setNPC(zone, "Merchant")
-    end
 
-    zone = zoneList(zone, true)
 
-    local camera = workspace.Camera
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = zone.cam
+        config.AutoFish = true
 
-    local bodyPosition = Instance.new("BodyPosition")
-    bodyPosition.Position = zone.pos
-    bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
-    bodyPosition.Parent = HumanoidRootPart
+        if AutoSell and (not SetNPC[(zone.."Merchant")]) then
+            setNPC(zone, "Merchant")
+        end
 
-    repeat task.wait() until (HumanoidRootPart.Position - zone.pos).Magnitude <= 1
-    task.wait(0.2)
+        zone = zoneList(zone, true)
 
-    Character.Torso.Anchored = true
-    Character.Humanoid.Sit = true
+        local camera = workspace.Camera
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = zone.cam
 
-    local RodPriority = {
-        [1] = "Rod Of The Depths",
-        [2] = "Aurora Rod",
-        [3] = "Steady Rod"
-    }
+        local bodyPosition = Instance.new("BodyPosition")
+        bodyPosition.Position = zone.pos
+        bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
+        bodyPosition.Parent = HumanoidRootPart
 
-    while config.AutoFish and RunService.Heartbeat:Wait() do
+        repeat task.wait() until (HumanoidRootPart.Position - zone.pos).Magnitude <= 1
+        task.wait(0.2)
 
-        if moreFunction() then
+        Character.Torso.Anchored = true
+        Character.Humanoid.Sit = true
+
+        local RodPriority = {
+            [1] = "Rod Of The Depths",
+            [2] = "Aurora Rod",
+            [3] = "Steady Rod"
+        }
+
+        local destroy = function()
             config.AutoFish = false
-            continue
+            camera.CameraType = Enum.CameraType.Custom
+            Character.Torso.Anchored = false
+            Character.Humanoid.Sit = false
+            bodyPosition:Destroy()
         end
 
-        rodNameCache = PlayerStats.Stats.rod.Value
-        local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
+        while config.AutoFish and RunService.Heartbeat:Wait() do
 
-        if not rod then
-            continue
-        end
+            rodNameCache = PlayerStats.Stats.rod.Value
+            local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
 
-        if rod.Parent == Backpack then
-            Character.Humanoid:EquipTool(rod)
-            equipRod(RodPriority)
-            continue
-        end
-
-        if rod:FindFirstChild("bobber") then
-
-            local shakeUI = PlayerGui:WaitForChild("shakeui", 3)
-            if not shakeUI then
-                Character.Humanoid:UnequipTools()
+            if not rod then
                 continue
             end
 
-            while PlayerGui:FindFirstChild("shakeui") do
-                local button = shakeUI.safezone:FindFirstChild("button")
-                if button then
-                    button.Size = UDim2.new(1001, 0, 1001, 0)
-                    VirtualUser:Button1Down(Vector2.new(1, 1))
-                    VirtualUser:Button1Up(Vector2.new(1, 1))
+            if rod.Parent == Backpack then
+                Character.Humanoid:EquipTool(rod)
+                equipRod(RodPriority)
+                continue
+            end
+
+            if rod:FindFirstChild("bobber") then
+
+                local shakeUI = PlayerGui:WaitForChild("shakeui", 3)
+                if not shakeUI then
+                    Character.Humanoid:UnequipTools()
+                    continue
                 end
-                RunService.Heartbeat:Wait()
+
+                while PlayerGui:FindFirstChild("shakeui") do
+                    local button = shakeUI.safezone:FindFirstChild("button")
+                    if button then
+                        button.Size = UDim2.new(1001, 0, 1001, 0)
+                        VirtualUser:Button1Down(Vector2.new(1, 1))
+                        VirtualUser:Button1Up(Vector2.new(1, 1))
+                    end
+                    RunService.Heartbeat:Wait()
+                end
+
+                repeat
+                    ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                    RunService.Heartbeat:Wait()
+                until not rod.values.bite.Value
+
+                if AutoSell and zone.sell then
+                    zone.sell:InvokeServer()
+                end
+
+                Character.Humanoid:UnequipTools()
+
+            else
+                rod.events.cast:FireServer(100)
             end
 
-            repeat
-                ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                RunService.Heartbeat:Wait()
-            until not rod.values.bite.Value
+            --moreFunction()
 
-            if AutoSell and zone.sell then
-                zone.sell:InvokeServer()
-            end
-
-            Character.Humanoid:UnequipTools()
-
-        else
-            rod.events.cast:FireServer(100)
         end
 
-    end
+        destroy()
 
-    camera.CameraType = Enum.CameraType.Custom
-    Character.Torso.Anchored = false
-    Character.Humanoid.Sit = false
-    bodyPosition:Destroy()
+    end)
+
 end
+
+local crabCage = function()
+    config.AutoFish = false
+    Character.Humanoid:UnequipTools()
+    if not Backpack:FindFirstChild("Crab Cage") then
+        setInterac("Crab Cage", 3)
+    end
+    local pos = Vector3.new(-127.297638, -736.863892, 1234.20581)
+    local bodyPosition = Instance.new("BodyPosition")
+    bodyPosition.Position = pos
+    bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
+    bodyPosition.Parent = HumanoidRootPart
+    repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude < 1
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = CFrame.new(-139.568878, -720.290649, 1227.21326, -0.495092869, 0.634007037, -0.594069302, 0, 0.683749914, 0.729716539, 0.868840158, 0.361277461, -0.338519663)
+    Character.Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
+    task.wait(0.5)
+    Character:WaitForChild("Crab Cage").Deploy:FireServer(CFrame.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875, -0.05541973561048508, -0, -0.9984631538391113, -0, 1, -0, 0.9984631538391113, 0, -0.05541973561048508))
+    bodyPosition:Destroy()
+    camera.CameraType = Enum.CameraType.Custom
+end
+
+local moreFunction = function() end
 
 local autoRodOfTheDepths = function()
     if StatsRod:FindFirstChild("Rod Of The Depths") then return end
@@ -590,8 +621,9 @@ local autoRodOfTheDepths = function()
                 repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude < 1
                 local camera = workspace.Camera
                 camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(-124.090141, -719.073669, 1262.87964, 0.994196475, 0.0633590296, -0.0869422331, 0, 0.808168352, 0.588951588, 0.10757935, -0.585533619, 0.803478181)
+                camera.CFrame = CFrame.new(-139.568878, -720.290649, 1227.21326, -0.495092869, 0.634007037, -0.594069302, 0, 0.683749914, 0.729716539, 0.868840158, 0.361277461, -0.338519663)
                 Character.Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
+                task.wait(0.5)
                 Character:WaitForChild("Crab Cage").Deploy:FireServer(CFrame.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875, -0.05541973561048508, -0, -0.9984631538391113, -0, 1, -0, 0.9984631538391113, 0, -0.05541973561048508))
                 bodyPosition:Destroy()
                 camera.CameraType = Enum.CameraType.Custom
@@ -611,9 +643,22 @@ local autoRodOfTheDepths = function()
                 end
             end
 
-            local moreFunction = function()
+            local moreFunction = function(destroy)
                 if checkVertigoFish() ~= "Vertigo" then
-                    return true
+                    destroy()
+                end
+                if not PlayerStats.Bestiary:FindFirstChild("Night Shrimp") then
+                    if #(workspace.active.crabcages:GetChildren()) == 0 then
+                        destroy()
+                        crabCage()
+                    else
+                        for _, v in pairs(workspace.active.crabcages:GetChildren()) do
+                            if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude > 20 then
+                                destroy()
+                                crabCage()
+                            end
+                        end
+                    end
                 end
                 local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
                 if not crabcages then
@@ -623,20 +668,21 @@ local autoRodOfTheDepths = function()
                     local prompt = crabcages:FindFirstChild("Prompt")
                     if not prompt then return end
                     prompt.HoldDuration = 0
-                    prompt:FindFirstChild("Prompt"):InputHoldBegin()
-                    prompt:FindFirstChild("Prompt"):InputHoldEnd()
+                    prompt:InputHoldBegin()
+                    prompt:InputHoldEnd()
                 end
             end
 
-            autoFish("Vertigo", false, moreFunction)
+            autoFish("Vertigo", false)
+            continue
 
         end
 
         if checkVertigoFish() == "Isonade" then
 
-            local moreFunction = function()
+            local moreFunction = function(destroy)
                 if zoneList("Isonade").pos then
-                    return true
+                    destroy()
                 end
             end
 
@@ -645,13 +691,14 @@ local autoRodOfTheDepths = function()
                 continue
             end
 
-            moreFunction = function()
+            moreFunction = function(destroy)
                 if checkVertigoFish() ~= "Isonade" then
-                    return true
+                    destroy()
                 end
             end
 
             autoFish("Isonade", false, moreFunction)
+            continue
 
         end
 
@@ -659,7 +706,12 @@ local autoRodOfTheDepths = function()
 
 end
 
-autoRodOfTheDepths()
+--autoRodOfTheDepths()
+
+if config.AutoFish then
+    task.spawn(autoFish("The Depths", ))
+end
+
 
 --[[
 

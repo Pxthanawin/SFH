@@ -709,7 +709,7 @@ end
 --autoRodOfTheDepths()
 
 if config.AutoFish then
-    task.spawn(autoFish("The Depths", ))
+    task.spawn(autoFish("The Depths", true))
 end
 
 

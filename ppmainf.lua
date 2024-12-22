@@ -235,13 +235,12 @@ local setNPC = function(ZoneName, npcname, remote, quantity)
             if npc.remote then
                 for i = 1, quantity do
                     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-                    if money >= npc.price then
-                        npc.remote:InvokeServer()
-                        task.wait(0.5)
-                    else
+                    if money < npc.price then
                         bodyPosition:Destroy()
                         return
                     end
+                    npc.remote:InvokeServer()
+                    task.wait(0.5)
                 end
             end
             bodyPosition:Destroy()
@@ -280,28 +279,27 @@ local setInterac = function(interacname, quantity)
 
     local purchaserompt = interac.interac:FindFirstChild("purchaserompt")
     for i = 1, quantity do
+        local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+        if money < interac.price then
+            bodyPosition:Destroy()
+            return
+        end
         local Highlight = interac.interac:WaitForChild("Highlight", 10)
         if Highlight then
             if purchaserompt then
                 purchaserompt.HoldDuration = 0
                 purchaserompt:InputHoldBegin()
                 purchaserompt:InputHoldEnd()
-                local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-                if money > interac.price then
-                    local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
-                    if not button then
-                        bodyPosition:Destroy()
-                        return
-                    end
-                    GuiService.SelectedObject = button
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                    repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                    GuiService.SelectedObject = nil
-                else
+                local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
+                if not button then
                     bodyPosition:Destroy()
                     return
                 end
+                GuiService.SelectedObject = button
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                GuiService.SelectedObject = nil
             end
         else
             bodyPosition:Destroy()

@@ -642,7 +642,8 @@ local autoRodOfTheDepths = function()
 
 end
 
-autoRodOfTheDepths()
+--autoRodOfTheDepths()
+task.spawn(autoFish("The Depths", true))
 
 --[[
 

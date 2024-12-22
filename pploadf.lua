@@ -109,7 +109,7 @@ repeat
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
 
 AssetsLoaded = true
---[[
+
 local FpsPart = Instance.new("Part")
 FpsPart.Name = "FPSBOOST"
 FpsPart.Position = Vector3.new(0.9315884709358215, 138.69482421875, 0.6082026362419128)
@@ -128,7 +128,7 @@ workspace.Gravity = 0
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
-        object.Transparency = 1
+        object.Transparency = 0
         object.CanCollide = false
         object.CanQuery = false
     end
@@ -208,7 +208,7 @@ task.spawn(function()
         end)
     end
 end)
-]]
+
 -- --
 
 local function OptimizeGamePerformance()

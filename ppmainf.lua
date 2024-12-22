@@ -240,7 +240,7 @@ local setNPC = function(ZoneName, npcname, remote, quantity)
                         return
                     end
                     npc.remote:InvokeServer()
-                    task.wait(0.5)
+                    task.wait(0.1)
                 end
             end
             bodyPosition:Destroy()
@@ -301,6 +301,7 @@ local setInterac = function(interacname, quantity)
                 repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
                 GuiService.SelectedObject = nil
             end
+            task.wait(0.1)
         else
             bodyPosition:Destroy()
             return

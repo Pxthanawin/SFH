@@ -26,8 +26,6 @@ for i, v in ipairs(enabled) do
 end
 
 if config["C$_100k"] then
-    config.AutoFish = true
-    config.AutoSell = true
     if not table.find(config.PurchaseRod, "SteadyRod") then
         table.insert(config.PurchaseRod, "SteadyRod")
     end

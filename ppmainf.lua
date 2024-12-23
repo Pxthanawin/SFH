@@ -625,8 +625,7 @@ local autoFish = function(zone, AutoSell, moreFunction)
         local RodPriority = {
             [1] = "Rod Of The Depths",
             [2] = "Aurora Rod",
-            [3] = "Steady Rod",
-            [4] = "Flimsy Rod"
+            [3] = "Steady Rod"
         }
 
         if not moreFunction then

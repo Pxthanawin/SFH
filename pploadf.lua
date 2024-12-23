@@ -5,6 +5,7 @@ Configurations = string.gsub(Configurations, "[%s#*-]", "")
 
 getgenv().config = {}
 config.PurchaseRod = {}
+getgenv().AutoFish = nil
 
 local enabled = {
     "C$_100k/",
@@ -180,14 +181,14 @@ end)
 task.spawn(function()
     repeat task.wait() until game:IsLoaded()
     if game.PlaceId == 4483381587 then return end
-    task.wait(100)
+    task.wait(20)
     local countM = 0
     local countM2 = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
     while task.wait(1) do
         pcall(function()
-            if config.AutoFish then
+            if AutoFish then
                 countM = countM + 1
                 local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
                 if money ~= currentMoney then

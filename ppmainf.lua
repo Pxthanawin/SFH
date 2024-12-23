@@ -979,7 +979,7 @@ elseif config["FarmLevel"] then
 
     task.spawn(function()
         autoFish("The Depths", true)
-        while task.wait(1) do
+        while task.wait(2) do
 
             if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
                 enchantRod("Rod Of The Depths", "Clever")
@@ -998,33 +998,3 @@ elseif config["FarmLevel"] then
     end)
 
 end
-
---[[
-
-task.spawn(function()
-    local morefunction1
-    while task.wait(1) do
-        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            local enctr = enctRelic()
-            if enctr and enctr[1].Value > 6 then
-                if checkDayNight() == "Night" then
-                    morefunction1 = true
-                end
-                if not config.AutoFish then
-                    if enchantRod("Aurora Rod", "Mutated") then
-                        config.AutoFish = true
-                        morefunction1 = false
-                        task.spawn(autoFish("The Depths"))
-                    else
-                        config.AutoFish = true
-                        morefunction1 = false
-                        task.spawn(autoFish("The Depths"))
-                    end
-                end
-            end
-        end
-        if morefunction1 then
-            morefunction = true
-        end
-    end
-end)]]

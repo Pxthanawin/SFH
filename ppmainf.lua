@@ -20,7 +20,6 @@ local StatsRod = PlayerStats.Rods
 local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
-local AutoFish
 local otherfunc = true
 
 local ListRod = {

@@ -603,6 +603,7 @@ local autoFish = function(zone, AutoSell, moreFunction)
 
         if AutoSell and (not SetNPC[(zone.."Merchant")]) then
             setNPC(zone, "Merchant")
+            AutoFish = true
         end
 
         zone = zoneList(zone, true)

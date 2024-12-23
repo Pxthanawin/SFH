@@ -720,13 +720,13 @@ end
 local autoRodOfTheDepths = function()
 
     if StatsRod:FindFirstChild("Rod Of The Depths") then return end
-    AutoFish = false
 
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     repeat
         money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     until task.wait() and money > 750000
 
+    AutoFish = false
     otherfunc = false
     repeat
 
@@ -925,6 +925,8 @@ if config["C$_100k"] then
 
 elseif config["FarmLevel"] then
 
+    autoFish("The Depths", true)
+
     task.spawn(function()
         local viewportSize = Workspace.CurrentCamera.ViewportSize
         local x, y = 0, viewportSize.Y - 1
@@ -974,20 +976,21 @@ elseif config["FarmLevel"] then
     end)
 
     task.spawn(function()
-        autoFish("The Depths", true)
+        
         while task.wait(2) do
 
             if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
                 enchantRod("Rod Of The Depths", "Clever")
-                autoFish("The Depths", true)
+                autoFish("Ancient Isle", true)
             elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
                 enchantRod("Aurora Rod", "Mutated")
-                autoFish("Ancient Isle", true)
+                autoFish("The Depths", true)
             end
 
             local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
             if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
                 autoRodOfTheDepths()
+                autoFish("Ancient Isle", true)
             end
 
             if money > 1000000 then

@@ -629,14 +629,6 @@ local autoFish = function(zone, AutoSell, moreFunction)
             [4] = "Flimsy Rod"
         }
 
-        local destroy = function()
-            AutoFish = false
-            camera.CameraType = Enum.CameraType.Custom
-            Character.Torso.Anchored = false
-            Character.Humanoid.Sit = false
-            bodyPosition:Destroy()
-        end
-
         if not moreFunction then
             moreFunction = function() end
         end
@@ -693,7 +685,11 @@ local autoFish = function(zone, AutoSell, moreFunction)
 
         end
 
-        destroy()
+        AutoFish = false
+        camera.CameraType = Enum.CameraType.Custom
+        Character.Torso.Anchored = false
+        Character.Humanoid.Sit = false
+        bodyPosition:Destroy()
 
     end)
 

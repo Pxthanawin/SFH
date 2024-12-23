@@ -8,6 +8,7 @@ config.PurchaseRod = {}
 
 local enabled = {
     "C$_100k/",
+    "FarmLevel/",
     {"PurchaseRod", "CarbonRod/", "NocturnalRod/", "SteadyRod/", "MagnetRod/", "RapidRod/", "AuroraRod/", "MythicalRod/", "TridentRod/", "KingsRod/", "DestinyRod/"}
 }
 
@@ -28,6 +29,13 @@ end
 if config["C$_100k"] then
     if not table.find(config.PurchaseRod, "SteadyRod") then
         table.insert(config.PurchaseRod, "SteadyRod")
+    end
+elseif config["FarmLevel"] then
+    if not table.find(config.PurchaseRod, "SteadyRod") then
+        table.insert(config.PurchaseRod, "SteadyRod")
+    end
+    if not table.find(config.PurchaseRod, "AuroraRod") then
+        table.insert(config.PurchaseRod, "AuroraRod")
     end
 end
 

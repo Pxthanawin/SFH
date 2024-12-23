@@ -20,6 +20,9 @@ local StatsRod = PlayerStats.Rods
 local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
+local AutoFish
+local otherfunc = true
+
 local ListRod = {
     ["CarbonRod"] = {"Carbon Rod", 2000},
     ["NocturnalRod"] = {"Nocturnal Rod", 11000},
@@ -125,13 +128,13 @@ local npcList = function(location, npcname, more, remote)
             datanpc = {
                 pos = Vector3.new(453.076996, 150.501022, 210.481934),
                 cframe = CFrame.new(453.076996, 150.501022, 210.481934, -0.0841025636, 1.00578879e-08, 0.9964571, -4.54328983e-08, 1, -1.39282568e-08, -0.9964571, -4.64433363e-08, -0.0841025636),
-                cam = CFrame.new(441.024414, 153.907944, 207.771103, -0.219435185, 0.148836121, -0.96420747, 0, 0.988295138, 0.152554303, 0.975627124, 0.0334757827, -0.216866717)
+                cam = CFrame.new(441.024414, 153.907944, 207.771103, -0.219435185, 0.148836121, -0.96420747, 0, 0.988295138, 0.152554303, 0.975627124, 0.0334757827, -0.216866717),
+                price = 450
             }
             if more then
                 datanpc.npc = workspace.world.npcs:WaitForChild("Appraiser", math.huge)
                 if remote == "appraise" then
                     datanpc.remote = datanpc.npc.appraiser.appraise
-                    datanpc.price = 450
                 end
             end
         end
@@ -145,27 +148,28 @@ local interactableList = function(interacname, more)
         datainterac = {
             pos = Vector3.new(-1150.93311, 134.499969, -1079.84131),
             cframe = CFrame.new(-1150.93311, 134.499969, -1079.84131, -0.896305919, -5.75794239e-08, -0.443436265, -3.43829925e-08, 1, -6.03508212e-08, 0.443436265, -3.88461316e-08, -0.896305919),
-            cam = CFrame.new(-1148.46057, 136.514679, -1073.94812, 0.966715574, -0.117059469, 0.227504075, 0, 0.889196634, 0.457525373, -0.255853504, -0.442296892, 0.859600246)
+            cam = CFrame.new(-1148.46057, 136.514679, -1073.94812, 0.966715574, -0.117059469, 0.227504075, 0, 0.889196634, 0.457525373, -0.255853504, -0.442296892, 0.859600246),
+            price = 2000
         }
         if more then
             datainterac.interac = workspace.world.interactables:WaitForChild("Sundial Totem", math.huge)
-            datainterac.price = 2000
         end
     elseif interacname == "Aurora Totem" then
         datainterac = {
             pos = Vector3.new(-1810.5636, -136.927948, -3282.44849),
             cframe = CFrame.new(-1810.5636, -136.927948, -3282.44849, -0.820921123, -3.69710804e-08, -0.571041584, -3.08078718e-08, 1, -2.04542854e-08, 0.571041584, 8.01221478e-10, -0.820921123),
-            cam = CFrame.new(-1813.31018, -130.086349, -3281.83008, -0.750986338, 0.650285959, -0.114663109, 0, 0.173648387, 0.98480773, 0.660317659, 0.739577174, -0.130407587)
+            cam = CFrame.new(-1813.31018, -130.086349, -3281.83008, -0.750986338, 0.650285959, -0.114663109, 0, 0.173648387, 0.98480773, 0.660317659, 0.739577174, -0.130407587),
+            price = 500000
         }
         if more then
             datainterac.interac = workspace.world.interactables:WaitForChild("Aurora Totem", math.huge)
-            datainterac.price = 500000
         end
     elseif interacname == "Crab Cage" then
         datainterac = {
             pos = Vector3.new(477.114136, 152.552109, 226.858932),
             cframe = CFrame.new(477.114136, 152.552109, 226.858932, -0.769669056, -2.87299997e-08, 0.638443053, 3.6466183e-08, 1, 8.89615634e-08, -0.638443053, 9.17525398e-08, -0.769669056),
-            cam = CFrame.new(471.929352, 160.65332, 241.613632, 0.971649051, 0.163671121, -0.17061621, 0, 0.721641779, 0.692266703, 0.236427844, -0.672640264, 0.701182544)
+            cam = CFrame.new(471.929352, 160.65332, 241.613632, 0.971649051, 0.163671121, -0.17061621, 0, 0.721641779, 0.692266703, 0.236427844, -0.672640264, 0.701182544),
+            price = 45
         }
         if more then
             local Highlight
@@ -178,7 +182,16 @@ local interactableList = function(interacname, more)
                     end
                 end
             until task.wait() and Highlight
-            datainterac.price = 45
+        end
+    elseif interacname == "Rod Of The Depths" then
+        datainterac = {
+            pos = Vector3.new(1704.9292, -902.527039, 1450.42468),
+            cframe = CFrame.new(1704.9292, -902.527039, 1450.42468, 0.995097816, -1.08760378e-08, -0.0988958851, 2.04235899e-08, 1, 9.55290673e-08, 0.0988958851, -9.70805729e-08, 0.995097816),
+            cam = CFrame.new(1704.4585, -895.608765, 1434.77356, -0.999177396, 0.017578356, -0.0365453809, 0, 0.901170909, 0.433463901, 0.0405532196, 0.433107346, -0.900429606),
+            price = 750000
+        }
+        if more then
+            datainterac.interac = workspace.world.interactables:WaitForChild("Rod Of The Depths", math.huge)
         end
     end
     return datainterac
@@ -199,8 +212,21 @@ local function checkDayNight()
     end
 end
 
+local function checkAurora()
+    if ReplicatedStorage.world.weather.Value == "Aurora_Borealis" then
+        return true
+    end
+end
+
+local function checkLuck()
+    if PlayerStats.Stats:FindFirstChild("status_luck") then
+        return true
+    end
+end
 
 local setNPC = function(ZoneName, npcname, remote, quantity)
+
+    AutoFish = false
 
     if not quantity then
         quantity = 1
@@ -255,6 +281,8 @@ end
 
 local setInterac = function(interacname, quantity)
 
+    AutoFish = false
+
     if not quantity then
         quantity = 1
     end
@@ -263,6 +291,10 @@ local setInterac = function(interacname, quantity)
     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
     local interac = interactableList(interacname)
+    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+    if interac.price and money < interac.price then
+        return
+    end
     local bodyPosition = Instance.new("BodyPosition")
     bodyPosition.Position = interac.pos
     bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
@@ -279,7 +311,7 @@ local setInterac = function(interacname, quantity)
 
     local purchaserompt = interac.interac:FindFirstChild("purchaserompt")
     for i = 1, quantity do
-        local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if money < interac.price then
             bodyPosition:Destroy()
             return
@@ -309,6 +341,34 @@ local setInterac = function(interacname, quantity)
     end
     bodyPosition:Destroy()
     camera.CameraType = Enum.CameraType.Custom
+
+end
+
+local setZone = function(zone, moreFunction)
+
+    AutoFish = false
+
+    zone = zoneList(zone, true)
+
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = zone.cam
+
+    local bodyPosition = Instance.new("BodyPosition")
+    bodyPosition.Position = zone.pos
+    bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
+    bodyPosition.Parent = HumanoidRootPart
+
+    repeat task.wait() until (HumanoidRootPart.Position - zone.pos).Magnitude <= 1
+    task.wait(0.2)
+
+    if not moreFunction then
+        moreFunction = function() end
+    end
+    moreFunction()
+
+    camera.CameraType = Enum.CameraType.Custom
+    bodyPosition:Destroy()
 
 end
 
@@ -352,6 +412,8 @@ local enchantRod = function(RodName, value)
 
     if checkDayNight() == "Day" then return end
 
+    AutoFish = false
+
     if PlayerStats.Stats.rod.Value ~= RodName then
         if StatsRod:FindFirstChild(RodName) then
             LocalPlayer.Character.Humanoid:UnequipTools()
@@ -362,16 +424,23 @@ local enchantRod = function(RodName, value)
     end
 
     Character.Humanoid:UnequipTools()
+    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     local enctr = enctRelic()
-    if not enctr then return end
+    if not enctr then
+        if money > 11000 then
+            setNPC("Sunstone Island", "Marlin", "power", 5)
+        end
+    end
+    money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     if enctr[1].Value < 5 then
-        local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if money > 11000 then
             setNPC("Sunstone Island", "Marlin", "power", 5)
         else
+            otherfunc = true
             return
         end
         if enctr[1].Value < 5 then
+            otherfunc = true
             return
         end
     end
@@ -398,10 +467,12 @@ local enchantRod = function(RodName, value)
 
         local Highlight = interactable:WaitForChild("Highlight", 60)
         if StatsRod[RodName].Value == value then
+            otherfunc = true
             bodyPosition:Destroy()
             return
         end
         if checkDayNight() == "Day" then
+            otherfunc = true
             bodyPosition:Destroy()
             return
         end
@@ -412,6 +483,7 @@ local enchantRod = function(RodName, value)
                 ProximityPrompt:InputHoldEnd()
                 local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
                 if not button then
+                    otherfunc = true
                     bodyPosition:Destroy()
                     return
                 end
@@ -422,6 +494,7 @@ local enchantRod = function(RodName, value)
                 GuiService.SelectedObject = nil
             end
         else
+            otherfunc = true
             bodyPosition:Destroy()
             return
         end
@@ -429,9 +502,11 @@ local enchantRod = function(RodName, value)
     end
 
     if StatsRod[RodName].Value == value then
+        otherfunc = true
         bodyPosition:Destroy()
         return
     end
+    otherfunc = true
     bodyPosition:Destroy()
     return
 
@@ -470,14 +545,62 @@ local checkVertigoFish = function()
     return "Vertigo"
 end
 
+local npcDepthsDoor = function()
+
+    Character = LocalPlayer.Character
+    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    local bodyPosition = Instance.new("BodyPosition")
+    bodyPosition.Position = Vector3.new(23.8910046, -705.998718, 1250.59277)
+    bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
+    bodyPosition.Parent = HumanoidRootPart
+
+    repeat task.wait() until (HumanoidRootPart.Position - Vector3.new(23.8910046, -705.998718, 1250.59277)).Magnitude <= 1
+
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = CFrame.new(4.40501785, -698.242615, 1247.79309, -0.142213896, 0.299789965, -0.943345785, 0, 0.953032434, 0.302868336, 0.989835918, 0.0430720858, -0.135534465)
+    HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
+
+    repeat task.wait() until workspace.world.npcs.Custos:GetChildren()[15]
+    local Highlight = workspace.world.npcs.Custos:GetChildren()[15]
+    local dialog = workspace.world.npcs.Custos:GetChildren()[15]:FindFirstChild("dialogprompt")
+
+    if Highlight then
+        if dialog then
+            dialog.HoldDuration = 0
+            dialog:InputHoldBegin()
+            dialog:InputHoldEnd()
+            repeat
+                local button = PlayerGui:WaitForChild("options",10) and PlayerGui.options.safezone["1option"].button
+                if not button then
+                    continue
+                end
+                GuiService.SelectedObject = button
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                repeat task.wait() until not PlayerGui:FindFirstChild("options")
+                GuiService.SelectedObject = nil
+                bodyPosition:Destroy()
+                camera.CameraType = Enum.CameraType.Custom
+            until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
+        end
+    else
+        game:Shutdown()
+    end
+
+end
+
 -- Main auto Farm
 local autoFish = function(zone, AutoSell, moreFunction)
 
     task.spawn(function()
 
+        if AutoFish then
+            return
+        end
 
-
-        config.AutoFish = true
+        AutoFish = true
 
         if AutoSell and (not SetNPC[(zone.."Merchant")]) then
             setNPC(zone, "Merchant")
@@ -507,14 +630,18 @@ local autoFish = function(zone, AutoSell, moreFunction)
         }
 
         local destroy = function()
-            config.AutoFish = false
+            AutoFish = false
             camera.CameraType = Enum.CameraType.Custom
             Character.Torso.Anchored = false
             Character.Humanoid.Sit = false
             bodyPosition:Destroy()
         end
 
-        while config.AutoFish and RunService.Heartbeat:Wait() do
+        if not moreFunction then
+            moreFunction = function() end
+        end
+
+        while AutoFish and RunService.Heartbeat:Wait() do
 
             rodNameCache = PlayerStats.Stats.rod.Value
             local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
@@ -562,7 +689,7 @@ local autoFish = function(zone, AutoSell, moreFunction)
                 rod.events.cast:FireServer(100)
             end
 
-            --moreFunction()
+            moreFunction()
 
         end
 
@@ -573,7 +700,7 @@ local autoFish = function(zone, AutoSell, moreFunction)
 end
 
 local crabCage = function()
-    config.AutoFish = false
+    AutoFish = false
     Character.Humanoid:UnequipTools()
     if not Backpack:FindFirstChild("Crab Cage") then
         setInterac("Crab Cage", 3)
@@ -594,71 +721,41 @@ local crabCage = function()
     camera.CameraType = Enum.CameraType.Custom
 end
 
-local moreFunction = function() end
-
 local autoRodOfTheDepths = function()
+
     if StatsRod:FindFirstChild("Rod Of The Depths") then return end
+    AutoFish = false
+
+    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+    repeat
+        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+    until task.wait() and money > 750000
+
+    otherfunc = false
     repeat
 
         if checkVertigoFish() == "Vertigo" then
-
-            local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-            if money < 750000 then
-                continue
-            end
-
-            local crabCage = function()
-                config.AutoFish = false
-                Character.Humanoid:UnequipTools()
-                if not Backpack:FindFirstChild("Crab Cage") then
-                    setInterac("Crab Cage", 3)
-                end
-                local pos = Vector3.new(-127.297638, -736.863892, 1234.20581)
-                local bodyPosition = Instance.new("BodyPosition")
-                bodyPosition.Position = pos
-                bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
-                bodyPosition.Parent = HumanoidRootPart
-                repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude < 1
-                local camera = workspace.Camera
-                camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(-139.568878, -720.290649, 1227.21326, -0.495092869, 0.634007037, -0.594069302, 0, 0.683749914, 0.729716539, 0.868840158, 0.361277461, -0.338519663)
-                Character.Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
-                task.wait(0.5)
-                Character:WaitForChild("Crab Cage").Deploy:FireServer(CFrame.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875, -0.05541973561048508, -0, -0.9984631538391113, -0, 1, -0, 0.9984631538391113, 0, -0.05541973561048508))
-                bodyPosition:Destroy()
-                camera.CameraType = Enum.CameraType.Custom
-            end
 
             if not PlayerStats.Bestiary:FindFirstChild("Night Shrimp") then
                 if #(workspace.active.crabcages:GetChildren()) == 0 then
                     crabCage()
                 else
+                    local i = 0
                     for _, v in pairs(workspace.active.crabcages:GetChildren()) do
-                        if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude > 20 then
-                            crabCage()
-                        else
-                            continue
+                        if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude < 20 then
+                            i += 1
+                            break
                         end
+                    end
+                    if i == 0 then
+                        crabCage()
                     end
                 end
             end
 
-            local moreFunction = function(destroy)
+            local moreFunction = function()
                 if checkVertigoFish() ~= "Vertigo" then
-                    destroy()
-                end
-                if not PlayerStats.Bestiary:FindFirstChild("Night Shrimp") then
-                    if #(workspace.active.crabcages:GetChildren()) == 0 then
-                        destroy()
-                        crabCage()
-                    else
-                        for _, v in pairs(workspace.active.crabcages:GetChildren()) do
-                            if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude > 20 then
-                                destroy()
-                                crabCage()
-                            end
-                        end
-                    end
+                    AutoFish = false
                 end
                 local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
                 if not crabcages then
@@ -673,27 +770,33 @@ local autoRodOfTheDepths = function()
                 end
             end
 
-            autoFish("Vertigo", false)
-            continue
+            autoFish("Vertigo", false, moreFunction)
 
-        end
-
-        if checkVertigoFish() == "Isonade" then
+        elseif checkVertigoFish() == "Isonade" then
 
             local moreFunction = function(destroy)
                 if zoneList("Isonade").pos then
-                    destroy()
+                    AutoFish = false
                 end
             end
 
             if not zoneList("Isonade").pos then
-                autoFish("The Depths", true, moreFunction)
+                autoFish("The Depths", false, moreFunction)
                 continue
             end
 
             moreFunction = function(destroy)
-                if checkVertigoFish() ~= "Isonade" then
-                    destroy()
+                local i = 0
+                for _, v in pairs(workspace.zones.fishing:GetChildren()) do
+                    if v.Name == "Isonade" then
+                        if (v.Position - HumanoidRootPart.Position).Magnitude < 1 then
+                            i += 1
+                            break
+                        end
+                    end
+                end
+                if i == 0 then
+                    AutoFish = false
                 end
             end
 
@@ -702,21 +805,201 @@ local autoRodOfTheDepths = function()
 
         end
 
-    until task.wait() and checkVertigoFish() == "100%"
+    until task.wait(1) and checkVertigoFish() == "100%"
+    otherfunc = true
+    npcDepthsDoor()
 
+    local setAbysHex = function(purchase)
+        local abys
+        local hex
+        for _, v in pairs(Backpack:GetChildren()) do
+            if v.Name == "Enchant Relic" then
+                if v:FindFirstChild("abyssaltemplate") then
+                    abys = v
+                elseif v:FindFirstChild("hexedtemplate") then
+                    hex = v
+                end
+            end
+        end
+        if abys and hex then
+            if purchase then
+                local moreFunction = function()
+                    Character.Humanoid:EquipTool(hex)
+                    task.wait(0.1)
+                    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/ActivatorClientActive"):FireServer("Hexed")
+                    task.wait(0.1)
+                    Character.Humanoid:EquipTool(abys)
+                    task.wait(0.1)
+                    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/ActivatorClientActive"):FireServer("Abyssal")
+                end
+                setZone("The Depths", moreFunction)
+                setInterac("Rod Of The Depths", 1)
+            end
+            return true
+        end
+    end
+
+    if setAbysHex() then
+        setAbysHex(true)
+        return
+    end
+
+    autoFish("The Depths", true)
+
+    repeat
+        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+    until task.wait() and money > 850000
+
+    local checkRelic = function()
+        i = 0
+        for _, v in pairs(Backpack:GetChildren()) do
+            if v.Name == "Enchant Relic" then
+                if #StatsInventory[tostring(v.link.Value)]:GetChildren() == 2 then
+                    i += StatsInventory[tostring(v.link.Value)].Stack
+                end
+            end
+        end
+        return i
+    end
+
+    AutoFish = false
+    repeat
+
+        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+        if money < 750000 then
+            autoFish("The Depths", true)
+            continue
+        end
+
+        local enctr = enctRelic()
+        if not enctr then
+            money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+            if money > 800000 then
+                setNPC("Sunstone Island", "Marlin", "power", 5)
+            else
+                autoFish("The Depths", true)
+                continue
+            end
+        end
+        if enctr[1].Value < 5 then
+            money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+            if money > 800000 then
+                setNPC("Sunstone Island", "Marlin", "power", 5)
+            else
+                autoFish("The Depths", true)
+                continue
+            end
+            if enctr[1].Value < 5 then
+                autoFish("The Depths", true)
+                continue
+            end
+        end
+
+        if enctr[2].Parent == Backpack then
+            Character.Humanoid:EquipTool(enctr[2])
+        end
+
+        setNPC("Moosewood", "Appraiser", "appraise", 1)
+        repeat
+            if not Character:FindFirstChild("Enchant Relic") then
+                enctr = enctRelic()
+                Character.Humanoid:EquipTool(enctr[2])
+            end
+            pcall(function()
+                workspace.world.npcs.Appraiser.appraiser.appraise:InvokeServer()
+            end)
+            task.wait()
+        until setAbysHex() or checkRelic() == 0
+
+    until task.wait() and money >= 750000 and setAbysHex()
+
+    repeat
+        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+        if money < 750000 then
+            autoFish("The Depths", true)
+        end
+    until task.wait(1) and money > 750000
+
+    setAbysHex(true)
 end
 
---autoRodOfTheDepths()
+if config["C$_100k"] then
 
+    autoFish("The Depths", true)
 
-autoFish("The Depths", true)
+elseif config["FarmLevel"] then
 
+    task.spawn(function()
+        local viewportSize = Workspace.CurrentCamera.ViewportSize
+        local x, y = 0, viewportSize.Y - 1
+        while task.wait(5) do
+            if (not AutoFish) and otherfunc then
+                continue
+            end
+            if StatsRod:FindFirstChild("Steady Rod") then
+                if not checkLuck() then
+                    setNPC("Sunstone Island", "Marlin", "luck", 1)
+                end
+                autoFish("The Depths", true)
+            elseif StatsRod:FindFirstChild("Aurora Rod") then
+                if not checkLuck() then
+                    setNPC("Sunstone Island", "Marlin", "luck", 3)
+                end
+                autoFish("The Depths", true)
+            elseif StatsRod:FindFirstChild("Rod Of The Depths") then
+                if not checkLuck() then
+                    setNPC("Sunstone Island", "Marlin", "luck", 6)
+                end
+                if checkDayNight() == "Day" then
+                    AutoFish = false
+                    Character.Humanoid:UnequipTools()
+                    if Backpack:FindFirstChild("Sundial Totem") then
+                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
+                    end
+                    task.wait(0.1)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                end
+                if not checkAurora() then
+                    AutoFish = false
+                    Character.Humanoid:UnequipTools()
+                    if Backpack:FindFirstChild("Aurora Totem") then
+                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+                    end
+                    task.wait(0.1)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                end
+                autoFish("Ancient Isle", true)
+            else
+                autoFish("The Depths", true)
+            end
+        end
+    end)
+
+    task.spawn(function()
+        autoFish("The Depths", true)
+        while task.wait(1) do
+
+            if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
+                enchantRod("Rod Of The Depths", "Clever")
+                autoFish("The Depths", true)
+            elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
+                enchantRod("Aurora Rod", "Mutated")
+                autoFish("Ancient Isle", true)
+            end
+
+            local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+            if not StatsRod:FindFirstChild("Rod Of The Depths") and money < 750000 then
+                autoRodOfTheDepths()
+            end
+
+        end
+    end)
+
+end
 
 --[[
-
-if config.AutoFish then
-    task.spawn(autoFish("The Depths"))
-end
 
 task.spawn(function()
     local morefunction1

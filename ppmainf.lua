@@ -626,7 +626,8 @@ local autoFish = function(zone, AutoSell, moreFunction)
         local RodPriority = {
             [1] = "Rod Of The Depths",
             [2] = "Aurora Rod",
-            [3] = "Steady Rod"
+            [3] = "Steady Rod",
+            [4] = "Flimsy Rod"
         }
 
         local destroy = function()
@@ -994,7 +995,41 @@ elseif config["FarmLevel"] then
                 autoRodOfTheDepths()
             end
 
+            if money < 1000000 then
+                
+            end
+
         end
     end)
 
 end
+
+--[[
+
+task.spawn(function()
+    local morefunction1
+    while task.wait(1) do
+        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
+            local enctr = enctRelic()
+            if enctr and enctr[1].Value > 6 then
+                if checkDayNight() == "Night" then
+                    morefunction1 = true
+                end
+                if not config.AutoFish then
+                    if enchantRod("Aurora Rod", "Mutated") then
+                        config.AutoFish = true
+                        morefunction1 = false
+                        task.spawn(autoFish("The Depths"))
+                    else
+                        config.AutoFish = true
+                        morefunction1 = false
+                        task.spawn(autoFish("The Depths"))
+                    end
+                end
+            end
+        end
+        if morefunction1 then
+            morefunction = true
+        end
+    end
+end)]]

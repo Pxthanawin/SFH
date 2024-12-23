@@ -986,12 +986,15 @@ elseif config["FarmLevel"] then
             end
 
             local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-            if not StatsRod:FindFirstChild("Rod Of The Depths") and money < 750000 then
+            if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
                 autoRodOfTheDepths()
             end
 
-            if money < 1000000 then
-                
+            if money > 1000000 then
+                purchaseRod("Mythical Rod", 110000)
+                purchaseRod("Trident Rod", 150000)
+                purchaseRod("Kings Rod", 120000)
+                purchaseRod("Destiny Rod", 190000)
             end
 
         end

@@ -91,6 +91,9 @@ local autoFish = function()
     }
 
     HumanoidRootPart.CFrame = CFrame.new(841, -750, 1246)
+    task.wait(5)
+    HumanoidRootPart.CFrame = CFrame.new(841, -750, 1246)
+    task.wait()
 
     Character.Torso.Anchored = true
     Character.Humanoid.Sit = true

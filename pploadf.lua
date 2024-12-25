@@ -120,8 +120,6 @@ FpsPart.Transparency = 0
 local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
 oxygen.Disabled = true
 
-workspace.Gravity = 0
-
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
@@ -291,11 +289,6 @@ end
 for _, v in pairs(workspace.Terrain:GetChildren()) do
     v:Destroy()
 end
-
-for _, v in pairs(game.Lighting:GetChildren()) do
-    v:Destroy()
-end
-
 
 for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     if v:IsA("Animation") then

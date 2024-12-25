@@ -319,7 +319,7 @@ task.spawn(function()
     repeat task.wait() until getgenv().StartFarm
     while getgenv().Sell_Every do
         task.wait(getgenv().Sell_Every)
-        workspace.world.npcs["Milo Merchant"].merchant.sellall:InvokeServer()
+        ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
     end
 end)
 

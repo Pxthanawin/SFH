@@ -125,7 +125,7 @@ workspace.Gravity = 0
 local function applySettings(object)
     if object:IsA("BasePart") then
         if object.Name == "FPSBOOST" then return end
-        object.Transparency = 0
+        object.Transparency = 1
         object.CanCollide = false
         object.CanQuery = false
     end
@@ -175,21 +175,19 @@ task.spawn(function()
 
     while task.wait(1) do
         pcall(function()
-                if config.AutoFish then
-                    countM = countM + 1
-                    local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-                    if money ~= currentMoney then
-                        countM = 0
-                        money = currentMoney
-                    end
-                    if countM == 20 then
-                        LocalPlayer.Character.Humanoid:UnequipTools()
-                    end
-                    if countM >= 40 then
-                        local tpservice = game:GetService("TeleportService")
-                        game:Shutdown()
-                    end
-                end
+            countM = countM + 1
+            local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+            if money ~= currentMoney then
+                countM = 0
+                money = currentMoney
+            end
+            if countM == 20 then
+                LocalPlayer.Character.Humanoid:UnequipTools()
+            end
+            if countM >= 40 then
+                local tpservice = game:GetService("TeleportService")
+                game:Shutdown()
+            end
         end)
     end
 end)
@@ -309,25 +307,4 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     for __, vv in pairs(v:GetDescendants()) do
         vv:Destroy()
     end
-end
-
-
-local settings = {
-    disableCamShake = true,
-    willautosell_event = true,
-    willautosell_exotic = true,
-    willautosell_relic = false,
-    willautosell_mythical = true,
-    willautosell_legendary = true
-}
-
-local ChangeSetting = game:GetService("Players").LocalPlayer.PlayerGui.hud.safezone.menu.menu_safezone:FindFirstChild("ChangeSetting")
-for settingName, settingValue in pairs(settings) do
-    local args = {
-        [1] = settingName,
-        [2] = settingValue
-    }
-    pcall(function()
-        ChangeSetting:FireServer(unpack(args))
-    end)
 end

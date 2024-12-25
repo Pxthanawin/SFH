@@ -90,7 +90,7 @@ local autoFish = function()
         [3] = "Steady Rod"
     }
 
-    Character.Torso.CFrame = CFrame.new(841, -750, 1246)
+    Humanoid.CFrame = CFrame.new(841, -750, 1246)
 
     Character.Torso.Anchored = true
     Character.Humanoid.Sit = true

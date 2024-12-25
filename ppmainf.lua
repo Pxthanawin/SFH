@@ -15,9 +15,8 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
-local PlayerStats = ReplicatedStorage.playerstats[LocalPlayer.Name]
-local StatsRod = PlayerStats.Rods
-local StatsInventory = PlayerStats.Inventory
+local StatsRod = ReplicatedStorage.playerstats[LocalPlayer.Name].Rods
+local rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
 local StartFarm
 
@@ -55,17 +54,6 @@ local function extractNumber(String)
     return tonumber((String:gsub("[^%d]", "")))
 end
 
-local Lighting = game:GetService("Lighting")
-
-local function checkDayNight()
-    local currentTime = Lighting.ClockTime
-    if currentTime >= 6 and currentTime < 18 then
-        return "Day"
-    else
-        return "Night"
-    end
-end
-
 
 local setZone = function(ZoneName)
 
@@ -100,6 +88,17 @@ local setZone = function(ZoneName)
             dialog:InputHoldBegin()
             dialog:InputHoldEnd()
             bodyPosition:Destroy()
+
+            local newPart = Instance.new("Part")
+            newPart.Name = "FPSBOOST"
+            newPart.Position = Vector3.new(0.9315884709358215, 138.69482421875, 0.6082026362419128)
+            newPart.Size = Vector3.new(30, 1, 30)
+            newPart.Color = Color3.fromRGB(0,0,0)
+            newPart.Anchored = true
+            newPart.CanCollide = false
+            newPart.Parent = workspace
+            newPart.Transparency = 0
+
             StartFarm = true
         end
     else
@@ -110,93 +109,13 @@ local setZone = function(ZoneName)
 end
 
 
-local enchantRod = function(RodName, value)
-
-    if checkDayNight() == "Day" then return end
-
-    if StatsRod[RodName].Value == value then
-        return true
-    end
-
-    if PlayerStats.Stats.rod.Value ~= RodName then
-        if StatsRod:FindFirstChild(RodName) then
-            LocalPlayer.Character.Humanoid:UnequipTools()
-            ReplicatedStorage.events.equiprod:FireServer(RodName)
-        else
-            return
-        end
-    end
-
-    local enctRelic = function()
-        for _, v in pairs(Backpack:GetChildren()) do
-            if v.Name == "Enchant Relic" then
-                if #StatsInventory[tostring(v.link.Value)]:GetChildren() == 2 then
-                    return {StatsInventory[tostring(v.link.Value)].Stack, v}
-                end
-            end
-        end
-        return
-    end
-
-    Character.Humanoid:UnequipTools()
-    local enctr = enctRelic()
-    if not enctr then return end
-    if enctr[1].Value < 6 then return end
-    if enctr[2].Parent == Backpack then
-        Character.Humanoid:EquipTool(enctr[2])
-    end
-
-    local pos = Vector3.new(1311, -802.427063, -83)
-    local bodyPosition = Instance.new("BodyPosition")
-    bodyPosition.Position = pos
-    bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
-    bodyPosition.Parent = HumanoidRootPart
-    repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
-
-    local camera = workspace.Camera
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
-
-    local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", 10)
-    if not interactable then return end
-    local ProximityPrompt = interactable.ProximityPrompt
-
-    while StatsRod[RodName].Value ~= value and enctr[1].Value > 1 and checkDayNight() == "Night" and task.wait() do
-        local Highlight = interactable:WaitForChild("Highlight", 20)
-        if Highlight then
-            if ProximityPrompt then
-                ProximityPrompt.HoldDuration = 0
-                ProximityPrompt:InputHoldBegin()
-                ProximityPrompt:InputHoldEnd()
-                local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
-                if not button then return end
-                GuiService.SelectedObject = button
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                GuiService.SelectedObject = nil
-                task.wait(1)
-            end
-        else
-            return
-        end
-    end
-
-    if StatsRod[RodName].Value == value then
-        return true
-    end
-    return
-
-end
-
-
 local purchaseRod = function(RodName, Price)
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     if StatsRod:FindFirstChild(RodName) then
-        return
+        return false
     elseif Price <= money then 
         ReplicatedStorage.events.purchase:FireServer(RodName, "Rod", 1)
-        return
+        return false
     else
         return true
     end
@@ -215,15 +134,11 @@ task.spawn(function()
     end
 end)
 
-local morefunction
-
 -- Main auto Fish
 local autoFish = function()
     local zone = "The Depths"
-
-    if not StartFarm then
-        setZone(zone)
-    end
+    setZone(zone)
+    repeat task.wait() until StartFarm
 
     zone = zoneList(zone, true)
 
@@ -242,33 +157,22 @@ local autoFish = function()
     Character.Torso.Anchored = true
     Character.Humanoid.Sit = true
 
+    if StatsRod:FindFirstChild("Steady Rod") then
+        if rodNameCache ~= "Steady Rod" then
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("equiprod"):FireServer("Steady Rod")
+        end
+    end
+
     while config.AutoFish and RunService.Heartbeat:Wait() do
         pcall(function()
-            local rodNameCache = PlayerStats.Stats.rod.Value
-
-            if morefunction then
-                config.AutoFish = false
-                return
-            end
-
-            if rodNameCache ~= "Aurora Rod" then
-                if StatsRod:FindFirstChild("Aurora Rod") then
-                    ReplicatedStorage.events.equiprod:FireServer("Aurora Rod")
-                    return
-                end
-                if rodNameCache ~= "Steady Rod" then
-                    if StatsRod:FindFirstChild("Steady Rod") then
-                        ReplicatedStorage.events.equiprod:FireServer("Steady Rod")
-                        return
-                    end
-                end
-            end
+            rodNameCache = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
 
             local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
     
             if not rod then
                 return
             end
+            
     
             if rod.Parent == Backpack then
                 Character.Humanoid:EquipTool(rod)
@@ -301,8 +205,6 @@ local autoFish = function()
                     zone.npc.merchant.sellall:InvokeServer()
                 end
 
-                LocalPlayer.Character.Humanoid:UnequipTools()
-
             else
                 rod.events.cast:FireServer(100)
             end
@@ -310,31 +212,7 @@ local autoFish = function()
     end
 
     camera.CameraType = Enum.CameraType.Custom
-    Character.Torso.Anchored = false
-    Character.Humanoid.Sit = false
     bodyPosition:Destroy()
 end
 
-if config.AutoFish then
-    task.spawn(autoFish)
-end
-
-task.spawn(function()
-    while task.wait(1) do
-        if StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            if checkDayNight() == "Night" then
-                morefunction1 = true
-            end
-            if not config.AutoFish then
-                if enchantRod("Aurora Rod", "Mutated") then
-                    config.AutoFish = true
-                    morefunction1 = false
-                    task.spawn(autoFish)
-                end
-            end
-        end
-        if morefunction1 then
-            morefunction = true
-        end
-    end
-end)
+task.spawn(autoFish)

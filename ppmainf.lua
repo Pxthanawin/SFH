@@ -90,13 +90,20 @@ local autoFish = function()
         [3] = "Steady Rod"
     }
 
-    HumanoidRootPart.CFrame = CFrame.new(841, -750, 1246)
-    task.wait(5)
-    HumanoidRootPart.CFrame = CFrame.new(841, -750, 1246)
-    task.wait()
+    Character = LocalPlayer.Character
+    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    
+    local bodyPosition = Instance.new("BodyPosition")
+    bodyPosition.Position = Vector3.new(841, -750, 1246)
+    bodyPosition.MaxForce = Vector3.new(math.huge,math.huge, math.huge)
+    bodyPosition.Parent = HumanoidRootPart
+
+    repeat task.wait() until (HumanoidRootPart.Position - Vector3.new(841, -750, 1246)).Magnitude <= 1
 
     Character.Torso.Anchored = true
     Character.Humanoid.Sit = true
+
+    bodyPosition:Destroy()
 
     while config.AutoFish and RunService.Heartbeat:Wait() do
 

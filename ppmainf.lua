@@ -80,6 +80,10 @@ end
 -- Main auto Fish
 local autoFish = function()
 
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+
     local RodPriority = {
         [1] = "Rod Of The Depths",
         [2] = "Aurora Rod",

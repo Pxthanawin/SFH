@@ -345,20 +345,23 @@ local enchantRod = function(RodName, value)
             if checkDayNight() == "Day" then
                 return
             end
-            if Highlight then
-                if ProximityPrompt then
-                    ProximityPrompt.HoldDuration = 0
-                    ProximityPrompt:InputHoldBegin()
-                    ProximityPrompt:InputHoldEnd()
-                    local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
-                    if button then
-                        GuiService.SelectedObject = button
-                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                        repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                        GuiService.SelectedObject = nil
-                        relic.stack -= 1
-                    end
+            if not Highlight then
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
+                continue
+            end
+            if ProximityPrompt then
+                ProximityPrompt.HoldDuration = 0
+                ProximityPrompt:InputHoldBegin()
+                ProximityPrompt:InputHoldEnd()
+                local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
+                if button then
+                    GuiService.SelectedObject = button
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                    GuiService.SelectedObject = nil
+                    relic.stack -= 1
                 end
             end
 

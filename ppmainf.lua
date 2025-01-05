@@ -707,7 +707,7 @@ task.spawn(function()
             repeat
                 RunService.Heartbeat:Wait()
             until PlayerGui:FindFirstChild("shakeui") or not rod:FindFirstChild("bobber")
-
+            local shakeUI = PlayerGui:FindFirstChild("shakeui")
             while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI.safezone:FindFirstChild("button")
                 if button then

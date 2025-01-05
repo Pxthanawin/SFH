@@ -296,8 +296,11 @@ local enchantRod = function(RodName, value)
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         local relic = enctRelic()
         if not relic then
-            if money > 11000 then
-                npcRemote("power")
+            if money > 33000 then
+                for i = 1, 3 do
+                    npcRemote("power")
+                end
+                task.wait()
                 relic = enctRelic()
             else
                 return
@@ -767,7 +770,7 @@ elseif config["FarmLevel"] then
 
     local viewportSize = Workspace.CurrentCamera.ViewportSize
     local x, y = 0, viewportSize.Y - 1
-    while task.wait(1) do
+    while task.wait(0.5) do
         if StatsRod:FindFirstChild("Rod Of The Depths") then
             if not checkLuck() then
                 for i = 1, 6 do

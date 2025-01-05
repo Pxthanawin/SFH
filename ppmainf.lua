@@ -449,13 +449,13 @@ local npcDepthsDoor = function()
         pcall(function()
             local Highlight = workspace.world.npcs.Custos:GetChildren()[15]
             local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
-            
+
             if Highlight then
                 dialog.HoldDuration = 0
                 dialog:InputHoldBegin()
                 dialog:InputHoldEnd()
             end
-            
+
             local button = PlayerGui:WaitForChild("options",10) and PlayerGui.options.safezone["1option"].button
             if button then
                 GuiService.SelectedObject = button
@@ -593,6 +593,7 @@ local autoRodOfTheDepths = function()
         end
         task.wait(5)
         npcDepthsDoor()
+        task.wait(0.5)
     end
 
     AutoSell = true
@@ -652,6 +653,9 @@ local autoRodOfTheDepths = function()
                 relic = enctRelic()
             else
                 setFishZone(zonelist["The Depths"])
+                repeat
+                    money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+                until task.wait(1) and money > 805000
                 continue
             end
         end

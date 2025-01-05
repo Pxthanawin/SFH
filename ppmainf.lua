@@ -722,7 +722,6 @@ task.spawn(function()
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 RunService.Heartbeat:Wait()
             until not rod.values.bite.Value
-            LocalPlayer.Character.Humanoid:UnequipTools()
 
             if AutoSell then
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
@@ -731,6 +730,8 @@ task.spawn(function()
         else
             rod.events.cast:FireServer(100)
         end
+
+        LocalPlayer.Character.Humanoid:UnequipTools()
 
     end
 end)
@@ -818,12 +819,12 @@ elseif config["FarmLevel"] then
             setFishZone(zonelist["Ancient Isle"])
             local camera = workspace.Camera
             camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(947.130798, -711.47113, 1262.57898, -0.0641093925, -0.115132757, -0.991279244, 0, 0.99332267, -0.11537008, 0.997942924, -0.00739630591, -0.0636813045)
+            camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
         else
             setFishZone(zonelist["The Depths"])
             local camera = workspace.Camera
             camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(947.130798, -711.47113, 1262.57898, -0.0641093925, -0.115132757, -0.991279244, 0, 0.99332267, -0.11537008, 0.997942924, -0.00739630591, -0.0636813045)
+            camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
         end
     end
 end

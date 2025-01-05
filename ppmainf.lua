@@ -322,8 +322,9 @@ local enchantRod = function(RodName, value)
     local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", math.huge)
     local ProximityPrompt = interactable.ProximityPrompt
 
-    Character.Humanoid:EquipTool(relic.equip)
     while StatsRod[RodName].Value ~= value and relic.stack > 0 and checkDayNight() == "Night" and task.wait() do
+
+        Character.Humanoid:EquipTool(relic.equip)
 
         local Highlight = interactable:WaitForChild("Highlight", 60)
         if StatsRod[RodName].Value == value then
@@ -348,6 +349,8 @@ local enchantRod = function(RodName, value)
                 end
             end
         end
+
+        Character.Humanoid:UnequipTools()
 
     end
 
@@ -505,6 +508,9 @@ local autoRodOfTheDepths = function()
     until task.wait() and money > 750000
 
     AutoSell = false
+
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Custom
 
     if checkVertigoFish() == "Vertigo" then
 
@@ -811,8 +817,14 @@ elseif config["FarmLevel"] then
 
         if StatsRod:FindFirstChild("Rod Of The Depths") then
             setFishZone(zonelist["Ancient Isle"])
+            local camera = workspace.Camera
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new(947.130798, -711.47113, 1262.57898, -0.0641093925, -0.115132757, -0.991279244, 0, 0.99332267, -0.11537008, 0.997942924, -0.00739630591, -0.0636813045)
         else
             setFishZone(zonelist["The Depths"])
+            local camera = workspace.Camera
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CFrame = CFrame.new(947.130798, -711.47113, 1262.57898, -0.0641093925, -0.115132757, -0.991279244, 0, 0.99332267, -0.11537008, 0.997942924, -0.00739630591, -0.0636813045)
         end
     end
 end

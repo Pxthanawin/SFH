@@ -772,7 +772,7 @@ elseif config["FarmLevel"] then
                 if Backpack:FindFirstChild("Aurora Totem") then
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 else
-                    setInterac("Aurora Totem", 5)
+                    setInterac("Aurora Totem")
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 end
                 task.wait(0.1)

@@ -389,9 +389,9 @@ local equipRod = function(RodPriority)
         if StatsRod:FindFirstChild(v) then
             if rodNameCache ~= v then
                 Character.Humanoid:UnequipTools()
-                RunService.Heartbeat:Wait()
+                task.wait(0.25)
                 ReplicatedStorage.events.equiprod:FireServer(v)
-                RunService.Heartbeat:Wait()
+                task.wait(0.25)
             end
             return
         end
@@ -699,6 +699,7 @@ task.spawn(function()
         if rod.Parent == Backpack then
             Character.Humanoid:EquipTool(rod)
             equipRod(RodPriority)
+            task.wait(0.25)
             continue
         end
 

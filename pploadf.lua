@@ -1,10 +1,15 @@
+if RunScript then return end
+getgenv().RunScript = true
+
 Configurations = string.gsub(Configurations, "[%s#*-]", "")
 
 getgenv().config = {}
 config.PurchaseRod = {}
+--getgenv().AutoFish = nil
 
 local enabled = {
     "C$_100k/",
+    "FarmLevel/",
     {"PurchaseRod", "CarbonRod/", "NocturnalRod/", "SteadyRod/", "MagnetRod/", "RapidRod/", "AuroraRod/", "MythicalRod/", "TridentRod/", "KingsRod/", "DestinyRod/"}
 }
 
@@ -23,10 +28,15 @@ for i, v in ipairs(enabled) do
 end
 
 if config["C$_100k"] then
-    config.AutoFish = true
-    config.AutoSell = true
     if not table.find(config.PurchaseRod, "SteadyRod") then
         table.insert(config.PurchaseRod, "SteadyRod")
+    end
+elseif config["FarmLevel"] then
+    if not table.find(config.PurchaseRod, "SteadyRod") then
+        table.insert(config.PurchaseRod, "SteadyRod")
+    end
+    if not table.find(config.PurchaseRod, "AuroraRod") then
+        table.insert(config.PurchaseRod, "AuroraRod")
     end
 end
 
@@ -107,6 +117,9 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 
 AssetsLoaded = true
 
+local Character = LocalPlayer.Character
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
 local FpsPart = Instance.new("Part")
 FpsPart.Name = "FPSBOOST"
 FpsPart.Position = Vector3.new(0.9315884709358215, 138.69482421875, 0.6082026362419128)
@@ -117,17 +130,64 @@ FpsPart.CanCollide = false
 FpsPart.Parent = workspace
 FpsPart.Transparency = 0
 
-local oxygen = LocalPlayer.Character.client:FindFirstChild("oxygen")
-oxygen.Disabled = true
+
+local humanoid = LocalPlayer.Character.Humanoid
+humanoid.PlatformStand = true
 
 local function applySettings(object)
     if object:IsA("BasePart") then
+        if object.Name == "partt" then return end
         if object.Name == "FPSBOOST" then return end
         object.Transparency = 1
         object.CanCollide = false
         object.CanQuery = false
     end
 end
+
+local newPart = function(y)
+    local part = Instance.new("Part")
+    part.Name = "partt"
+    part.Position = HumanoidRootPart.Position - Vector3.new(0, y, 0)
+    part.Size = Vector3.new(2, 1, 2)
+    part.Anchored = true
+    part.Parent = workspace
+    part.Transparency = 1
+end
+
+task.spawn(function()
+    repeat
+        task.wait()
+    until AssetsLoaded
+    while task.wait(0.25) do
+        local rpart = true
+        for i, v in pairs(workspace:GetChildren()) do
+            if v:IsA("BasePart") and v.Name == "partt" then
+                if humanoid.PlatformStand then
+                    if (v.Position - HumanoidRootPart.Position).Magnitude < 2 then
+                        rpart = false
+                        break
+                    else
+                        v:Destroy()
+                    end
+                else
+                    if (v.Position - HumanoidRootPart.Position).Magnitude < 4 then
+                        rpart = false
+                        break
+                    else
+                        v:Destroy()
+                    end
+                end
+            end
+        end
+        if rpart then
+            if humanoid.PlatformStand then
+                newPart(1.4)
+            else
+                newPart(3.4)
+            end
+        end
+    end
+end)
 
 local function recursiveIterate(parent)
     for _, object in pairs(parent:GetChildren()) do
@@ -155,7 +215,9 @@ end
 destroyPlayer()
 task.spawn(function()
     while task.wait(2) do
-        destroyPlayer()
+        pcall(function()
+            destroyPlayer()
+        end)
     end
 end)
 
@@ -167,119 +229,114 @@ end)
 task.spawn(function()
     repeat task.wait() until game:IsLoaded()
     if game.PlaceId == 4483381587 then return end
-    task.wait(100)
+    task.wait(30)
     local countM = 0
     local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
 
     while task.wait(1) do
-        pcall(function()
-            countM = countM + 1
-            local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-            if money ~= currentMoney then
-                countM = 0
-                money = currentMoney
-            end
-            if countM == 20 then
-                LocalPlayer.Character.Humanoid:UnequipTools()
-            end
-            if countM >= 40 then
-                game:Shutdown()
-            end
-        end)
+        countM = countM + 1
+        local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
+        if money ~= currentMoney then
+            countM = 0
+            money = currentMoney
+        end
+        if countM % 20 == 0 then
+            LocalPlayer.Character.Humanoid:UnequipTools()
+        end
+        if countM >= 80 then
+            local tpservice = game:GetService("TeleportService")
+            game:Shutdown()
+        end
     end
 end)
 
 -- --
 
-pcall(function()
+local function OptimizeGamePerformance()
 
-    local function OptimizeGamePerformance()
-
-        local function optimizeObject(obj)
-            pcall(function()
-                if obj:IsA("BasePart") then
-                    obj.Material = Enum.Material.Plastic
-                    obj.Reflectance = 0
-                    obj.TopSurface = Enum.SurfaceType.Smooth
-                    obj.BottomSurface = Enum.SurfaceType.Smooth
-                    obj.CastShadow = false
-                elseif obj:IsA("Decal") or obj:IsA("Texture") then
-                    obj.Transparency = 1
-                elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
-                    obj.Enabled = false
-                elseif obj:IsA("Sound") then
-                    obj:Stop()
-                    obj.Volume = 0
-                elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
-                    obj.Enabled = false
-                end
-            end)
-        end
-
-        local Lighting = game:GetService("Lighting")
-        Lighting.GlobalShadows = false
-        Lighting.Brightness = 1
-        Lighting.FogEnd = 1e6
-        Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
-        Lighting.EnvironmentSpecularScale = 0
-        Lighting.EnvironmentDiffuseScale = 0
-
-        for _, effect in ipairs(Lighting:GetChildren()) do
-            if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
-                effect.Enabled = false
+    local function optimizeObject(obj)
+        pcall(function()
+            if obj:IsA("BasePart") then
+                obj.Material = Enum.Material.Plastic
+                obj.Reflectance = 0
+                obj.TopSurface = Enum.SurfaceType.Smooth
+                obj.BottomSurface = Enum.SurfaceType.Smooth
+                obj.CastShadow = false
+            elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                obj.Transparency = 1
+            elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
+                obj.Enabled = false
+            elseif obj:IsA("Sound") then
+                obj:Stop()
+                obj.Volume = 0
+            elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+                obj.Enabled = false
             end
-        end
-
-        local Terrain = workspace:FindFirstChild("Terrain")
-        if Terrain then
-            Terrain.WaterWaveSize = 0
-            Terrain.WaterWaveSpeed = 0
-            Terrain.WaterReflectance = 0
-            Terrain.WaterTransparency = 1
-            for _, child in ipairs(Terrain:GetChildren()) do
-                optimizeObject(child)
-            end
-            Terrain.ChildAdded:Connect(optimizeObject)
-        end
-
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            optimizeObject(obj)
-        end
-        workspace.DescendantAdded:Connect(optimizeObject)
-
-        for _, texture in ipairs(workspace:GetDescendants()) do
-            if texture:IsA("Texture") or texture:IsA("Decal") then
-                if not texture.Parent then
-                    texture:Destroy()
-                end
-            end
-        end
-
-        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-
-        local PhysicsService = game:GetService("PhysicsService")
-        if PhysicsService then
-            pcall(function()
-                PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
-            end)
-        else
-            warn("PhysicsService not available.")
-        end
-
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("MeshPart") then
-                v.Material = Enum.Material.SmoothPlastic
-                v.TextureID = ""
-            elseif v:IsA("SpecialMesh") then
-                v.TextureId = ""
-            end
-        end
-
+        end)
     end
 
-    OptimizeGamePerformance()
+    local Lighting = game:GetService("Lighting")
+    Lighting.GlobalShadows = false
+    Lighting.Brightness = 1
+    Lighting.FogEnd = 1e6
+    Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+    Lighting.EnvironmentSpecularScale = 0
+    Lighting.EnvironmentDiffuseScale = 0
 
-end)
+    for _, effect in ipairs(Lighting:GetChildren()) do
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
+            effect.Enabled = false
+        end
+    end
+
+    local Terrain = workspace:FindFirstChild("Terrain")
+    if Terrain then
+        Terrain.WaterWaveSize = 0
+        Terrain.WaterWaveSpeed = 0
+        Terrain.WaterReflectance = 0
+        Terrain.WaterTransparency = 1
+        for _, child in ipairs(Terrain:GetChildren()) do
+            optimizeObject(child)
+        end
+        Terrain.ChildAdded:Connect(optimizeObject)
+    end
+
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        optimizeObject(obj)
+    end
+    workspace.DescendantAdded:Connect(optimizeObject)
+
+    for _, texture in ipairs(workspace:GetDescendants()) do
+        if texture:IsA("Texture") or texture:IsA("Decal") then
+            if not texture.Parent then
+                texture:Destroy()
+            end
+        end
+    end
+
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+    local PhysicsService = game:GetService("PhysicsService")
+    if PhysicsService then
+        pcall(function()
+            PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
+        end)
+    else
+        warn("PhysicsService not available.")
+    end
+
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("MeshPart") then
+            v.Material = Enum.Material.SmoothPlastic
+            v.TextureID = ""
+        elseif v:IsA("SpecialMesh") then
+            v.TextureId = ""
+        end
+    end
+
+end
+
+OptimizeGamePerformance()
 
 if LocalPlayer and LocalPlayer.PlayerScripts then
     LocalPlayer.PlayerScripts.weather.Disabled = true
@@ -320,5 +377,53 @@ for settingName, settingValue in pairs(settings) do
     end)
 end
 
+local npclist = {
+    ["Marlin"] = {
+        pos = Vector3.new(-926.718994, 223.700012, -998.751404),
+        cframe = CFrame.new(-926.718994, 223.700012, -998.751404, 0.0335294306, 8.36562108e-08, -0.999437749, -7.97742601e-08, 1, 8.10269825e-08, 0.999437749, 7.7012615e-08, 0.0335294306),
+        cam = CFrame.new(-932.332153, 227.20462, -990.165649, 0.836995304, 0.104951933, -0.537051201, 0, 0.98143512, 0.191794604, 0.547210038, -0.160531178, 0.821456611)
+    },
+    ["Appraiser"] = {
+        pos = Vector3.new(453.076996, 150.501022, 210.481934),
+        cframe = CFrame.new(453.076996, 150.501022, 210.481934, -0.0841025636, 1.00578879e-08, 0.9964571, -4.54328983e-08, 1, -1.39282568e-08, -0.9964571, -4.64433363e-08, -0.0841025636),
+        cam = CFrame.new(441.024414, 153.907944, 207.771103, -0.219435185, 0.148836121, -0.96420747, 0, 0.988295138, 0.152554303, 0.975627124, 0.0334757827, -0.216866717)
+    }
+}
+
+for i, v in pairs(npclist) do
+
+    local npc = v
+    HumanoidRootPart.CFrame = CFrame.new(npc.pos)
+
+    task.wait(0.5)
+
+    if i == "Marlin" then
+        npc.npc = workspace.world.npcs:WaitForChild("Merlin", math.huge)
+    elseif i == "Appraiser" then
+        npc.npc = workspace.world.npcs:WaitForChild("Appraiser", math.huge)
+    end
+
+    repeat task.wait() until (HumanoidRootPart.Position - npc.npc.HumanoidRootPart.Position).Magnitude <= 6
+
+    local camera = workspace.Camera
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = npc.cam
+    HumanoidRootPart.CFrame = npc.cframe
+
+    local Highlight = npc.npc:WaitForChild("Highlight", math.huge)
+    local dialog = npc.npc:FindFirstChild("dialogprompt")
+
+    if Highlight then
+        if dialog then
+            dialog.HoldDuration = 0
+            dialog:InputHoldBegin()
+            dialog:InputHoldEnd()
+            task.wait()
+        end
+    end
+
+    camera.CameraType = Enum.CameraType.Custom
+
+end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()

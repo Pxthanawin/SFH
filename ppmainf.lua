@@ -97,7 +97,7 @@ local npcRemote = function(remote)
         HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "power" then
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
-        pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.luck:InvokeServer())
+        pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.power:InvokeServer())
         HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "Appraiser" then
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
@@ -765,7 +765,6 @@ elseif config["FarmLevel"] then
                 for i = 1, 6 do
                     npcRemote("luck")
                 end
-                task.wait()
             end
             if checkDayNight() ~= "Night" then
                 if Backpack:FindFirstChild("Sundial Totem") then
@@ -802,12 +801,10 @@ elseif config["FarmLevel"] then
         elseif StatsRod:FindFirstChild("Aurora Rod") then
             if not checkLuck() then
                 npcRemote("luck")
-                task.wait()
             end
         elseif StatsRod:FindFirstChild("Steady Rod") then
             if not checkLuck() then
                 npcRemote("luck")
-                task.wait()
             end
         end
 

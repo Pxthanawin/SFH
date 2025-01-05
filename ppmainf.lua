@@ -699,7 +699,7 @@ task.spawn(function()
         if rod.Parent == Backpack then
             Character.Humanoid:EquipTool(rod)
             equipRod(RodPriority)
-            task.wait(0.25)
+            task.wait(0.5)
             continue
         end
 
@@ -751,7 +751,6 @@ elseif config["FarmLevel"] then
                 end
             end
             if checkDayNight() ~= "Night" then
-                Character.Humanoid:UnequipTools()
                 if Torso.Anchored then
                     Torso.Anchored = false
                     task.wait(0.25)
@@ -759,7 +758,7 @@ elseif config["FarmLevel"] then
                 if Backpack:FindFirstChild("Sundial Totem") then
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 else
-                    setInterac("Sundial Totem", 5)
+                    setInterac("Sundial Totem", 3)
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 end
                 task.wait(0.1)
@@ -768,7 +767,6 @@ elseif config["FarmLevel"] then
                 task.wait(2)
             end
             if not checkAurora() then
-                Character.Humanoid:UnequipTools()
                 if Torso.Anchored then
                     Torso.Anchored = false
                     task.wait(0.25)

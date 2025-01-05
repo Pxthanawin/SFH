@@ -90,19 +90,23 @@ local ListVartigoFish = {
 }
 
 local npcRemote = function(remote)
-    local currentPos = HumanoidRootPart.Position
+    if Torso.Anchored then
+        Torso.Anchored = false
+        task.wait(0.25)
+    end
+    --local currentPos = HumanoidRootPart.Position
     if remote == "luck" then
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.luck:InvokeServer())
-        HumanoidRootPart.CFrame = CFrame.new(currentPos)
+        --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "power" then
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.power:InvokeServer())
-        HumanoidRootPart.CFrame = CFrame.new(currentPos)
+        --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "Appraiser" then
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
         pcall(workspace.world.npcs:WaitForChild("Appraiser", math.huge).appraiser.appraise:InvokeServer())
-        HumanoidRootPart.CFrame = CFrame.new(currentPos)
+        --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     end
 end
 
@@ -290,10 +294,8 @@ local enchantRod = function(RodName, value)
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     local relic = enctRelic()
     if not relic then
-        if money > 55000 then
-            for i = 1, 5 do
-                npcRemote("power")
-            end
+        if money > 11000 then
+            npcRemote("power")
             relic = enctRelic()
         else
             return
@@ -811,7 +813,7 @@ elseif config["FarmLevel"] then
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
         elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            --enchantRod("Aurora Rod", "Mutated")
+            enchantRod("Aurora Rod", "Mutated")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)

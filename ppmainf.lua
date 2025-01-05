@@ -505,6 +505,8 @@ local autoRodOfTheDepths = function()
         money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     until task.wait() and money > 750000
 
+    AutoSell = false
+
     if checkVertigoFish() == "Vertigo" then
 
         repeat
@@ -526,7 +528,6 @@ local autoRodOfTheDepths = function()
                 end
             end
 
-            AutoSell = false
             setFishZone(zonelist["Vertigo"])
 
             local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
@@ -581,6 +582,11 @@ local autoRodOfTheDepths = function()
     end
 
     if not PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate") then
+        while not Backpack:FindFirstChild("The Depths Key") do
+            setFishZone(zonelist["Vertigo"])
+            task.wait(1)
+        end
+        task.wait(5)
         npcDepthsDoor()
     end
 
@@ -793,11 +799,11 @@ elseif config["FarmLevel"] then
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
+        if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 1100000 then
             autoRodOfTheDepths()
         end
 
-        if money > 1000000 then
+        if StatsRod:FindFirstChild("Rod Of The Depths") and money > 1000000 then
             purchaseRod("Mythical Rod", 110000)
             purchaseRod("Trident Rod", 150000)
             purchaseRod("Kings Rod", 120000)
@@ -807,7 +813,20 @@ elseif config["FarmLevel"] then
         if StatsRod:FindFirstChild("Rod Of The Depths") then
             setFishZone(zonelist["Ancient Isle"])
         else
-            setFishZone(zonelist["The Depths"])
+            --setFishZone(zonelist["The Depths"])
         end
     end
 end
+
+task.spawn(function()
+    if config["FarmLevel"] then
+        task.wait(300)
+        while not StatsRod:FindFirstChild("Rod Of The Depths") do
+            local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+            if money > 1500000 then
+                game:Shutdown()
+            end
+            task.wait(1)
+        end
+    end
+end)

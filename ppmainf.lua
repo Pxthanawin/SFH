@@ -768,6 +768,7 @@ elseif config["FarmLevel"] then
                 task.wait(0.1)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                task.wait(2)
             end
             if not checkAurora() then
                 Character.Humanoid:UnequipTools()
@@ -784,6 +785,7 @@ elseif config["FarmLevel"] then
                 task.wait(0.1)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                task.wait(2)
             end
         elseif StatsRod:FindFirstChild("Aurora Rod") then
             if not checkLuck() then

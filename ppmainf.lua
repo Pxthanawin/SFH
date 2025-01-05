@@ -704,9 +704,11 @@ task.spawn(function()
 
         if rod:FindFirstChild("bobber") then
 
-            local shakeUI = PlayerGui:WaitForChild("shakeui", 3)
+            repeat
+                RunService.Heartbeat:Wait()
+            until PlayerGui:FindFirstChild("shakeui") or not rod:FindFirstChild("bobber")
 
-            while PlayerGui:WaitForChild("shakeui") do
+            while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)

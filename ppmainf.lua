@@ -459,8 +459,9 @@ local npcDepthsDoor = function()
                 GuiService.SelectedObject = button
                 task.wait(0.1)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                task.wait(0.1)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                repeat task.wait() until not PlayerGui:FindFirstChild("options")
+                task.wait(0.5)
                 GuiService.SelectedObject = nil
             until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
         end

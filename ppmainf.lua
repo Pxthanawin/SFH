@@ -302,16 +302,21 @@ local enchantRod = function(RodName, value)
 
     if PlayerStats.Stats.rod.Value ~= RodName then
         if StatsRod:FindFirstChild(RodName) then
+            if Torso.Anchored then
+                Torso.Anchored = false
+                task.wait(0.25)
+            end
             LocalPlayer.Character.Humanoid:UnequipTools()
+            task.wait(0.25)
             ReplicatedStorage.events.equiprod:FireServer(RodName)
         end
     end
 
-    local pos = Vector3.new(1311, -802.427063, -83)
     if Torso.Anchored then
         Torso.Anchored = false
         task.wait(0.25)
     end
+    local pos = Vector3.new(1311, -802.427063, -83)
     HumanoidRootPart.CFrame = CFrame.new(pos)
     repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
 
@@ -693,18 +698,14 @@ task.spawn(function()
         end
 
         rodNameCache = PlayerStats.Stats.rod.Value
+        local rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
 
-        local rod = Backpack:FindFirstChild(rodNameCache) or (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild(rodNameCache))
-
-        if not rod then
-            continue
-        end
-
-        if rod.Parent == Backpack then
-            Character.Humanoid:EquipTool(rod)
-            equipRod(RodPriority)
-            task.wait(0.5)
-            continue
+        if not Character:FindFirstChild(rodNameCache) then
+            if rod.Parent == Backpack then
+                Character.Humanoid:EquipTool(rod)
+                equipRod(RodPriority)
+                continue
+            end
         end
 
         if rod:FindFirstChild("bobber") then

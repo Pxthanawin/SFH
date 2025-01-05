@@ -819,7 +819,7 @@ elseif config["FarmLevel"] then
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
         elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            enchantRod("Aurora Rod", "Mutated")
+            --enchantRod("Aurora Rod", "Mutated")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)

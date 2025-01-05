@@ -753,7 +753,7 @@ elseif config["FarmLevel"] then
                     npcRemote("luck")
                 end
             end
-            if checkDayNight() == "Day" then
+            if checkDayNight() ~= "Night" then
                 Character.Humanoid:UnequipTools()
                 if Torso.Anchored then
                     Torso.Anchored = false

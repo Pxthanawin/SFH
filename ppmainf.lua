@@ -281,90 +281,93 @@ end
 
 local enchantRod = function(RodName, value)
 
-    if StatsRod[RodName].Value == value then
-        return
-    end
+    pcall(function()
 
-    if checkDayNight() == "Day" then return end
-
-    if not StatsRod:FindFirstChild(RodName) then
-        return
-    end
-
-    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-    local relic = enctRelic()
-    if not relic then
-        if money > 11000 then
-            npcRemote("power")
-            relic = enctRelic()
-        else
-            return
-        end
-    end
-
-    if PlayerStats.Stats.rod.Value ~= RodName then
-        if StatsRod:FindFirstChild(RodName) then
-            LocalPlayer.Character.Humanoid:UnequipTools()
-            ReplicatedStorage.events.equiprod:FireServer(RodName)
-        end
-    end
-
-    local pos = Vector3.new(1311, -802.427063, -83)
-    if Torso.Anchored then
-        Torso.Anchored = false
-        task.wait(0.25)
-    end
-    HumanoidRootPart.CFrame = CFrame.new(pos)
-    repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
-
-    local camera = workspace.Camera
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
-
-    local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", math.huge)
-    local ProximityPrompt = interactable.ProximityPrompt
-
-    if not relic then
-        return
-    end
-
-    if not relic.stack then
-        return
-    end
-
-    while StatsRod[RodName].Value ~= value and relic.stack > 0 and checkDayNight() == "Night" and task.wait() do
-
-        Character.Humanoid:EquipTool(relic.equip)
-
-        local Highlight = interactable:WaitForChild("Highlight", 60)
         if StatsRod[RodName].Value == value then
             return
         end
-        if checkDayNight() == "Day" then
+
+        if checkDayNight() == "Day" then return end
+
+        if not StatsRod:FindFirstChild(RodName) then
             return
         end
-        if Highlight then
-            if ProximityPrompt then
-                ProximityPrompt.HoldDuration = 0
-                ProximityPrompt:InputHoldBegin()
-                ProximityPrompt:InputHoldEnd()
-                local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
-                if button then
-                    GuiService.SelectedObject = button
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                    repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                    GuiService.SelectedObject = nil
-                    relic.stack -= 1
-                end
+
+        local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+        local relic = enctRelic()
+        if not relic then
+            if money > 11000 then
+                npcRemote("power")
+                relic = enctRelic()
+            else
+                return
             end
         end
 
-        Character.Humanoid:UnequipTools()
+        if PlayerStats.Stats.rod.Value ~= RodName then
+            if StatsRod:FindFirstChild(RodName) then
+                LocalPlayer.Character.Humanoid:UnequipTools()
+                ReplicatedStorage.events.equiprod:FireServer(RodName)
+            end
+        end
 
-    end
+        local pos = Vector3.new(1311, -802.427063, -83)
+        if Torso.Anchored then
+            Torso.Anchored = false
+            task.wait(0.25)
+        end
+        HumanoidRootPart.CFrame = CFrame.new(pos)
+        repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
 
-    camera.CameraType = Enum.CameraType.Custom
+        local camera = workspace.Camera
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
+
+        local interactable = workspace.world.interactables:WaitForChild("Enchant Altar", math.huge)
+        local ProximityPrompt = interactable.ProximityPrompt
+
+        if not relic then
+            return
+        end
+
+        if not relic.stack then
+            return
+        end
+
+        while StatsRod[RodName].Value ~= value and relic.stack > 0 and checkDayNight() == "Night" and task.wait() do
+
+            Character.Humanoid:EquipTool(relic.equip)
+
+            local Highlight = interactable:WaitForChild("Highlight", 60)
+            if StatsRod[RodName].Value == value then
+                return
+            end
+            if checkDayNight() == "Day" then
+                return
+            end
+            if Highlight then
+                if ProximityPrompt then
+                    ProximityPrompt.HoldDuration = 0
+                    ProximityPrompt:InputHoldBegin()
+                    ProximityPrompt:InputHoldEnd()
+                    local button = PlayerGui.over:WaitForChild("prompt",10) and PlayerGui.over.prompt.confirm
+                    if button then
+                        GuiService.SelectedObject = button
+                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                        repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                        GuiService.SelectedObject = nil
+                        relic.stack -= 1
+                    end
+                end
+            end
+
+            Character.Humanoid:UnequipTools()
+
+        end
+        camera.CameraType = Enum.CameraType.Custom
+
+    end)
 
 end
 

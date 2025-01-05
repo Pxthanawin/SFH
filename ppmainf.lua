@@ -751,11 +751,11 @@ elseif config["FarmLevel"] then
                 end
             end
             if checkDayNight() ~= "Night" then
-                if Torso.Anchored then
-                    Torso.Anchored = false
-                    task.wait(0.25)
-                end
                 if Backpack:FindFirstChild("Sundial Totem") then
+                    if Torso.Anchored then
+                        Torso.Anchored = false
+                        task.wait(0.25)
+                    end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 else
                     setInterac("Sundial Totem", 3)
@@ -767,11 +767,11 @@ elseif config["FarmLevel"] then
                 task.wait(2)
             end
             if not checkAurora() then
-                if Torso.Anchored then
-                    Torso.Anchored = false
-                    task.wait(0.25)
-                end
                 if Backpack:FindFirstChild("Aurora Totem") then
+                    if Torso.Anchored then
+                        Torso.Anchored = false
+                        task.wait(0.25)
+                    end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 else
                     setInterac("Aurora Totem")
@@ -797,7 +797,7 @@ elseif config["FarmLevel"] then
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
         elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            --enchantRod("Aurora Rod", "Mutated")
+            enchantRod("Aurora Rod", "Mutated")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)

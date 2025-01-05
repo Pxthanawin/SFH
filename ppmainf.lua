@@ -442,31 +442,29 @@ local npcDepthsDoor = function()
     camera.CFrame = CFrame.new(4.40501785, -698.242615, 1247.79309, -0.142213896, 0.299789965, -0.943345785, 0, 0.953032434, 0.302868336, 0.989835918, 0.0430720858, -0.135534465)
     HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
 
-    repeat task.wait() until workspace.world.npcs.Custos:GetChildren()[15]
-    local Highlight = workspace.world.npcs.Custos:GetChildren()[15]
-    local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
-
-    if Highlight then
-        if dialog then
-            dialog.HoldDuration = 0
-            dialog:InputHoldBegin()
-            dialog:InputHoldEnd()
-            repeat
-                local button = PlayerGui:WaitForChild("options",10) and PlayerGui.options.safezone["1option"].button
-                if not button then
-                    continue
-                end
+    repeat
+        pcall(function()
+            local Highlight = workspace.world.npcs.Custos:GetChildren()[15]
+            local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
+            
+            if Highlight then
+                dialog.HoldDuration = 0
+                dialog:InputHoldBegin()
+                dialog:InputHoldEnd()
+            end
+            
+            local button = PlayerGui:WaitForChild("options",10) and PlayerGui.options.safezone["1option"].button
+            if button then
                 GuiService.SelectedObject = button
                 task.wait(0.1)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 task.wait(0.1)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                task.wait(0.5)
-                GuiService.SelectedObject = nil
-            until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
-        end
-        camera.CameraType = Enum.CameraType.Custom
-    end
+            end
+        end)
+    until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
+
+    GuiService.SelectedObject = nil
     camera.CameraType = Enum.CameraType.Custom
 
 end

@@ -731,8 +731,6 @@ task.spawn(function()
             rod.events.cast:FireServer(100)
         end
 
-        LocalPlayer.Character.Humanoid:UnequipTools()
-
     end
 end)
 

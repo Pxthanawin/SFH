@@ -705,12 +705,8 @@ task.spawn(function()
         if rod:FindFirstChild("bobber") then
 
             local shakeUI = PlayerGui:WaitForChild("shakeui", 3)
-            if not shakeUI then
-                Character.Humanoid:UnequipTools()
-                continue
-            end
 
-            while PlayerGui:FindFirstChild("shakeui") do
+            while PlayerGui:WaitForChild("shakeui") do
                 local button = shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)
@@ -724,12 +720,11 @@ task.spawn(function()
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 RunService.Heartbeat:Wait()
             until not rod.values.bite.Value
+            LocalPlayer.Character.Humanoid:UnequipTools()
 
             if AutoSell then
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
-
-            LocalPlayer.Character.Humanoid:UnequipTools()
 
         else
             rod.events.cast:FireServer(100)

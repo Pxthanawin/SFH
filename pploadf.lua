@@ -139,7 +139,7 @@ local function applySettings(object)
         if object.Name == "partt" then return end
         if object.Name == "FPSBOOST" then return end
         object.Transparency = 1
-        object.CanCollide = false
+        --object.CanCollide = false
         object.CanQuery = false
     end
 end
@@ -243,7 +243,7 @@ task.spawn(function()
         if countM % 20 == 0 then
             LocalPlayer.Character.Humanoid:UnequipTools()
         end
-        if countM >= 80 then
+        if countM >= 150 then
             local tpservice = game:GetService("TeleportService")
             game:Shutdown()
         end

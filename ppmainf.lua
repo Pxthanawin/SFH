@@ -247,11 +247,11 @@ local setFishZone = function(zone)
             return
         else
             Torso.Anchored = false
-            task.wait(0.25)
+            task.wait(1)
         end
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(0.25)
+    task.wait(1)
     Torso.Anchored = true
 end
 

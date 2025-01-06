@@ -513,9 +513,9 @@ local crabCage = function()
     if not Backpack:FindFirstChild("Crab Cage") then
         setInterac("Crab Cage", 3)
     end
-    Humanoid.PlatformStand = false
     local pos = Vector3.new(-127.297638, -736.863892, 1234.20581)
     HumanoidRootPart.CFrame = CFrame.new(pos)
+    Humanoid.PlatformStand = false
     task.wait(0.25)
     HumanoidRootPart.CFrame = CFrame.new(pos)
     local camera = workspace.Camera
@@ -535,9 +535,9 @@ local autoRodOfTheDepths = function()
     if StatsRod:FindFirstChild("Rod Of The Depths") then return end
 
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-    repeat
-        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-    until task.wait() and money > 750000
+    if money < 750000 then
+        return
+    end
 
     AutoSell = false
 
@@ -565,6 +565,7 @@ local autoRodOfTheDepths = function()
                 end
             end
 
+            task.wait(1)
             setFishZone(zonelist["Vertigo"])
 
             local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
@@ -580,7 +581,7 @@ local autoRodOfTheDepths = function()
                 prompt:InputHoldEnd()
             end
 
-        until task.wait(1) and checkVertigoFish() ~= "Vertigo"
+        until task.wait() and checkVertigoFish() ~= "Vertigo"
 
         game:Shutdown()
 

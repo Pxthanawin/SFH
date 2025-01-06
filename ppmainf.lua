@@ -258,16 +258,17 @@ local setFishZone = function(zone)
 end]]
 
 local setFishZone = function(zone)
+    task.wait(0.5)
     if Torso.Anchored then
         if (HumanoidRootPart.Position - zone).Magnitude < 6 then
             return
         else
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.5)
         end
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(5)
+    task.wait(3)
     Torso.Anchored = true
 end
 
@@ -505,17 +506,17 @@ end
 
 local crabCage = function()
     Character.Humanoid:UnequipTools()
-    if not Backpack:FindFirstChild("Crab Cage") then
-        setInterac("Crab Cage", 3)
-    end
     if Torso.Anchored then
         Torso.Anchored = false
         task.wait(0.25)
     end
+    if not Backpack:FindFirstChild("Crab Cage") then
+        setInterac("Crab Cage", 3)
+    end
     Humanoid.PlatformStand = false
     local pos = Vector3.new(-127.297638, -736.863892, 1234.20581)
     HumanoidRootPart.CFrame = CFrame.new(pos)
-    repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude < 2
+    task.wait(0.25)
     HumanoidRootPart.CFrame = CFrame.new(pos)
     local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable

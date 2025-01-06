@@ -470,7 +470,7 @@ local npcDepthsDoor = function()
 
     HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
 
-    repeat task.wait() until (HumanoidRootPart.Position - Vector3.new(23.8910046, -705.998718, 1250.59277)).Magnitude <= 1
+    task.wait(0.5)
 
     local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
@@ -623,7 +623,7 @@ local autoRodOfTheDepths = function()
             setFishZone(zonelist["Vertigo"])
             task.wait(1)
         end
-        task.wait(5)
+        task.wait(1)
         npcDepthsDoor()
         task.wait(0.5)
     end

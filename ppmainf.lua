@@ -567,7 +567,9 @@ local autoRodOfTheDepths = function()
 
             local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
             if not crabcages then
-                return
+                task.wait(1)
+                setFishZone(zonelist["The Depths"])
+                continue
             end
 
             setFishZone(zonelist["Vertigo"])

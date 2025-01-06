@@ -90,20 +90,32 @@ local ListVartigoFish = {
 }
 
 local npcRemote = function(remote)
-    if Torso.Anchored then
-        Torso.Anchored = false
-        task.wait(0.25)
-    end
+    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     --local currentPos = HumanoidRootPart.Position
     if remote == "luck" then
+        if money < 5000 then return end
+        if Torso.Anchored then
+            Torso.Anchored = false
+            task.wait(0.25)
+        end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.luck:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "power" then
+        if money < 11000 then return end
+        if Torso.Anchored then
+            Torso.Anchored = false
+            task.wait(0.25)
+        end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.power:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "Appraiser" then
+        if money < 450 then return end
+        if Torso.Anchored then
+            Torso.Anchored = false
+            task.wait(0.25)
+        end
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
         pcall(workspace.world.npcs:WaitForChild("Appraiser", math.huge).appraiser.appraise:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)

@@ -511,7 +511,7 @@ local crabCage = function()
         task.wait(0.25)
     end
     if not Backpack:FindFirstChild("Crab Cage") then
-        setInterac("Crab Cage", 3)
+        setInterac("Crab Cage", 5)
     end
     local pos = Vector3.new(-127.297638, -736.863892, 1234.20581)
     HumanoidRootPart.CFrame = CFrame.new(pos)
@@ -554,7 +554,7 @@ local autoRodOfTheDepths = function()
                 else
                     local i = 0
                     for _, v in pairs(workspace.active.crabcages:GetChildren()) do
-                        if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude < 20 then
+                        if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude < 10 then
                             i += 1
                             break
                         end
@@ -565,13 +565,12 @@ local autoRodOfTheDepths = function()
                 end
             end
 
-            task.wait(1)
-            setFishZone(zonelist["Vertigo"])
-
             local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
             if not crabcages then
-                continue
+                return
             end
+
+            setFishZone(zonelist["Vertigo"])
 
             if crabcages:FindFirstChild("Highlight") then
                 local prompt = crabcages:FindFirstChild("Prompt")
@@ -581,7 +580,7 @@ local autoRodOfTheDepths = function()
                 prompt:InputHoldEnd()
             end
 
-        until task.wait() and checkVertigoFish() ~= "Vertigo"
+        until task.wait(1) and checkVertigoFish() ~= "Vertigo"
 
         game:Shutdown()
 

@@ -569,6 +569,8 @@ local autoRodOfTheDepths = function()
 
         until task.wait(1) and checkVertigoFish() ~= "Vertigo"
 
+        game:Shutdown()
+
     end
 
     if checkVertigoFish() == "Isonade" then

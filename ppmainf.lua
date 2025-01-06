@@ -582,8 +582,6 @@ local autoRodOfTheDepths = function()
 
         until task.wait(1) and checkVertigoFish() ~= "Vertigo"
 
-        game:Shutdown()
-
     end
 
     if checkVertigoFish() == "Isonade" then
@@ -665,13 +663,9 @@ local autoRodOfTheDepths = function()
     end
 
     money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-    if money < 850000 then
-        setFishZone(zonelist["The Depths"])
+    if money < 750000 then
+        return
     end
-
-    repeat
-        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-    until task.wait(1) and money > 850000
 
     repeat
 
@@ -680,17 +674,13 @@ local autoRodOfTheDepths = function()
         local relic = enctRelic()
         if not relic then
             money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-            if money > 805000 then
+            if money > 100000 then
                 for i = 1, 5 do
                     npcRemote("power")
                 end
                 relic = enctRelic()
             else
-                setFishZone(zonelist["The Depths"])
-                repeat
-                    money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-                until task.wait(1) and money > 805000
-                continue
+                return
             end
         end
 
@@ -709,11 +699,8 @@ local autoRodOfTheDepths = function()
 
     money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     if money < 750000 then
-        setFishZone(zonelist["The Depths"])
+        return
     end
-    repeat
-        money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-    until task.wait(1) and money > 750000
 
     setAbysHex(true)
 end
@@ -841,7 +828,7 @@ elseif config["FarmLevel"] then
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 1100000 then
+        if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
             autoRodOfTheDepths()
         end
 

@@ -600,14 +600,9 @@ local autoRodOfTheDepths = function()
                 end
                 if i < 22 then
                     crabCage()
+                else
+                    return
                 end
-            end
-
-            local crabcages = workspace.active.crabcages:FindFirstChild(LocalPlayer.Name)
-            if not crabcages then
-                task.wait(1)
-                setFishZone(zonelist["The Depths"])
-                continue
             end
 
             for _, v in ipairs(workspace.active.crabcages:GetChildren()) do

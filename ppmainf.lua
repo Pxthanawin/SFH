@@ -548,27 +548,28 @@ local crabCage = function()
         setInterac("Crab Cage", 5)
     end
     HumanoidRootPart.CFrame = CFrame.new(zonelist["Vertigo"])
-
-    local viewportSize = Workspace.CurrentCamera.ViewportSize
-    local x, y = 0, viewportSize.Y - 1
-
     Humanoid.Sit = false
     task.wait(0.25)
     for _, v in ipairs(crabcframe) do
         HumanoidRootPart.CFrame = v
+        local viewportSize = Workspace.CurrentCamera.ViewportSize
+        local x, y = 0, viewportSize.Y - 1
         local cameraPosition = HumanoidRootPart.Position + Vector3.new(0, 15, 0)
         local cameraLookAt = HumanoidRootPart.Position
         camera.CameraType = Enum.CameraType.Attach
         camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
         if Backpack:FindFirstChild("Crab Cage") then
             Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
+        else
+            break
         end
         task.wait(0.25)
         VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
         VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-        task.wait()
-        camera.CameraType = Enum.CameraType.Custom
+        task.wait(0.25)
+        Humanoid:UnequipTools()
     end
+    camera.CameraType = Enum.CameraType.Custom
     task.wait(0.25)
     Humanoid.Sit = true
 end
@@ -591,11 +592,13 @@ local autoRodOfTheDepths = function()
             if not PlayerStats.Bestiary:FindFirstChild("Night Shrimp") then
                 local i = 0
                 for _, v in pairs(workspace.active.crabcages:GetChildren()) do
-                    if v.Name == game.Players.LocalPlayer.Name then
-                        i = 100001
-                        break
-                    elseif (v.blocker.Position - Vector3.new(-121, -743, 1234)).Magnitude < 200 then
-                        i += 1
+                    if (v.blocker.Position - Vector3.new(-121, -743, 1234)).Magnitude < 200 then
+                        if v.Name == game.Players.LocalPlayer.Name then
+                            i = 100001
+                            break
+                        else
+                            i += 1
+                        end
                     end
                 end
                 if i < 22 then

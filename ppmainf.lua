@@ -848,8 +848,6 @@ if config["C$_100k"] then
 
 elseif config["FarmLevel"] then
 
-    local viewportSize = Workspace.CurrentCamera.ViewportSize
-    local x, y = 0, viewportSize.Y - 1
     while task.wait(1) do
 
         if iF > 3 then
@@ -886,6 +884,8 @@ elseif config["FarmLevel"] then
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 end
                 task.wait(0.1)
+                local viewportSize = Workspace.CurrentCamera.ViewportSize
+                local x, y = 0, viewportSize.Y - 1
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
                 task.wait(1)
@@ -903,6 +903,8 @@ elseif config["FarmLevel"] then
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 end
                 task.wait(0.1)
+                local viewportSize = Workspace.CurrentCamera.ViewportSize
+                local x, y = 0, viewportSize.Y - 1
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
                 task.wait(1)

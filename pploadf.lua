@@ -63,13 +63,6 @@ local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-task.spawn(function()
-    while task.wait(2) do
-        RunService:Set3dRenderingEnabled(true)
-        task.wait(0.05)
-        RunService:Set3dRenderingEnabled(false)
-    end
-end)
 
 -- ---- Other Variable
 

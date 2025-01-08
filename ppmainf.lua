@@ -865,6 +865,7 @@ elseif config["FarmLevel"] then
                 for i = 1, 6 do
                     npcRemote("luck")
                 end
+                task.wait(0.25)
             end
             if checkDayNight() ~= "Night" and sundialt then
                 sundialt = false
@@ -904,10 +905,12 @@ elseif config["FarmLevel"] then
         elseif StatsRod:FindFirstChild("Aurora Rod") then
             if not checkLuck() then
                 npcRemote("luck")
+                task.wait(0.25)
             end
         elseif StatsRod:FindFirstChild("Steady Rod") then
             if not checkLuck() then
                 npcRemote("luck")
+                task.wait(0.25)
             end
         end
 

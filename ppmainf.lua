@@ -590,16 +590,13 @@ local autoRodOfTheDepths = function()
                     if v.Name == game.Players.LocalPlayer.Name then
                         i = 100001
                         break
-                    end
-                    if (v.blocker.Position - Vector3.new(-121, -743, 1234)).Magnitude < 200 then
+                    elseif (v.blocker.Position - Vector3.new(-121, -743, 1234)).Magnitude < 200 then
                         i += 1
                     end
                 end
                 if i < 22 then
                     crabCage()
-                elseif i == 100001 then
-                    return
-                else
+                elseif i ~= 100001 then
                     return
                 end
             end

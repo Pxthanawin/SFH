@@ -549,7 +549,7 @@ local crabCage = function()
     local viewportSize = Workspace.CurrentCamera.ViewportSize
     local x, y = 0, viewportSize.Y - 1
 
-    Humanoid.PlatformStand = false
+    Humanoid.Sit = false
     task.wait(0.25)
     for _, v in ipairs(crabcframe) do
         HumanoidRootPart.CFrame = v
@@ -567,7 +567,7 @@ local crabCage = function()
         camera.CameraType = Enum.CameraType.Custom
     end
     task.wait(0.25)
-    Humanoid.PlatformStand = true
+    Humanoid.Sit = true
 end
 
 local autoRodOfTheDepths = function()

@@ -933,7 +933,7 @@ elseif config["FarmLevel"] then
             autoRodOfTheDepths()
         end
 
-        if StatsRod:FindFirstChild("Rod Of The Depths") and money > 1000000 then
+        if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value > 400) then
             purchaseRod("Mythical Rod", 110000)
             purchaseRod("Trident Rod", 150000)
             purchaseRod("Kings Rod", 120000)

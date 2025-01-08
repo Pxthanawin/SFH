@@ -578,8 +578,6 @@ local autoRodOfTheDepths = function()
         return
     end
 
-    AutoSell = false
-
     camera.CameraType = Enum.CameraType.Custom
 
     if checkVertigoFish() == "Vertigo" then
@@ -590,7 +588,7 @@ local autoRodOfTheDepths = function()
                 local i = 0
                 for _, v in pairs(workspace.active.crabcages:GetChildren()) do
                     if v.Name == game.Players.LocalPlayer.Name then
-                        i = 30
+                        i = 100001
                         break
                     end
                     if (v.blocker.Position - Vector3.new(-121, -743, 1234)).Magnitude < 200 then
@@ -599,6 +597,8 @@ local autoRodOfTheDepths = function()
                 end
                 if i < 22 then
                     crabCage()
+                elseif i == 100001 then
+                    return
                 else
                     return
                 end
@@ -625,6 +625,7 @@ local autoRodOfTheDepths = function()
                 end
             end
 
+            AutoSell = false
             setFishZone(zonelist["Vertigo"])
 
         until task.wait(1) and checkVertigoFish() ~= "Vertigo"

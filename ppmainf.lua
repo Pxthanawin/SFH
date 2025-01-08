@@ -12,6 +12,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local camera = workspace.Camera
 
 local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
@@ -26,6 +27,14 @@ local rodNameCache = PlayerStats.Stats.rod.Value
 local AutoSell = true
 
 local zonefish = Vector3.new(841, -750, 1246)
+
+local sundialt = true
+local aurorat = true
+local farmc = true
+
+local iS = 0
+local iA = 0
+local iF = 0
 
 local function extractNumber(String)
     return tonumber((String:gsub("[^%d]", "")))
@@ -89,6 +98,34 @@ local ListVartigoFish = {
     "Voidfin Mahi"
 }
 
+local crabcframe = {
+    CFrame.new(-108.393913, -731.931641, 1274.02393, 0.0261686351, -4.32356586e-08, 0.999657571, -2.81474204e-08, 1, 4.39872991e-08, -0.999657571, -2.92888682e-08, 0.0261686351),
+    CFrame.new(-107.913918, -731.931641, 1268.96436, 0.398755074, 1.14332195e-07, 0.917057455, -5.97640621e-08, 1, -9.86862574e-08, -0.917057455, -1.54554307e-08, 0.398755074),
+    CFrame.new(-105.316803, -731.931641, 1265.45081, 0.731348395, 2.57834554e-08, 0.682004035, 1.95802414e-08, 1, -5.88023426e-08, -0.682004035, 5.63588038e-08, 0.731348395),
+    CFrame.new(-101.398254, -731.931641, 1264.73889, 0.996194124, -1.86150686e-08, 0.0871622413, 9.5941024e-09, 1, 1.03915177e-07, -0.0871622413, -1.02683444e-07, 0.996194124),
+    CFrame.new(-126.570824, -736.921326, 1249.44983, -0.930414855, 3.3981955e-08, -0.366508096, 1.14769492e-08, 1, 6.35828528e-08, 0.366508096, 5.49520394e-08, -0.930414855),
+    CFrame.new(-126.570824, -736.921326, 1249.44983, -0.559208751, 3.68686166e-08, 0.829026878, 6.70668143e-08, 1, 7.66842256e-10, -0.829026878, 5.60290196e-08, -0.559208751),
+    CFrame.new(-126.570786, -736.921326, 1249.44995, 0.669113874, -3.92071797e-08, 0.74315989, 1.19301635e-09, 1, 5.16832479e-08, -0.74315989, -3.36953754e-08, 0.669113874),
+    CFrame.new(-126.57077, -736.921326, 1249.44971, 0.852652609, 4.90440648e-08, -0.522478223, -2.68322822e-08, 1, 5.00795032e-08, 0.522478223, -2.86811357e-08, 0.852652609),
+    CFrame.new(-128.476593, -736.86377, 1236.09924, 0.182254702, -6.49348531e-09, -0.983251333, 7.47906448e-09, 1, -5.21778132e-09, 0.983251333, -6.40283471e-09, 0.182254702),
+    CFrame.new(-130.444183, -736.86377, 1230.6322, 0.573596358, 2.54263739e-08, -0.81913805, -7.80947573e-08, 1, -2.36449722e-08, 0.81913805, 7.75330591e-08, 0.573596358),
+    CFrame.new(-133.651352, -736.863831, 1227.5675, 0.927194059, 9.46170431e-08, -0.374581277, -7.10716819e-08, 1, 7.66717463e-08, 0.374581277, -4.44674697e-08, 0.927194059),
+    CFrame.new(-137.511536, -736.86377, 1236.93909, -0.90997088, 6.27705354e-09, 0.414672107, -2.32460842e-08, 1, -6.61494042e-08, -0.414672107, -6.98335327e-08, -0.90997088),
+    CFrame.new(-143.535797, -736.404785, 1215.13452, 0.93968612, -7.76427314e-08, 0.342038006, 7.29872056e-08, 1, 2.64814499e-08, -0.342038006, 8.01478328e-11, 0.93968612),
+    CFrame.new(-139.552338, -736.86377, 1234.79895, -0.333827347, -8.40543579e-10, 0.942634225, 3.85927912e-08, 1, 1.45590651e-08, -0.942634225, 4.1239101e-08, -0.333827347),
+    CFrame.new(-139.768021, -736.86377, 1229.72083, 0.139154732, 7.20137336e-08, 0.990270674, 6.96110547e-08, 1, -8.25031421e-08, -0.990270674, 8.04144875e-08, 0.139154732),
+    CFrame.new(-144.556717, -736.404785, 1217.0918, -0.469492912, -1.77599588e-08, 0.882936239, -3.25390097e-08, 1, 2.81234813e-09, -0.882936239, -2.74094951e-08, -0.469492912),
+    CFrame.new(-146.442352, -736.404785, 1215.35657, 0.398721874, 4.28803766e-08, 0.917071879, -3.06554426e-08, 1, -3.34296395e-08, -0.917071879, -1.47841162e-08, 0.398721874),
+    CFrame.new(-141.684692, -736.404785, 1214.90491, 0.843406498, 2.19585949e-08, -0.53727597, -4.32623466e-08, 1, -2.70422476e-08, 0.53727597, 4.60514258e-08, 0.843406498),
+    CFrame.new(-138.502258, -736.404785, 1214.53247, 0.267267436, -8.63725518e-08, -0.963622391, 1.64266123e-09, 1, -8.91775827e-08, 0.963622391, 2.22513599e-08, 0.267267436),
+    CFrame.new(-74.3979568, -736.791931, 1209.00134, -1, -2.08987991e-08, -2.98460945e-05, -2.08969748e-08, 1, -6.11025612e-08, 2.98460945e-05, -6.11019431e-08, -1),
+    CFrame.new(-71.0015869, -736.79187, 1205.38, 0.965933383, -1.03933129e-09, -0.25879091, 1.44798218e-09, 1, 1.38846867e-09, 0.25879091, -1.71589287e-09, 0.965933383),
+    CFrame.new(-71.6375351, -736.791931, 1206.02002, 0.587764978, 2.55517651e-08, 0.809031725, -8.85797746e-08, 1, 3.27704406e-08, -0.809031725, -9.09251696e-08, 0.587764978),
+    CFrame.new(-81.0526276, -736.791931, 1210.33521, 0.82902503, -3.25108047e-08, 0.559211493, -1.40557663e-08, 1, 7.8974395e-08, -0.559211493, -7.3331897e-08, 0.82902503),
+    CFrame.new(-82.1462708, -736.791931, 1211.06555, 0.00869873539, -3.7484206e-08, 0.999962151, -2.79494881e-08, 1, 3.7728757e-08, -0.999962151, -2.82766237e-08, 0.00869873539),
+    CFrame.new(-82.1949234, -736.791931, 1214.10071, -0.629336298, 2.05353174e-08, 0.777133107, 6.62660637e-09, 1, -2.10581099e-08, -0.777133107, -8.10287748e-09, -0.629336298)
+}
+
 local npcRemote = function(remote)
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     --local currentPos = HumanoidRootPart.Position
@@ -146,22 +183,19 @@ local interactableList = function(interacname, more)
         end
     elseif interacname == "Crab Cage" then
         datainterac = {
-            pos = Vector3.new(477.114136, 152.552109, 226.858932),
-            cframe = CFrame.new(477.114136, 152.552109, 226.858932, -0.769669056, -2.87299997e-08, 0.638443053, 3.6466183e-08, 1, 8.89615634e-08, -0.638443053, 9.17525398e-08, -0.769669056),
-            cam = CFrame.new(471.929352, 160.65332, 241.613632, 0.971649051, 0.163671121, -0.17061621, 0, 0.721641779, 0.692266703, 0.236427844, -0.672640264, 0.701182544),
+            pos = Vector3.new(477.21521, 152.536423, 225.896362),
+            cframe = CFrame.new(477.21521, 152.536423, 225.896362, -0.856148243, 8.27452524e-08, 0.516730249, 4.23745021e-08, 1, -8.99238941e-08, -0.516730249, -5.50919985e-08, -0.856148243),
+            cam = CFrame.new(482.736908, 161.19809, 217.266678, -0.842328846, -0.308790088, 0.441736042, 0, 0.819602251, 0.572932839, -0.538963854, 0.482597858, -0.690374732),
             price = 45
         }
         if more then
-            local Highlight
-            repeat
-                datainterac.interac = workspace.world.interactables:WaitForChild("Crab Cage", math.huge)
-                for _, v in pairs(datainterac.interac:GetChildren()) do
-                    if v:FindFirstChild("Highlight") then
-                        Highlight = true
-                        datainterac.interac = v
-                    end
+            datainterac.interac = workspace.world.interactables:WaitForChild("Crab Cage", math.huge)
+            for _, v in pairs(datainterac.interac:GetChildren()) do
+                if v:FindFirstChild("purchaserompt") then
+                    datainterac.interac = v
+                    break
                 end
-            until task.wait() and Highlight
+            end
         end
     elseif interacname == "Rod Of The Depths" then
         datainterac = {
@@ -204,7 +238,6 @@ local setInterac = function(interacname, quantity)
 
     repeat task.wait() until (HumanoidRootPart.Position - interac.pos).Magnitude <= 1
 
-    local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = interac.cam
     HumanoidRootPart.CFrame = interac.cframe
@@ -335,7 +368,6 @@ local enchantRod = function(RodName, value)
         HumanoidRootPart.CFrame = CFrame.new(pos)
         repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
 
-        local camera = workspace.Camera
         camera.CameraType = Enum.CameraType.Scriptable
         camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
@@ -472,7 +504,6 @@ local npcDepthsDoor = function()
 
     task.wait(0.5)
 
-    local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(4.40501785, -698.242615, 1247.79309, -0.142213896, 0.299789965, -0.943345785, 0, 0.953032434, 0.302868336, 0.989835918, 0.0430720858, -0.135534465)
     HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
@@ -513,21 +544,30 @@ local crabCage = function()
     if not Backpack:FindFirstChild("Crab Cage") then
         setInterac("Crab Cage", 5)
     end
-    local pos = Vector3.new(-127.297638, -736.863892, 1234.20581)
-    HumanoidRootPart.CFrame = CFrame.new(pos)
+    HumanoidRootPart.CFrame = CFrame.new(zonelist["Vertigo"])
+
+    local viewportSize = Workspace.CurrentCamera.ViewportSize
+    local x, y = 0, viewportSize.Y - 1
+
     Humanoid.PlatformStand = false
     task.wait(0.25)
-    HumanoidRootPart.CFrame = CFrame.new(pos)
-    local camera = workspace.Camera
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(-139.568878, -720.290649, 1227.21326, -0.495092869, 0.634007037, -0.594069302, 0, 0.683749914, 0.729716539, 0.868840158, 0.361277461, -0.338519663)
-    Character.Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
-    task.wait(0.5)
-    HumanoidRootPart.CFrame = CFrame.new(pos)
-    Character:WaitForChild("Crab Cage").Deploy:FireServer(CFrame.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875, -0.05541973561048508, -0, -0.9984631538391113, -0, 1, -0, 0.9984631538391113, 0, -0.05541973561048508))
-    task.wait(0.5)
+    for _, v in ipairs(crabcframe) do
+        HumanoidRootPart.CFrame = v
+        local cameraPosition = HumanoidRootPart.Position + Vector3.new(0, 15, 0)
+        local cameraLookAt = HumanoidRootPart.Position
+        camera.CameraType = Enum.CameraType.Attach
+        camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+        if Backpack:FindFirstChild("Crab Cage") then
+            Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
+        end
+        task.wait(0.25)
+        VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+        VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+        task.wait()
+        camera.CameraType = Enum.CameraType.Custom
+    end
+    task.wait(0.25)
     Humanoid.PlatformStand = true
-    camera.CameraType = Enum.CameraType.Custom
 end
 
 local autoRodOfTheDepths = function()
@@ -541,7 +581,6 @@ local autoRodOfTheDepths = function()
 
     AutoSell = false
 
-    local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Custom
 
     if checkVertigoFish() == "Vertigo" then
@@ -549,19 +588,18 @@ local autoRodOfTheDepths = function()
         repeat
 
             if not PlayerStats.Bestiary:FindFirstChild("Night Shrimp") then
-                if #(workspace.active.crabcages:GetChildren()) == 0 then
+                local i = 0
+                for _, v in pairs(workspace.active.crabcages:GetChildren()) do
+                    if v.Name == game.Players.LocalPlayer.Name then
+                        i = 30
+                        break
+                    end
+                    if (v.blocker.Position - Vector3.new(-121, -743, 1234)).Magnitude < 200 then
+                        i += 1
+                    end
+                end
+                if i < 22 then
                     crabCage()
-                else
-                    local i = 0
-                    for _, v in pairs(workspace.active.crabcages:GetChildren()) do
-                        if (v.blocker.Position - Vector3.new(-124.78862762451172, -737.0723876953125, 1234.0301513671875)).Magnitude < 10 then
-                            i += 1
-                            break
-                        end
-                    end
-                    if i == 0 then
-                        crabCage()
-                    end
                 end
             end
 
@@ -572,17 +610,57 @@ local autoRodOfTheDepths = function()
                 continue
             end
 
+            for _, v in ipairs(workspace.active.crabcages:GetChildren()) do
+                if v.Name == game.Players.LocalPlayer.Name and v:FindFirstChild("Prompt") and v.Prompt.Enabled then
+                    if Torso.Anchored then
+                        Torso.Anchored = false
+                        task.wait(0.25)
+                    end
+                    local pos = v.handle.Position
+                    local cameraPosition = pos + Vector3.new(0, 15, 0)
+                    local cameraLookAt = pos
+                    local prompt = v.Prompt
+                    camera.CameraType = Enum.CameraType.Scriptable
+                    camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
+                    task.wait(0.25)
+                    prompt.HoldDuration = 0
+                    prompt:InputHoldBegin()
+                    prompt:InputHoldEnd()
+                    camera.CameraType = Enum.CameraType.Custom
+                end
+            end
+
             setFishZone(zonelist["Vertigo"])
 
-            if crabcages:FindFirstChild("Highlight") then
-                local prompt = crabcages:FindFirstChild("Prompt")
-                if not prompt then continue end
+        until task.wait(1) and checkVertigoFish() ~= "Vertigo"
+
+        for _, v in ipairs(workspace.active.crabcages:GetChildren()) do
+            while v.Name == game.Players.LocalPlayer.Name do
+                task.wait()
+                if v:FindFirstChild("Prompt") and v.Prompt.Enabled then
+                    break
+                end
+            end
+            if v.Name == game.Players.LocalPlayer.Name and v:FindFirstChild("Prompt") and v.Prompt.Enabled then
+                if Torso.Anchored then
+                    Torso.Anchored = false
+                    task.wait(0.25)
+                end
+                local pos = v.handle.Position
+                local cameraPosition = pos + Vector3.new(0, 15, 0)
+                local cameraLookAt = pos
+                local prompt = v.Prompt
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
+                task.wait(0.25)
                 prompt.HoldDuration = 0
                 prompt:InputHoldBegin()
                 prompt:InputHoldEnd()
+                camera.CameraType = Enum.CameraType.Custom
             end
-
-        until task.wait(1) and checkVertigoFish() ~= "Vertigo"
+        end
 
     end
 
@@ -766,7 +844,6 @@ end)
 if config["C$_100k"] then
 
     setFishZone(zonelist["The Depths"])
-    local camera = workspace.Camera
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
 
@@ -774,14 +851,30 @@ elseif config["FarmLevel"] then
 
     local viewportSize = Workspace.CurrentCamera.ViewportSize
     local x, y = 0, viewportSize.Y - 1
-    while task.wait(0.5) do
+    while task.wait(1) do
+
+        if iF > 3 then
+            farmc = true
+            iF = 0
+        end
+        if iS > 30 then
+            sundialt = true
+            iS = 0
+        end
+        if iA > 30 then
+            aurorat = true
+            iA = 0
+        end
+
         if StatsRod:FindFirstChild("Rod Of The Depths") then
             if not checkLuck() then
                 for i = 1, 6 do
                     npcRemote("luck")
                 end
             end
-            if checkDayNight() ~= "Night" then
+            if checkDayNight() ~= "Night" and sundialt then
+                sundialt = false
+                iS = 0
                 if Backpack:FindFirstChild("Sundial Totem") then
                     if Torso.Anchored then
                         Torso.Anchored = false
@@ -795,9 +888,10 @@ elseif config["FarmLevel"] then
                 task.wait(0.1)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-                task.wait(2)
-            end
-            if not checkAurora() then
+                task.wait(1)
+            elseif not checkAurora() and aurorat then
+                aurorat = false
+                iA = 0
                 if Backpack:FindFirstChild("Aurora Totem") then
                     if Torso.Anchored then
                         Torso.Anchored = false
@@ -811,7 +905,7 @@ elseif config["FarmLevel"] then
                 task.wait(0.1)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-                task.wait(2)
+                task.wait(1)
             end
         elseif StatsRod:FindFirstChild("Aurora Rod") then
             if not checkLuck() then
@@ -825,7 +919,7 @@ elseif config["FarmLevel"] then
 
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
-        elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
+        --elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
             --enchantRod("Aurora Rod", "Mutated")
         end
 
@@ -841,20 +935,26 @@ elseif config["FarmLevel"] then
             purchaseRod("Destiny Rod", 190000)
         end
 
-        if StatsRod:FindFirstChild("Rod Of The Depths") then
-            setFishZone(zonelist["Ancient Isle"])
-            local camera = workspace.Camera
-            camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
-        else
-            setFishZone(zonelist["The Depths"])
-            local camera = workspace.Camera
-            camera.CameraType = Enum.CameraType.Scriptable
-            camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+        if farmc then
+            farmc = false
+            iF = 0
+            if StatsRod:FindFirstChild("Rod Of The Depths") then
+                setFishZone(zonelist["Ancient Isle"])
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+            else
+                setFishZone(zonelist["The Depths"])
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+            end
         end
+
+        iS += 1
+        iA += 1
+        iF += 1
     end
 end
-
+--[[
 task.spawn(function()
     if config["FarmLevel"] then
         task.wait(300)
@@ -866,4 +966,4 @@ task.spawn(function()
             task.wait(1)
         end
     end
-end)
+end)]]

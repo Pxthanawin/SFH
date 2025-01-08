@@ -327,7 +327,7 @@ end
 
 local enchantRod = function(RodName, value)
 
-    pcall(function()
+    while task.wait(0.5) do
 
         if StatsRod[RodName].Value == value then
             return
@@ -340,14 +340,14 @@ local enchantRod = function(RodName, value)
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        local relic = enctRelic()
+        local relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
         if not relic then
             if money > 33000 then
                 for i = 1, 3 do
                     npcRemote("power")
                 end
                 task.wait()
-                relic = enctRelic()
+                relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
             else
                 return
             end
@@ -378,13 +378,15 @@ local enchantRod = function(RodName, value)
             return
         end
 
-        if not relic.stack then
-            return
-        end
+        while StatsRod[RodName].Value ~= value and checkDayNight() == "Night" and task.wait(0.25) do
 
-        while StatsRod[RodName].Value ~= value and relic.stack > 0 and checkDayNight() == "Night" and task.wait() do
+            relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
 
-            Character.Humanoid:EquipTool(relic.equip)
+            if not relic then
+                break
+            end
+
+            Humanoid:EquipTool(relic.equip)
 
             local Highlight = interactable:WaitForChild("Highlight", 60)
             if StatsRod[RodName].Value == value then
@@ -409,7 +411,6 @@ local enchantRod = function(RodName, value)
                     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                     repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
                     GuiService.SelectedObject = nil
-                    relic.stack -= 1
                 end
             end
 
@@ -417,9 +418,7 @@ local enchantRod = function(RodName, value)
 
         end
         camera.CameraType = Enum.CameraType.Custom
-
-    end)
-
+    end
 end
 
 local purchaseRod = function(RodName, Price)
@@ -746,21 +745,21 @@ local autoRodOfTheDepths = function()
 
         money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
 
-        local relic = enctRelic()
+        local relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
         if not relic then
             money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
             if money > 100000 then
                 for i = 1, 5 do
                     npcRemote("power")
                 end
-                relic = enctRelic()
+                relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
             else
                 return
             end
         end
 
         repeat
-            relic = enctRelic()
+            relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
             if not relic then
                 break
             end
@@ -914,12 +913,13 @@ elseif config["FarmLevel"] then
 
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
-        --elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            --enchantRod("Aurora Rod", "Mutated")
+        elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
+            enchantRod("Aurora Rod", "Mutated")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
+            task.wait(0.5)
             autoRodOfTheDepths()
         end
 

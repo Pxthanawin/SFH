@@ -325,11 +325,15 @@ local enctRelic = function(Mutation)
     end
 end
 
-local enchantRod = function(RodName, value)
+local enchantRod = function(RodName, value, value2)
+
+    if not value2 then
+        value2 = "nil"
+    end
 
     while task.wait(0.5) do
 
-        if StatsRod[RodName].Value == value then
+        if StatsRod[RodName].Value == value or StatsRod[RodName].Value == value2 then
             return
         end
 
@@ -378,7 +382,7 @@ local enchantRod = function(RodName, value)
             return
         end
 
-        while StatsRod[RodName].Value ~= value and checkDayNight() == "Night" and task.wait(0.25) do
+        while task.wait(0.25) do
 
             relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
 
@@ -389,7 +393,7 @@ local enchantRod = function(RodName, value)
             Humanoid:EquipTool(relic.equip)
 
             local Highlight = interactable:WaitForChild("Highlight", 60)
-            if StatsRod[RodName].Value == value then
+            if StatsRod[RodName].Value == value or StatsRod[RodName].Value == value2 then
                 return
             end
             if checkDayNight() == "Day" then
@@ -468,7 +472,7 @@ local RodPriority = {
 }
 
 local checkVertigoFish = function()
-    local fish = 9
+    local fish = #ListVartigoFish + 1
     for _, v in pairs(PlayerStats.Bestiary:GetChildren()) do
         for _, vv in ipairs(ListVartigoFish) do
             if v.Name == vv then
@@ -914,8 +918,8 @@ elseif config["FarmLevel"] then
 
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
-        elseif StatsRod:FindFirstChild("Aurora Rod") and StatsRod["Aurora Rod"].Value ~= "Mutated" then
-            enchantRod("Aurora Rod", "Mutated")
+        elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Divine") and not StatsRod:FindFirstChild("Rod Of The Depths") then
+            enchantRod("Aurora Rod", "Mutated", "Divine")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)

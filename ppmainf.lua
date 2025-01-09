@@ -385,7 +385,7 @@ local enchantRod = function(RodName, value, value2)
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(pos)
-        repeat task.wait() until (HumanoidRootPart.Position - pos).Magnitude <= 1
+        task.wait(0.25)
 
         camera.CameraType = Enum.CameraType.Scriptable
         camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
@@ -405,6 +405,7 @@ local enchantRod = function(RodName, value, value2)
                 break
             end
 
+            HumanoidRootPart.CFrame = CFrame.new(pos)
             Humanoid:EquipTool(relic.equip)
 
             local Highlight = interactable:WaitForChild("Highlight", 60)

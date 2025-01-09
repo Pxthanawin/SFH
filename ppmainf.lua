@@ -728,6 +728,7 @@ local autoRodOfTheDepths = function()
     end
 
     AutoSell = true
+    ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
 
     local setAbysHex = function(purchase)
 

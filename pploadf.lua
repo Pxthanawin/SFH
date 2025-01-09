@@ -94,9 +94,11 @@ local function updateTime()
     textLabel.Text = string.format("%02d:%02d:%02d", hours, minutes, seconds)
 end
 
-while task.wait(0.25) do
-    updateTime()
-end
+task.spawn(function()
+    while task.wait(0.25) do
+        updateTime()
+    end
+end)
 
 task.spawn(function()
     while task.wait(2) do

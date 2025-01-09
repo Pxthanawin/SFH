@@ -151,6 +151,7 @@ local npcRemote = function(remote)
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
+        task.wait(0.1)
         pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.luck:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "power" then
@@ -160,6 +161,7 @@ local npcRemote = function(remote)
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
+        task.wait(0.1)
         pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.power:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "Appraiser" then
@@ -169,6 +171,7 @@ local npcRemote = function(remote)
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
+        task.wait(0.1)
         pcall(workspace.world.npcs:WaitForChild("Appraiser", math.huge).appraiser.appraise:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     end
@@ -188,8 +191,8 @@ local interactableList = function(interacname, more)
         end
     elseif interacname == "Aurora Totem" then
         datainterac = {
-            pos = Vector3.new(-1810.5636, -136.927948, -3282.44849),
-            cframe = CFrame.new(-1810.5636, -136.927948, -3282.44849, -0.820921123, -3.69710804e-08, -0.571041584, -3.08078718e-08, 1, -2.04542854e-08, 0.571041584, 8.01221478e-10, -0.820921123),
+            pos = Vector3.new(-1811.86853, -136.927979, -3281.16772),
+            cframe = CFrame.new(-1811.86853, -136.927979, -3281.16772, 0.999493241, -3.9704716e-08, 0.0318309925, 3.91892918e-08, 1, 1.68163776e-08, -0.0318309925, -1.55604223e-08, 0.999493241),
             cam = CFrame.new(-1813.31018, -130.086349, -3281.83008, -0.750986338, 0.650285959, -0.114663109, 0, 0.173648387, 0.98480773, 0.660317659, 0.739577174, -0.130407587),
             price = 500000
         }
@@ -262,6 +265,7 @@ local setInterac = function(interacname, quantity)
     for i = 1, quantity do
         money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if money > interac.price then
+            HumanoidRootPart.CFrame = interac.cframe
             local Highlight = interac.interac:WaitForChild("Highlight", math.huge)
             if Highlight then
                 if purchaserompt then
@@ -780,14 +784,14 @@ local autoRodOfTheDepths = function()
         end
 
         repeat
+            task.wait()
             relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
             if not relic then
-                break
+                return
             end
             Character.Humanoid:EquipTool(relic.equip)
             npcRemote("Appraiser")
             Character.Humanoid:UnequipTools()
-            task.wait()
         until setAbysHex()
 
     until task.wait() and setAbysHex()

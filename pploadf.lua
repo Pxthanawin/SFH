@@ -1,6 +1,3 @@
-if RunScript then return end
-getgenv().RunScript = true
-
 Configurations = string.gsub(Configurations, "[%s#*-]", "")
 
 getgenv().config = {}
@@ -61,6 +58,45 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = PlayerGui
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+
+local backgroundFrame = Instance.new("Frame")
+backgroundFrame.Parent = screenGui
+backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+backgroundFrame.Position = UDim2.new(0, 0, 0, 0)
+backgroundFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+backgroundFrame.BorderSizePixel = 0
+
+local textLabel = Instance.new("TextLabel")
+textLabel.Parent = backgroundFrame
+textLabel.Size = UDim2.new(0, 1000, 0, 250)
+textLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+textLabel.Text = "00:00:00"
+textLabel.TextColor3 = Color3.new(0, 0, 0)
+textLabel.BackgroundTransparency = 1
+textLabel.TextScaled = true
+textLabel.Font = Enum.Font.SourceSansBold
+textLabel.BorderSizePixel = 0
+
+local startTime = tick()
+
+local function updateTime()
+    local currentTime = tick() - startTime
+    local hours = math.floor(currentTime / 3600)
+    local minutes = math.floor((currentTime % 3600) / 60)
+    local seconds = math.floor(currentTime % 60)
+
+    textLabel.Text = string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
+while task.wait(0.25) do
+    updateTime()
+end
 
 task.spawn(function()
     while task.wait(2) do

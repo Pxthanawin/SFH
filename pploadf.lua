@@ -289,7 +289,7 @@ task.spawn(function()
         if countM % 20 == 0 then
             LocalPlayer.Character.Humanoid:UnequipTools()
         end
-        if countM >= 150 then
+        if countM >= 300 then
             local tpservice = game:GetService("TeleportService")
             game:Shutdown()
         end

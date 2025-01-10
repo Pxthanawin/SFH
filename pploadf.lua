@@ -438,37 +438,43 @@ local npclist = {
 
 for i, v in pairs(npclist) do
 
-    local npc = v
-    HumanoidRootPart.CFrame = CFrame.new(npc.pos)
+    pcall(function()
 
-    task.wait(0.5)
+        local npc = v
+        HumanoidRootPart.CFrame = CFrame.new(npc.pos)
 
-    if i == "Marlin" then
-        npc.npc = workspace.world.npcs:WaitForChild("Merlin", math.huge)
-    elseif i == "Appraiser" then
-        npc.npc = workspace.world.npcs:WaitForChild("Appraiser", math.huge)
-    end
+        task.wait(1)
 
-    repeat task.wait() until (HumanoidRootPart.Position - npc.npc.HumanoidRootPart.Position).Magnitude <= 6
-
-    local camera = workspace.Camera
-    camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = npc.cam
-    HumanoidRootPart.CFrame = npc.cframe
-
-    local Highlight = npc.npc:WaitForChild("Highlight", math.huge)
-    local dialog = npc.npc:FindFirstChild("dialogprompt")
-
-    if Highlight then
-        if dialog then
-            dialog.HoldDuration = 0
-            dialog:InputHoldBegin()
-            dialog:InputHoldEnd()
-            task.wait()
+        if i == "Marlin" then
+            npc.npc = workspace.world.npcs:WaitForChild("Merlin", 10)
+        elseif i == "Appraiser" then
+            npc.npc = workspace.world.npcs:WaitForChild("Appraiser", 10)
         end
-    end
 
-    camera.CameraType = Enum.CameraType.Custom
+        local camera = workspace.Camera
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = npc.cam
+        HumanoidRootPart.CFrame = npc.cframe
+
+        if not npc.npc then return end
+
+        local Highlight = npc.npc:WaitForChild("Highlight", 10)
+        local dialog = npc.npc:FindFirstChild("dialogprompt")
+
+        if Highlight then
+            if dialog then
+                dialog.HoldDuration = 0
+                dialog:InputHoldBegin()
+                dialog:InputHoldEnd()
+                task.wait()
+            end
+        end
+
+        task.wait(0.25)
+
+        camera.CameraType = Enum.CameraType.Custom
+
+    end)
 
 end
 

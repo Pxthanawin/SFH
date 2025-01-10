@@ -475,10 +475,12 @@ local equipRod = function(RodPriority)
     for _, v in ipairs(RodPriority) do
         if StatsRod:FindFirstChild(v) then
             if rodNameCache ~= v then
-                Character.Humanoid:UnequipTools()
-                task.wait(0.25)
-                ReplicatedStorage.events.equiprod:FireServer(v)
-                task.wait(0.25)
+                pcall(function()
+                    Character.Humanoid:UnequipTools()
+                    task.wait(0.25)
+                    ReplicatedStorage.events.equiprod:FireServer(v)
+                    task.wait(0.25)
+                end)
             end
             return
         end
@@ -822,7 +824,9 @@ task.spawn(function()
 
         if not Character:FindFirstChild(rodNameCache) then
             if rod.Parent == Backpack then
-                Character.Humanoid:EquipTool(rod)
+                pcall(function()
+                    Character.Humanoid:EquipTool(rod)
+                end)
                 equipRod(RodPriority)
                 task.wait()
                 continue

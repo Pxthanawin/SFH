@@ -162,6 +162,11 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 
 AssetsLoaded = true
 
+LocalPlayer.Idled:connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
+
 local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
@@ -289,7 +294,7 @@ task.spawn(function()
         if countM % 20 == 0 then
             LocalPlayer.Character.Humanoid:UnequipTools()
         end
-        if countM >= 300 then
+        if countM >= 150 then
             local tpservice = game:GetService("TeleportService")
             game:Shutdown()
         end

@@ -880,7 +880,7 @@ elseif config["FarmLevel"] then
 
     while task.wait(1) do
 
-        if iF > 3 then
+        if iF > 2 then
             farmc = true
             iF = 0
         end

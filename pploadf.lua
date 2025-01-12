@@ -68,7 +68,7 @@ local backgroundFrame = Instance.new("Frame")
 backgroundFrame.Parent = screenGui
 backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
 backgroundFrame.Position = UDim2.new(0, 0, 0, 0)
-backgroundFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0)
 backgroundFrame.BorderSizePixel = 0
 
 local textLabel = Instance.new("TextLabel")
@@ -77,7 +77,7 @@ textLabel.Size = UDim2.new(0, 1000, 0, 250)
 textLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 textLabel.Text = "00:00:00"
-textLabel.TextColor3 = Color3.new(0, 0, 0)
+textLabel.TextColor3 = Color3.new(1, 1, 1)
 textLabel.BackgroundTransparency = 1
 textLabel.TextScaled = true
 textLabel.Font = Enum.Font.SourceSansBold

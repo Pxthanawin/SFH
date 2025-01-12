@@ -858,7 +858,7 @@ task.spawn(function()
             Character.Humanoid:UnequipTools()
             __count += 1
 
-            if AutoSell and __count > 5 then
+            if AutoSell and __count > 20 then
                 __count = 0
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end

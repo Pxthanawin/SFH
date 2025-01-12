@@ -25,6 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
+local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
 
@@ -855,8 +856,10 @@ task.spawn(function()
             until not rod.values.bite.Value
 
             Character.Humanoid:UnequipTools()
+            __count += 1
 
-            if AutoSell then
+            if AutoSell and __count > 5 then
+                __count = 0
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 

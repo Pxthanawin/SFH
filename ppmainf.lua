@@ -854,6 +854,8 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             until not rod.values.bite.Value
 
+            Character.Humanoid:UnequipTools()
+
             if AutoSell then
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end

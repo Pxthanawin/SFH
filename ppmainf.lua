@@ -906,6 +906,7 @@ task.spawn(function()
                 Character.Humanoid:UnequipTools()
                 continue
             end]]
+            task.wait()
             if PlayerGui:FindFirstChild("reel") then
                 PlayerGui.reel:Destroy()
             end

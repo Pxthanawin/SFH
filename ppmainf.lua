@@ -910,8 +910,10 @@ task.spawn(function()
                 PlayerGui.reel:Destroy()
             end
             ReplicatedStorage.events.reelfinished:FireServer(100, true)
-            task.wait(0.25)
-            Character.Humanoid:UnequipTools()
+            task.wait(0.1)
+            if rod.values.bite.Value then
+                Character.Humanoid:UnequipTools()
+            end
 
             __count += 1
 
@@ -919,6 +921,9 @@ task.spawn(function()
                 __count = 0
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
+
+            task.wait(0.25)
+            Character.Humanoid:UnequipTools()
 
         else
             rod.events.cast:FireServer(100)

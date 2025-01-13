@@ -868,7 +868,7 @@ task.spawn(function()
             continue
         end
 
-        if Character:FindFirstChild(rodNameCache) and rod and rod:FindFirstChild("bobber") then
+        if Character:FindFirstChild(rodNameCache) and rod:FindFirstChild("bobber") then
 
             repeat
                 RunService.Heartbeat:Wait()
@@ -914,9 +914,10 @@ task.spawn(function()
             equipRod(RodPriority)
             rodNameCache = PlayerStats.Stats.rod.Value
             rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
-            Character.Humanoid:EquipTool(rod)
-            task.wait()
-            rod.events.cast:FireServer(100)
+            pcall(Character.Humanoid:EquipTool(rod))
+            if Character:FindFirstChild(rodNameCache) and rod.values.casted.Value then
+                rod.events.cast:FireServer(100)
+            end
 
         end
 

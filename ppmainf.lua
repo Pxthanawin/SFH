@@ -25,7 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
---local __sec = false
+local __sec = false
 local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
@@ -489,6 +489,7 @@ local equipRod = function(RodPriority)
                     task.wait(0.25)
                     ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(v)
                     task.wait(0.25)
+                    __sec = true
                     rodNameCache = PlayerStats.Stats.rod.Value
                 end)
             end
@@ -861,7 +862,7 @@ task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
-            --__sec = true
+            __sec = true
             task.wait(0.5)
             continue
         end
@@ -899,22 +900,20 @@ task.spawn(function()
                 end
                 RunService.Heartbeat:Wait()
             end
-            --[[
+
             if __sec and rod.values.bite.Value then
                 __sec = false
                 task.wait()
                 Character.Humanoid:UnequipTools()
                 continue
-            end]]
-            task.wait(0.25)
-            if PlayerGui:FindFirstChild("reel") then
-                PlayerGui.reel:Destroy()
             end
-            ReplicatedStorage.events.reelfinished:FireServer(100, true)
-            task.wait()
-            if rod.values.bite.Value then
-                Character.Humanoid:UnequipTools()
-            end
+            repeat
+                if PlayerGui:FindFirstChild("reel") then
+                    PlayerGui.reel:Destroy()
+                end
+                ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                task.wait()
+            until not rod.values.bite.Value
 
             __count += 1
 
@@ -923,7 +922,6 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-            task.wait(0.25)
             Character.Humanoid:UnequipTools()
 
         else

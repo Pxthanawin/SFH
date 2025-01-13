@@ -151,7 +151,7 @@ local npcRemote = function(remote)
         if money < 5000 then return end
         if Torso.Anchored then
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         task.wait(0.1)
@@ -161,7 +161,7 @@ local npcRemote = function(remote)
         if money < 11000 then return end
         if Torso.Anchored then
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         task.wait(0.1)
@@ -171,7 +171,7 @@ local npcRemote = function(remote)
         if money < 450 then return end
         if Torso.Anchored then
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
         task.wait(0.1)
@@ -181,7 +181,7 @@ local npcRemote = function(remote)
         if money < 250 then return end
         if Torso.Anchored then
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(256.994873, 135.709, 58.1402702)
         task.wait(0.1)
@@ -260,7 +260,7 @@ local setInterac = function(interacname, quantity)
     end
     if Torso.Anchored then
         Torso.Anchored = false
-        task.wait(1)
+        task.wait(0.25)
     end
 
     HumanoidRootPart.CFrame = CFrame.new(interac.pos)
@@ -329,7 +329,7 @@ local setFishZone = function(zone)
             return
         else
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.25)
         end
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
@@ -392,14 +392,14 @@ local enchantRod = function(RodName, value, value2)
         if PlayerStats.Stats.rod.Value ~= RodName then
             if StatsRod:FindFirstChild(RodName) then
                 LocalPlayer.Character.Humanoid:UnequipTools()
-                ReplicatedStorage.events.equiprod:FireServer(RodName)
+                ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(RodName)
             end
         end
 
         local pos = Vector3.new(1311, -802.427063, -83)
         if Torso.Anchored then
             Torso.Anchored = false
-            task.wait(1)
+            task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(pos)
         task.wait(0.25)
@@ -491,7 +491,7 @@ local equipRod = function(RodPriority)
                 pcall(function()
                     Character.Humanoid:UnequipTools()
                     task.wait(0.25)
-                    ReplicatedStorage.events.equiprod:FireServer(v)
+                    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(v)
                     task.wait(0.25)
                 end)
             end
@@ -532,7 +532,7 @@ local npcDepthsDoor = function()
 
     if Torso.Anchored then
         Torso.Anchored = false
-        task.wait(1)
+        task.wait(0.25)
     end
 
     Character = LocalPlayer.Character
@@ -577,7 +577,7 @@ local crabCage = function()
     Character.Humanoid:UnequipTools()
     if Torso.Anchored then
         Torso.Anchored = false
-        task.wait(1)
+        task.wait(0.25)
     end
     if not Backpack:FindFirstChild("Crab Cage") then
         setInterac("Crab Cage", 5)
@@ -647,7 +647,7 @@ local autoRodOfTheDepths = function()
                 if v.Name == game.Players.LocalPlayer.Name and v:FindFirstChild("Prompt") and v.Prompt.Enabled then
                     if Torso.Anchored then
                         Torso.Anchored = false
-                        task.wait(1)
+                        task.wait(0.25)
                     end
                     local pos = v.handle.Position
                     local cameraPosition = pos + Vector3.new(0, 15, 0)
@@ -680,7 +680,7 @@ local autoRodOfTheDepths = function()
             if v.Name == game.Players.LocalPlayer.Name and v:FindFirstChild("Prompt") and v.Prompt.Enabled then
                 if Torso.Anchored then
                     Torso.Anchored = false
-                    task.wait(1)
+                    task.wait(0.25)
                 end
                 local pos = v.handle.Position
                 local cameraPosition = pos + Vector3.new(0, 15, 0)
@@ -755,7 +755,7 @@ local autoRodOfTheDepths = function()
             if purchase then
                 if Torso.Anchored then
                     Torso.Anchored = false
-                    task.wait(1)
+                    task.wait(0.25)
                 end
                 HumanoidRootPart.CFrame = CFrame.new(Vector3.new(841, -750, 1246))
                 task.wait(0.1)
@@ -825,7 +825,7 @@ end
 local getchest = function()
     if Torso.Anchored then
         Torso.Anchored = false
-        task.wait(1)
+        task.wait(0.25)
     end
     Character.Humanoid:UnequipTools()
     task.wait()
@@ -906,6 +906,10 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             until not rod.values.bite.Value
 
+            if PlayerGui:FindFirstChild("reel") then
+                PlayerGui.reel:Destroy()
+            end
+
             Character.Humanoid:UnequipTools()
             __count += 1
 
@@ -950,22 +954,18 @@ elseif config["FarmLevel"] then
 
         if StatsRod:FindFirstChild("Rod Of The Depths") then
             if not checkLuck() then
-                farmc = false
-                iF = 0
                 for i = 1, 6 do
                     npcRemote("luck")
                 end
                 task.wait(0.25)
             end
             if checkDayNight() ~= "Night" and sundialt then
-                farmc = false
-                iF = 0
                 sundialt = false
                 iS = 0
                 if Backpack:FindFirstChild("Sundial Totem") then
                     if Torso.Anchored then
                         Torso.Anchored = false
-                        task.wait(1)
+                        task.wait(0.25)
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 else
@@ -979,14 +979,12 @@ elseif config["FarmLevel"] then
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
                 task.wait(1)
             elseif not checkAurora() and aurorat then
-                farmc = false
-                iF = 0
                 aurorat = false
                 iA = 0
                 if Backpack:FindFirstChild("Aurora Totem") then
                     if Torso.Anchored then
                         Torso.Anchored = false
-                        task.wait(1)
+                        task.wait(0.25)
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 else
@@ -994,42 +992,34 @@ elseif config["FarmLevel"] then
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 end
                 task.wait(0.1)
-                local viewportSize = Workspace.CurrentCamera.ViewportSize
-                local x, y = 0, viewportSize.Y - 1
-                VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
-                VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-                task.wait(1)
+                if Backpack:FindFirstChild("Aurora Totem") then
+                    local viewportSize = Workspace.CurrentCamera.ViewportSize
+                    local x, y = 0, viewportSize.Y - 1
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                    task.wait(1)
+                end
             end
         elseif StatsRod:FindFirstChild("Aurora Rod") then
             if not checkLuck() then
-                farmc = false
-                iF = 0
                 npcRemote("luck")
                 task.wait(0.25)
             end
         elseif StatsRod:FindFirstChild("Steady Rod") then
             if not checkLuck() then
-                farmc = false
-                iF = 0
                 npcRemote("luck")
                 task.wait(0.25)
             end
         end
 
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
-            farmc = false
-            iF = 0
             enchantRod("Rod Of The Depths", "Clever")
         elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Divine") and not StatsRod:FindFirstChild("Rod Of The Depths") then
-            farmc = false
-            iF = 0
             enchantRod("Aurora Rod", "Mutated", "Divine")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
-            farmc = false
-            iF = 0
             task.wait(0.5)
             autoRodOfTheDepths()
         end
@@ -1048,6 +1038,8 @@ elseif config["FarmLevel"] then
         end
 
         if farmc then
+            farmc = false
+            iF = 0
             if StatsRod:FindFirstChild("Rod Of The Depths") then
                 setFishZone(zonelist["Ancient Isle"])
                 camera.CameraType = Enum.CameraType.Scriptable

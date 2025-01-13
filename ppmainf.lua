@@ -872,7 +872,7 @@ task.spawn(function()
 
             repeat
                 RunService.Heartbeat:Wait()
-            until PlayerGui:FindFirstChild("shakeui") or not rod:FindFirstChild("bobber")
+            until PlayerGui:FindFirstChild("shakeui") or Backpack:FindFirstChild(rodNameCache) or not rod:FindFirstChild("bobber")
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
             while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
@@ -890,8 +890,8 @@ task.spawn(function()
                 Character.Humanoid:UnequipTools()
                 continue
             end]]
-            while rod.values.bite.Value do
-                task.wait(0.25)
+            while Character:FindFirstChild(rodNameCache) and rod.values.bite.Value do
+                task.wait()
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
                 end

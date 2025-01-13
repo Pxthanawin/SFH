@@ -914,7 +914,7 @@ task.spawn(function()
             equipRod(RodPriority)
             rodNameCache = PlayerStats.Stats.rod.Value
             rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
-            pcall(Character.Humanoid:EquipTool(rod))
+            pcall(function() Character.Humanoid:EquipTool(rod) end)
             if Character:FindFirstChild(rodNameCache) and rod.values.casted.Value then
                 rod.events.cast:FireServer(100)
             end

@@ -901,7 +901,7 @@ task.spawn(function()
                     PlayerGui.reel:Destroy()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                RunService.Heartbeat:Wait()
+                task.wait()
             until not rod.values.bite.Value
 
             Character.Humanoid:UnequipTools()

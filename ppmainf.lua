@@ -912,6 +912,8 @@ task.spawn(function()
             Character.Humanoid:UnequipTools()
             equipRod(RodPriority)
             task.wait()
+            rodNameCache = PlayerStats.Stats.rod.Value
+            rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
             Character.Humanoid:EquipTool(rod)
             task.wait()
             rod.events.cast:FireServer(100)

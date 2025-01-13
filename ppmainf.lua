@@ -32,10 +32,12 @@ local zonefish = Vector3.new(841, -750, 1246)
 local sundialt = true
 local aurorat = true
 local farmc = true
+local gct = true
 
 local iS = 0
 local iA = 0
 local iF = 0
+local iC = 0
 
 local function extractNumber(String)
     return tonumber((String:gsub("[^%d]", "")))
@@ -174,6 +176,16 @@ local npcRemote = function(remote)
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
         task.wait(0.1)
         pcall(workspace.world.npcs:WaitForChild("Appraiser", math.huge).appraiser.appraise:InvokeServer())
+        --HumanoidRootPart.CFrame = CFrame.new(currentPos)
+    elseif remote == "Jack Marrow" then
+        if money < 250 then return end
+        if Torso.Anchored then
+            Torso.Anchored = false
+            task.wait(1)
+        end
+        HumanoidRootPart.CFrame = CFrame.new(256.994873, 135.709, 58.1402702)
+        task.wait(0.1)
+        pcall(workspace.world.npcs:WaitForChild("Jack Marrow", math.huge).treasure.repairmap:InvokeServer())
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     end
 end
@@ -648,6 +660,7 @@ local autoRodOfTheDepths = function()
                     prompt.HoldDuration = 0
                     prompt:InputHoldBegin()
                     prompt:InputHoldEnd()
+                    task.wait(0.25)
                     camera.CameraType = Enum.CameraType.Custom
                 end
             end
@@ -680,6 +693,7 @@ local autoRodOfTheDepths = function()
                 prompt.HoldDuration = 0
                 prompt:InputHoldBegin()
                 prompt:InputHoldEnd()
+                task.wait(0.25)
                 camera.CameraType = Enum.CameraType.Custom
             end
         end
@@ -808,6 +822,43 @@ local autoRodOfTheDepths = function()
     setAbysHex(true)
 end
 
+local getchest = function()
+    if Torso.Anchored then
+        Torso.Anchored = false
+        task.wait(1)
+    end
+    Character.Humanoid:UnequipTools()
+    task.wait()
+    for _, v in ipairs(Backpack:GetChildren()) do
+        if v.Name == "Treasure Map" then
+            Humanoid:EquipTool(v)
+            task.wait(0.25)
+            npcRemote("Jack Marrow")
+
+            for _, vv in ipairs(workspace.world.chests:GetChildren()) do
+                if not vv:FindFirstChild("ProximityPrompt") then
+                    continue
+                end
+                vv.CFrame = HumanoidRootPart.CFrame
+                task.wait()
+                local pos = vv.Position
+                local cameraPosition = pos + Vector3.new(0, 15, 0)
+                local cameraLookAt = pos
+                local prompt = vv.ProximityPrompt
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+                HumanoidRootPart.CFrame = CFrame.new(pos)
+                task.wait(0.5)
+                prompt.HoldDuration = 0
+                prompt:InputHoldBegin()
+                prompt:InputHoldEnd()
+                task.wait(0.25)
+                camera.CameraType = Enum.CameraType.Custom
+            end
+        end
+    end
+end
+
 task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
@@ -880,27 +931,35 @@ elseif config["FarmLevel"] then
 
     while task.wait(1) do
 
-        if iF > 2 then
+        if iF > 1 then
             farmc = true
             iF = 0
         end
-        if iS > 30 then
+        if iS > 60 then
             sundialt = true
             iS = 0
         end
-        if iA > 30 then
+        if iA > 60 then
             aurorat = true
             iA = 0
+        end
+        if iC > 300 then
+            gct = true
+            iC = 0
         end
 
         if StatsRod:FindFirstChild("Rod Of The Depths") then
             if not checkLuck() then
+                farmc = false
+                iF = 0
                 for i = 1, 6 do
                     npcRemote("luck")
                 end
                 task.wait(0.25)
             end
             if checkDayNight() ~= "Night" and sundialt then
+                farmc = false
+                iF = 0
                 sundialt = false
                 iS = 0
                 if Backpack:FindFirstChild("Sundial Totem") then
@@ -920,6 +979,8 @@ elseif config["FarmLevel"] then
                 VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
                 task.wait(1)
             elseif not checkAurora() and aurorat then
+                farmc = false
+                iF = 0
                 aurorat = false
                 iA = 0
                 if Backpack:FindFirstChild("Aurora Totem") then
@@ -941,24 +1002,34 @@ elseif config["FarmLevel"] then
             end
         elseif StatsRod:FindFirstChild("Aurora Rod") then
             if not checkLuck() then
+                farmc = false
+                iF = 0
                 npcRemote("luck")
                 task.wait(0.25)
             end
         elseif StatsRod:FindFirstChild("Steady Rod") then
             if not checkLuck() then
+                farmc = false
+                iF = 0
                 npcRemote("luck")
                 task.wait(0.25)
             end
         end
 
         if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
+            farmc = false
+            iF = 0
             enchantRod("Rod Of The Depths", "Clever")
         elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Divine") and not StatsRod:FindFirstChild("Rod Of The Depths") then
+            farmc = false
+            iF = 0
             enchantRod("Aurora Rod", "Mutated", "Divine")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
+            farmc = false
+            iF = 0
             task.wait(0.5)
             autoRodOfTheDepths()
         end
@@ -970,9 +1041,13 @@ elseif config["FarmLevel"] then
             purchaseRod("Destiny Rod", 190000)
         end
 
+        if game.Players.LocalPlayer.leaderstats.Level.Value > 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct and money > 10000 then
+            gct = false
+            iC = 0
+            getchest()
+        end
+
         if farmc then
-            farmc = false
-            iF = 0
             if StatsRod:FindFirstChild("Rod Of The Depths") then
                 setFishZone(zonelist["Ancient Isle"])
                 camera.CameraType = Enum.CameraType.Scriptable

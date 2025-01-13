@@ -902,13 +902,12 @@ task.spawn(function()
             end
 
             repeat
+                if PlayerGui:FindFirstChild("reel") then
+                    PlayerGui.reel:Destroy()
+                end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 RunService.Heartbeat:Wait()
             until not rod.values.bite.Value
-
-            if PlayerGui:FindFirstChild("reel") then
-                PlayerGui.reel:Destroy()
-            end
 
             Character.Humanoid:UnequipTools()
             __count += 1

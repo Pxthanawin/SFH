@@ -857,9 +857,7 @@ local getchest = function()
 end
 
 task.spawn(function()
-    rodNameCache = PlayerStats.Stats.rod.Value
-    local rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
-
+    local rod
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
@@ -870,6 +868,26 @@ task.spawn(function()
 
         rodNameCache = PlayerStats.Stats.rod.Value
         rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
+
+        if not rod then
+            continue
+        end
+
+        if not rod.values.casted.Value then
+            Character.Humanoid:UnequipTools()
+            task.wait()
+        end
+
+        if not Character:FindFirstChild(rodNameCache) then
+            if rod.Parent == Backpack then
+                pcall(function()
+                    Character.Humanoid:EquipTool(rod)
+                end)
+                equipRod(RodPriority)
+                task.wait()
+                continue
+            end
+        end
 
         if rod:FindFirstChild("bobber") then
 
@@ -911,19 +929,8 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-        elseif rod.Parent == Character or not rod or not rod.values.casted.Value then
-
-            Character.Humanoid:UnequipTools()
-            equipRod(RodPriority)
-            rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
-            if not rod then
-                continue
-            end
-            Character.Humanoid:EquipTool(rod)
-            if Character:FindFirstChild(rodNameCache) then
-                rod.events.cast:FireServer(100)
-            end
-
+        else
+            rod.events.cast:FireServer(100)
         end
 
     end

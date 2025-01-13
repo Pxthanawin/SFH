@@ -888,7 +888,7 @@ task.spawn(function()
             Character.Humanoid:UnequipTools()
             task.wait()
             Character.Humanoid:EquipTool(rod)
-            task.wait(0.25)
+            task.wait()
         end
 
         if rod:FindFirstChild("bobber") then
@@ -933,6 +933,7 @@ task.spawn(function()
 
         else
             rod.events.cast:FireServer(100)
+            task.wait(0.25)
         end
 
     end

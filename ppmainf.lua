@@ -34,10 +34,10 @@ local aurorat = true
 local farmc = true
 local gct = true
 
-local iS = 0
-local iA = 0
-local iF = 0
-local iC = 0
+local iS = 1000
+local iA = 1000
+local iF = 1000
+local iC = 1000
 
 local function extractNumber(String)
     return tonumber((String:gsub("[^%d]", "")))
@@ -910,7 +910,7 @@ task.spawn(function()
 
             __count += 1
 
-            if AutoSell and __count > 20 then
+            if AutoSell and __count >= 30 then
                 __count = 0
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end

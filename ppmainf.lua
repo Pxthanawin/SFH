@@ -896,6 +896,7 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             end
 
+            Character.Humanoid:UnequipTools()
             repeat
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
@@ -904,7 +905,6 @@ task.spawn(function()
                 task.wait()
             until not rod.values.bite.Value
 
-            Character.Humanoid:UnequipTools()
             __count += 1
 
             if AutoSell and __count > 20 then

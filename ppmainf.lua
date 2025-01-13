@@ -873,11 +873,6 @@ task.spawn(function()
             continue
         end
 
-        if not rod.values.casted.Value then
-            Character.Humanoid:UnequipTools()
-            task.wait()
-        end
-
         if not Character:FindFirstChild(rodNameCache) then
             if rod.Parent == Backpack then
                 pcall(function()
@@ -887,6 +882,12 @@ task.spawn(function()
                 task.wait()
                 continue
             end
+        end
+
+        if not rod.values.casted.Value then
+            Character.Humanoid:UnequipTools()
+            task.wait()
+            Character.Humanoid:EquipTool(rod)
         end
 
         if rod:FindFirstChild("bobber") then

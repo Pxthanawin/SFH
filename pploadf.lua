@@ -296,7 +296,7 @@ task.spawn(function()
         end
         if countM >= 150 then
             local tpservice = game:GetService("TeleportService")
-            game:Shutdown()
+            tpservice:Teleport(16732694052, game.Players.LocalPlayer)
         end
     end
 end)

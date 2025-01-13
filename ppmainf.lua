@@ -489,6 +489,7 @@ local equipRod = function(RodPriority)
                     task.wait(0.25)
                     ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(v)
                     task.wait(0.25)
+                    rodNameCache = PlayerStats.Stats.rod.Value
                 end)
             end
             return
@@ -867,7 +868,7 @@ task.spawn(function()
             continue
         end
 
-        if rod and rod:FindFirstChild("bobber") then
+        if Character:FindFirstChild(rodNameCache) and rod and rod:FindFirstChild("bobber") then
 
             repeat
                 RunService.Heartbeat:Wait()
@@ -907,11 +908,10 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-        elseif not rod or rod.Parent == Backpack or rod.values.casted.Value then
+        elseif Backpack:FindFirstChild(rodNameCache) or not rod or rod.values.casted.Value then
 
             Character.Humanoid:UnequipTools()
             equipRod(RodPriority)
-            task.wait()
             rodNameCache = PlayerStats.Stats.rod.Value
             rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
             Character.Humanoid:EquipTool(rod)
@@ -970,7 +970,7 @@ elseif config["FarmLevel"] then
                     setInterac("Sundial Totem", 3)
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 end
-                task.wait(math.random(0, 40) / 10)
+                task.wait(math.random(0, 30) / 10)
                 if checkDayNight() ~= "Night" then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1
@@ -991,7 +991,7 @@ elseif config["FarmLevel"] then
                     setInterac("Aurora Totem")
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 end
-                task.wait(math.random(0, 40) / 10)
+                task.wait(math.random(0, 20) / 10)
                 if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1

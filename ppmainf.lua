@@ -25,7 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
-local __sec = false
+--local __sec = false
 local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
@@ -856,33 +856,18 @@ local getchest = function()
 end
 
 task.spawn(function()
+    rodNameCache = PlayerStats.Stats.rod.Value
+    local rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
+
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
-            __sec = true
+            --__sec = true
             task.wait(0.5)
             continue
         end
 
-        rodNameCache = PlayerStats.Stats.rod.Value
-        local rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
-
-        if not rod then
-            continue
-        end
-
-        if not Character:FindFirstChild(rodNameCache) then
-            if rod.Parent == Backpack then
-                pcall(function()
-                    Character.Humanoid:EquipTool(rod)
-                end)
-                equipRod(RodPriority)
-                task.wait()
-                continue
-            end
-        end
-
-        if rod:FindFirstChild("bobber") then
+        if rod and rod:FindFirstChild("bobber") then
 
             repeat
                 RunService.Heartbeat:Wait()
@@ -914,7 +899,6 @@ task.spawn(function()
                     Character.Humanoid:UnequipTools()
                 end
             end
-            Character.Humanoid:UnequipTools()
 
             __count += 1
 
@@ -923,8 +907,15 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-        else
+        elseif not rod or rod.Parent == Backpack or rod.values.casted.Value then
+
+            Character.Humanoid:UnequipTools()
+            equipRod(RodPriority)
+            task.wait()
+            Character.Humanoid:EquipTool(rod)
+            task.wait()
             rod.events.cast:FireServer(100)
+
         end
 
     end

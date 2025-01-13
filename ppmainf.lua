@@ -907,6 +907,7 @@ task.spawn(function()
                 continue
             end]]
             while rod.values.bite.Value do
+                task.wait()
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
                 end
@@ -914,7 +915,6 @@ task.spawn(function()
                 if rod.values.bite.Value then
                     Character.Humanoid:UnequipTools()
                 end
-                task.wait()
             end
 
             __count += 1
@@ -924,7 +924,7 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-            task.wait(0.25)
+            task.wait(0.5)
             Character.Humanoid:UnequipTools()
 
         else

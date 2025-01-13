@@ -911,6 +911,7 @@ task.spawn(function()
                     PlayerGui.reel:Destroy()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                task.wait()
                 if rod.values.bite.Value then
                     Character.Humanoid:UnequipTools()
                 end

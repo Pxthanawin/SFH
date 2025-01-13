@@ -906,6 +906,7 @@ task.spawn(function()
                 Character.Humanoid:UnequipTools()
                 continue
             end]]
+            task.wait(0.25)
             while rod.values.bite.Value do
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()

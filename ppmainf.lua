@@ -972,12 +972,14 @@ elseif config["FarmLevel"] then
                     setInterac("Sundial Totem", 3)
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                 end
-                task.wait(0.1)
-                local viewportSize = Workspace.CurrentCamera.ViewportSize
-                local x, y = 0, viewportSize.Y - 1
-                VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
-                VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-                task.wait(1)
+                task.wait(math.random(0, 40) / 10)
+                if checkDayNight() ~= "Night" then
+                    local viewportSize = Workspace.CurrentCamera.ViewportSize
+                    local x, y = 0, viewportSize.Y - 1
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                    task.wait(1)
+                end
             elseif not checkAurora() and aurorat then
                 aurorat = false
                 iA = 0
@@ -991,8 +993,8 @@ elseif config["FarmLevel"] then
                     setInterac("Aurora Totem")
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                 end
-                task.wait(0.1)
-                if Backpack:FindFirstChild("Aurora Totem") then
+                task.wait(math.random(0, 40) / 10)
+                if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1
                     VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)

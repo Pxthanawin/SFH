@@ -901,15 +901,12 @@ task.spawn(function()
                     PlayerGui.reel:Destroy()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait()
+                task.wait(0.1)
                 if rod.values.bite.Value then
-                    task.wait(0.25)
                     Character.Humanoid:UnequipTools()
                 end
             until not rod.values.bite.Value
-            if rod.Parent == Character then
-                Character.Humanoid:UnequipTools()
-            end
+            Character.Humanoid:UnequipTools()
 
             __count += 1
 

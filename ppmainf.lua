@@ -868,7 +868,14 @@ task.spawn(function()
             continue
         end
 
-        if Character:FindFirstChild(rodNameCache) and rod:FindFirstChild("bobber") then
+        rodNameCache = PlayerStats.Stats.rod.Value
+        rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
+
+        if not rod then
+            continue
+        end
+
+        if rod:FindFirstChild("bobber") then
 
             repeat
                 RunService.Heartbeat:Wait()
@@ -890,7 +897,7 @@ task.spawn(function()
                 Character.Humanoid:UnequipTools()
                 continue
             end]]
-            while Character:FindFirstChild(rodNameCache) and rod.values.bite.Value do
+            while rod.values.bite.Value do
                 task.wait()
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
@@ -908,13 +915,16 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-        elseif Backpack:FindFirstChild(rodNameCache) or not rod or rod.values.casted.Value then
+        elseif rod.Parent == Character or rod.values.casted.Value then
 
             Character.Humanoid:UnequipTools()
             equipRod(RodPriority)
             rodNameCache = PlayerStats.Stats.rod.Value
             rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
-            pcall(function() Character.Humanoid:EquipTool(rod) end)
+            if not rod then
+                continue
+            end
+            Character.Humanoid:EquipTool(rod)
             if Character:FindFirstChild(rodNameCache) and rod.values.casted.Value then
                 rod.events.cast:FireServer(100)
             end

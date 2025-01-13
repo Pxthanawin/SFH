@@ -46,12 +46,7 @@ end
 local Lighting = game:GetService("Lighting")
 
 local function checkDayNight()
-    local currentTime = Lighting.ClockTime
-    if currentTime >= 6 and currentTime < 18 then
-        return "Day"
-    else
-        return "Night"
-    end
+    return ReplicatedStorage.world.cycle.Value
 end
 
 local function checkAurora()

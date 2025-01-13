@@ -1054,6 +1054,7 @@ elseif config["FarmLevel"] then
         iS += 1
         iA += 1
         iF += 1
+        iC += 1
     end
 end
 --[[

@@ -906,13 +906,12 @@ task.spawn(function()
                 Character.Humanoid:UnequipTools()
                 continue
             end]]
-            task.wait(0.25)
             while rod.values.bite.Value do
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait()
+                task.wait(0.25)
                 if rod.values.bite.Value then
                     Character.Humanoid:UnequipTools()
                 end

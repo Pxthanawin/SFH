@@ -921,7 +921,7 @@ task.spawn(function()
                 continue
             end
             Character.Humanoid:EquipTool(rod)
-            if Character:FindFirstChild(rodNameCache) and rod.values.casted.Value then
+            if Character:FindFirstChild(rodNameCache) then
                 rod.events.cast:FireServer(100)
             end
 

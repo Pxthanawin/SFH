@@ -902,8 +902,14 @@ task.spawn(function()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 task.wait()
-                Character.Humanoid:UnequipTools()
+                if rod.values.bite.Value then
+                    task.wait(0.25)
+                    Character.Humanoid:UnequipTools()
+                end
             until not rod.values.bite.Value
+            if rod.Parent == Character then
+                Character.Humanoid:UnequipTools()
+            end
 
             __count += 1
 

@@ -897,9 +897,11 @@ task.spawn(function()
                 end
                 RunService.Heartbeat:Wait()
             end
-            if __sec then
+            if __sec and rod.values.bite.Value then
                 __sec = false
+                task.wait()
                 Character.Humanoid:UnequipTools()
+                continue
             end
             while rod.values.bite.Value do
                 if PlayerGui:FindFirstChild("reel") then

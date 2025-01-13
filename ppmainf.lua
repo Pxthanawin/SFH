@@ -884,13 +884,6 @@ task.spawn(function()
             end
         end
 
-        if not rod.values.casted.Value then
-            Character.Humanoid:UnequipTools()
-            task.wait()
-            Character.Humanoid:EquipTool(rod)
-            task.wait()
-        end
-
         if rod:FindFirstChild("bobber") then
 
             repeat
@@ -931,9 +924,10 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
+            Character.Humanoid:UnequipTools()
+
         else
             rod.events.cast:FireServer(100)
-            task.wait(0.25)
         end
 
     end

@@ -871,10 +871,6 @@ task.spawn(function()
         rodNameCache = PlayerStats.Stats.rod.Value
         rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
 
-        if not rod then
-            continue
-        end
-
         if rod:FindFirstChild("bobber") then
 
             repeat
@@ -915,7 +911,7 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-        elseif rod.Parent == Character or rod.values.casted.Value then
+        elseif rod.Parent == Character or not rod or not rod.values.casted.Value then
 
             Character.Humanoid:UnequipTools()
             equipRod(RodPriority)

@@ -162,6 +162,9 @@ until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChil
 
 AssetsLoaded = true
 
+ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):FireServer(false)
+ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):Destroy()
+
 LocalPlayer.Idled:connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
@@ -295,8 +298,12 @@ task.spawn(function()
             LocalPlayer.Character.Humanoid:UnequipTools()
         end
         if countM >= 150 then
-            local tpservice = game:GetService("TeleportService")
-            tpservice:Teleport(16732694052, game.Players.LocalPlayer)
+            if rejoin then
+                local tpservice = game:GetService("TeleportService")
+                tpservice:Teleport(16732694052, LocalPlayer)
+            else
+                game:Shutdown()
+            end
         end
     end
 end)
@@ -438,6 +445,11 @@ local npclist = {
         pos = Vector3.new(453.076996, 150.501022, 210.481934),
         cframe = CFrame.new(453.076996, 150.501022, 210.481934, -0.0841025636, 1.00578879e-08, 0.9964571, -4.54328983e-08, 1, -1.39282568e-08, -0.9964571, -4.64433363e-08, -0.0841025636),
         cam = CFrame.new(441.024414, 153.907944, 207.771103, -0.219435185, 0.148836121, -0.96420747, 0, 0.988295138, 0.152554303, 0.975627124, 0.0334757827, -0.216866717)
+    },
+    ["Jack Marrow"] = {
+        pos = Vector3.new(256.994873, 135.709, 58.1402702),
+        cframe = CFrame.new(256.994873, 135.709, 58.1402702, -0.286957443, 6.85323016e-08, -0.95794332, -5.15833314e-08, 1, 8.69931611e-08, 0.95794332, 7.43772404e-08, -0.286957443),
+        cam = CFrame.new(270.265411, 141.460327, 64.1011047, 0.353080839, -0.324972838, 0.877340615, 0, 0.937737644, 0.347344309, -0.93559283, -0.122640617, 0.331097186)
     }
 }
 

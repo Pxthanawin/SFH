@@ -25,6 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
+local __sec = false
 local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
@@ -328,7 +329,7 @@ local setFishZone = function(zone)
         end
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(3)
+    task.wait(2)
     Torso.Anchored = true
 end
 
@@ -858,6 +859,7 @@ task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
+            __sec = true
             task.wait(0.5)
             continue
         end
@@ -895,13 +897,14 @@ task.spawn(function()
                 end
                 RunService.Heartbeat:Wait()
             end
-
-            task.wait(0.25)
+            if __sec then
+                __sec = false
+                Character.Humanoid:UnequipTools()
+            end
             while rod.values.bite.Value do
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
                 end
-                Character.Humanoid:UnequipTools()
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 task.wait()
             end

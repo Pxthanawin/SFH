@@ -915,7 +915,6 @@ task.spawn(function()
 
             Character.Humanoid:UnequipTools()
             equipRod(RodPriority)
-            rodNameCache = PlayerStats.Stats.rod.Value
             rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
             if not rod then
                 continue

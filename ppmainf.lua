@@ -888,6 +888,7 @@ task.spawn(function()
             Character.Humanoid:UnequipTools()
             task.wait()
             Character.Humanoid:EquipTool(rod)
+            task.wait()
         end
 
         if rod:FindFirstChild("bobber") then

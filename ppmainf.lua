@@ -901,7 +901,7 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             end
 
-            if __sec >= 20 and rod.values.bite.Value then
+            if __sec >= 24 and rod.values.bite.Value then
                 __sec = 0
                 Character.Humanoid:UnequipTools()
                 continue
@@ -909,7 +909,7 @@ task.spawn(function()
                 __sec += 1
             end
 
-            task.wait()
+            task.wait(0.1)
             if rod.values.bite.Value then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
             end

@@ -25,7 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
-local __sec = false
+local __sec = 20
 local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
@@ -862,7 +862,7 @@ task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
-            __sec = true
+            __sec = 20
             task.wait(0.5)
             continue
         end
@@ -901,18 +901,19 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             end
 
-            if __sec and rod.values.bite.Value then
-                __sec = false
-                task.wait()
+            if __sec >= 20 and rod.values.bite.Value then
+                __sec = 0
                 Character.Humanoid:UnequipTools()
                 continue
+            else
+                __sec += 1
             end
             repeat
+                task.wait()
                 if PlayerGui:FindFirstChild("reel") then
                     PlayerGui.reel:Destroy()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait()
             until not rod.values.bite.Value
 
             __count += 1
@@ -922,6 +923,7 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
+            task.wait(0.25)
             Character.Humanoid:UnequipTools()
 
         else

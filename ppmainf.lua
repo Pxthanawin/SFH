@@ -323,7 +323,7 @@ end]]
 local setFishZone = function(zone)
     task.wait(0.25)
     if Torso.Anchored then
-        if (HumanoidRootPart.Position - zone).Magnitude < 6 then
+        if (HumanoidRootPart.Position - zone).Magnitude < 10 then
             return
         else
             Torso.Anchored = false
@@ -720,7 +720,7 @@ local autoRodOfTheDepths = function()
             local i = true
             for _, v in pairs(workspace.zones.fishing:GetChildren()) do
                 if v.Name == "Isonade" then
-                    if (v.Position - HumanoidRootPart.Position).Magnitude < 6 then
+                    if (v.Position - HumanoidRootPart.Position).Magnitude < 10 then
                         i = false
                         break
                     end
@@ -730,7 +730,7 @@ local autoRodOfTheDepths = function()
                 setFishZone(pos)
             end
 
-        until task.wait() and checkVertigoFish() ~= "Isonade"
+        until task.wait(1) and checkVertigoFish() ~= "Isonade"
 
     end
 
@@ -893,7 +893,7 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             until PlayerGui:FindFirstChild("shakeui") or Backpack:FindFirstChild(rodNameCache) or not rod:FindFirstChild("bobber")
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
-            while PlayerGui:FindFirstChild("shakeui") do
+            while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
                 local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)

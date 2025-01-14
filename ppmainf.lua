@@ -918,7 +918,8 @@ task.spawn(function()
             end
             if rod.values.bite.Value then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait(0.4)
+                task.wait(0.2)
+                Character.Humanoid:UnequipTools()
             end
 
             __count += 1
@@ -927,8 +928,6 @@ task.spawn(function()
                 __count = 0
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
-
-            Character.Humanoid:UnequipTools()
 
         else
             rod.events.cast:FireServer(100)

@@ -913,10 +913,10 @@ task.spawn(function()
                 __sec += 1
             end]]
 
+            while not rod.values.bite.Value do
+                RunService.Heartbeat:Wait()
+            end
             if PlayerGui:FindFirstChild("reel") then
-                while not rod.values.bite.Value do
-                    RunService.Heartbeat:Wait()
-                end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
                 Character.Humanoid:UnequipTools()

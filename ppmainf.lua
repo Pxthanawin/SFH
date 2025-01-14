@@ -895,7 +895,7 @@ task.spawn(function()
             until PlayerGui:FindFirstChild("shakeui") or Backpack:FindFirstChild(rodNameCache) or not rod:FindFirstChild("bobber")
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
             while rod:FindFirstChild("bobber") and not PlayerGui:FindFirstChild("reel") do
-                local button = PlayerGui:FindFirstChild("shakeui") and shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
+                local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)
                     VirtualUser:Button1Down(Vector2.new(1, 1))
@@ -919,8 +919,7 @@ task.spawn(function()
             if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
-                game:GetService("Players").LocalPlayer.Character:WaitForChild("Rod Of The Depths"):WaitForChild("events"):WaitForChild("reset"):FireServer()
-
+                Character.Humanoid:UnequipTools()
             end
 
             __count += 1

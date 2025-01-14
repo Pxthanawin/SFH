@@ -909,13 +909,13 @@ task.spawn(function()
                 __sec += 1
             end
 
-            if rod.values.bite.Value then
-                repeat task.wait() until PlayerGui:FindFirstChild("reel") or not rod:FindFirstChild("bobber")
+            repeat task.wait() until PlayerGui:FindFirstChild("reel") or not rod:FindFirstChild("bobber")
+            if rod:FindFirstChild("bobber") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                while PlayerGui:FindFirstChild("reel") do
-                    PlayerGui.reel:Destroy()
-                    task.wait()
-                end
+            end
+            while PlayerGui:FindFirstChild("reel") do
+                PlayerGui.reel:Destroy()
+                task.wait()
             end
 
             __count += 1

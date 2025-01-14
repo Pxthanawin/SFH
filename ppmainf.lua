@@ -127,6 +127,7 @@ local crabcframe = {
 
 if PlayerGui.hud.safezone:FindFirstChild("reward") then
     GuiService.SelectedObject = PlayerGui.hud.safezone.reward.Claim
+    task.wait(0.1)
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
     task.wait(0.1)
@@ -134,6 +135,7 @@ if PlayerGui.hud.safezone:FindFirstChild("reward") then
 end
 if PlayerGui:FindFirstChild("DateReward") and PlayerGui.DateReward.datereward.Visible then
     GuiService.SelectedObject = PlayerGui.DateReward.datereward.Visible
+    task.wait(0.1)
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
     task.wait(0.1)
@@ -901,13 +903,14 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             end
 
+            --[[
             if __sec >= 24 and rod.values.bite.Value then
                 __sec = 0
                 Character.Humanoid:UnequipTools()
                 continue
             else
                 __sec += 1
-            end
+            end]]
 
             repeat task.wait() until PlayerGui:FindFirstChild("reel") or not rod.values.bite.Value
             if PlayerGui:FindFirstChild("reel") then

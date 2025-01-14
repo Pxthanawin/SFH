@@ -919,7 +919,8 @@ task.spawn(function()
             if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
-                Character.Humanoid:UnequipTools()
+                game:GetService("Players").LocalPlayer.Character:WaitForChild("Rod Of The Depths"):WaitForChild("events"):WaitForChild("reset"):FireServer()
+
             end
 
             __count += 1

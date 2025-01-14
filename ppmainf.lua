@@ -918,7 +918,7 @@ task.spawn(function()
             end
             if rod.values.bite.Value then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait(0.3)
+                task.wait(0.4)
             end
 
             __count += 1

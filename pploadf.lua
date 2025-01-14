@@ -425,15 +425,13 @@ local settings = {
     willautosell_legendary = true
 }
 
-local ChangeSetting = game:GetService("Players").LocalPlayer.PlayerGui.hud.safezone.menu.menu_safezone:FindFirstChild("ChangeSetting")
+local ChangeSetting = game:GetService("ReplicatedStorage"):WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Settings/Update")
 for settingName, settingValue in pairs(settings) do
     local args = {
         [1] = settingName,
         [2] = settingValue
     }
-    pcall(function()
-        ChangeSetting:FireServer(unpack(args))
-    end)
+    ChangeSetting:FireServer(unpack(args))
 end
 
 local npclist = {

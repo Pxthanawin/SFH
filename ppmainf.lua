@@ -912,9 +912,7 @@ task.spawn(function()
                 __sec += 1
             end]]
 
-            while PlayerGui:FindFirstChild("reel") or not rod.values.bite.Value do
-                task.wait()
-            end
+            repeat task.wait() until PlayerGui:FindFirstChild("reel") or not rod.values.bite.Value
             if PlayerGui:FindFirstChild("reel") then
                 PlayerGui.reel:Destroy()
             end

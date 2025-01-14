@@ -25,7 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
-local __sec = 1000
+--local __sec = 20
 local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
@@ -491,7 +491,7 @@ local equipRod = function(RodPriority)
                     task.wait(0.25)
                     ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(v)
                     task.wait(0.25)
-                    __sec = true
+                    --__sec = true
                     rodNameCache = PlayerStats.Stats.rod.Value
                 end)
             end
@@ -864,7 +864,7 @@ task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
-            __sec = 20
+            --__sec = 20
             task.wait(0.5)
             continue
         end
@@ -893,8 +893,8 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             until PlayerGui:FindFirstChild("shakeui") or Backpack:FindFirstChild(rodNameCache) or not rod:FindFirstChild("bobber")
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
-            while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
-                local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
+            while rod:FindFirstChild("bobber") and not PlayerGui:FindFirstChild("reel") do
+                local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:WaitForChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)
                     VirtualUser:Button1Down(Vector2.new(1, 1))
@@ -903,23 +903,21 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             end
 
-            if __sec >= 60 and rod.values.bite.Value then
+            --[[
+            if __sec >= 24 and rod.values.bite.Value then
                 __sec = 0
                 Character.Humanoid:UnequipTools()
                 continue
             else
                 __sec += 1
-            end
+            end]]
 
-            if rod.values.bite.Value then
-                ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                repeat
-                    task.wait()
-                until not rod.values.bite.Value
-                Character.Humanoid:UnequipTools()
-            end
             if PlayerGui:FindFirstChild("reel") then
                 PlayerGui.reel:Destroy()
+            end
+            if rod.values.bite.Value then
+                ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                task.wait(0.3)
             end
 
             __count += 1
@@ -928,6 +926,8 @@ task.spawn(function()
                 __count = 0
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
+
+            Character.Humanoid:UnequipTools()
 
         else
             rod.events.cast:FireServer(100)

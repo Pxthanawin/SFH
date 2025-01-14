@@ -915,8 +915,8 @@ task.spawn(function()
             end
             if rod.values.bite.Value then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                task.wait(0.3)
             end
-            repeat task.wait() until rod:FindFirstChild("bobber") or not rod.values.bite.Value
 
             __count += 1
 

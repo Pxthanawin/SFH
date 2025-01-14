@@ -894,7 +894,7 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             until PlayerGui:FindFirstChild("shakeui") or Backpack:FindFirstChild(rodNameCache) or not rod:FindFirstChild("bobber")
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
-            while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
+            while rod:FindFirstChild("bobber") and not PlayerGui:FindFirstChild("reel") do
                 local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)
@@ -913,9 +913,9 @@ task.spawn(function()
                 __sec += 1
             end]]
 
-            if rod.values.bite.Value then
+            if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                --PlayerGui.reel:Destroy()
+                PlayerGui.reel:Destroy()
                 task.wait(0.1)
                 Character.Humanoid:UnequipTools()
             end

@@ -914,11 +914,12 @@ task.spawn(function()
             end]]
 
             if PlayerGui:FindFirstChild("reel") then
-                while not rod.values.bite.Value or PlayerGui:FindFirstChild("shakeui") do
+                while not rod.values.bite.Value do
                     RunService.Heartbeat:Wait()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
+                rod.values.bite.Value = false
                 Character.Humanoid:UnequipTools()
             end
 

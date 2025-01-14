@@ -914,7 +914,7 @@ task.spawn(function()
 
             if rod.values.bite.Value then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait(0.2)
+                task.wait(0.3)
                 Character.Humanoid:UnequipTools()
             end
             if PlayerGui:FindFirstChild("reel") then

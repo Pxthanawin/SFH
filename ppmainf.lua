@@ -153,7 +153,9 @@ local npcRemote = function(remote)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         task.wait(0.1)
-        pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.luck:InvokeServer())
+        pcall(function()
+            workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.luck:InvokeServer()
+        end)
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "power" then
         if money < 11000 then return end
@@ -163,7 +165,9 @@ local npcRemote = function(remote)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
         task.wait(0.1)
-        pcall(workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.power:InvokeServer())
+        pcall(function()
+            workspace.world.npcs:WaitForChild("Merlin", math.huge).Merlin.power:InvokeServer()
+        end)
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "Appraiser" then
         if money < 450 then return end
@@ -173,7 +177,9 @@ local npcRemote = function(remote)
         end
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
         task.wait(0.1)
-        pcall(workspace.world.npcs:WaitForChild("Appraiser", math.huge).appraiser.appraise:InvokeServer())
+        pcall(function()
+            workspace.world.npcs:WaitForChild("Appraiser", math.huge).appraiser.appraise:InvokeServer()
+        end)
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     elseif remote == "Jack Marrow" then
         if money < 250 then return end
@@ -183,7 +189,9 @@ local npcRemote = function(remote)
         end
         HumanoidRootPart.CFrame = CFrame.new(256.994873, 135.709, 58.1402702)
         task.wait(0.1)
-        pcall(workspace.world.npcs:WaitForChild("Jack Marrow", math.huge).treasure.repairmap:InvokeServer())
+        pcall(function()
+            workspace.world.npcs:WaitForChild("Jack Marrow", math.huge).treasure.repairmap:InvokeServer()
+        end)
         --HumanoidRootPart.CFrame = CFrame.new(currentPos)
     end
 end

@@ -917,7 +917,6 @@ task.spawn(function()
                 task.wait(0.4)
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
-                task.wait()
                 Character.Humanoid:UnequipTools()
             end
 

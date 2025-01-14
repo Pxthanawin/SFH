@@ -914,7 +914,9 @@ task.spawn(function()
             end]]
 
             if PlayerGui:FindFirstChild("reel") then
-                task.wait(0.4)
+                repeat
+                    RunService.Heartbeat:Wait()
+                until rod.values.bite.Value
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
                 Character.Humanoid:UnequipTools()

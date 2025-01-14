@@ -25,7 +25,7 @@ local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
 
 local AutoSell = true
-local __sec = 20
+--local __sec = 20
 local __count = 0
 
 local zonefish = Vector3.new(841, -750, 1246)
@@ -491,7 +491,7 @@ local equipRod = function(RodPriority)
                     task.wait(0.25)
                     ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(v)
                     task.wait(0.25)
-                    __sec = true
+                    --__sec = true
                     rodNameCache = PlayerStats.Stats.rod.Value
                 end)
             end
@@ -864,7 +864,7 @@ task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
         if not Torso.Anchored then
-            __sec = 20
+            --__sec = 20
             task.wait(0.5)
             continue
         end
@@ -918,7 +918,7 @@ task.spawn(function()
             end
             if rod.values.bite.Value then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
-                task.wait(0.3)
+                task.wait(0.2)
             end
 
             __count += 1

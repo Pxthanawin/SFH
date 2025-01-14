@@ -375,14 +375,14 @@ local enchantRod = function(RodName, value, value2)
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        local relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
+        local relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
         if not relic then
             if money > 33000 then
                 for i = 1, 3 do
                     npcRemote("power")
                 end
                 task.wait()
-                relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
+                relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
             else
                 return
             end
@@ -415,7 +415,7 @@ local enchantRod = function(RodName, value, value2)
 
         while task.wait(0.25) do
 
-            relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
+            relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
 
             if not relic then
                 break
@@ -789,14 +789,14 @@ local autoRodOfTheDepths = function()
 
         money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
 
-        local relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
+        local relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
         if not relic then
             money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
             if money > 100000 then
                 for i = 1, 5 do
                     npcRemote("power")
                 end
-                relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
+                relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
             else
                 return
             end
@@ -804,7 +804,7 @@ local autoRodOfTheDepths = function()
 
         repeat
             task.wait()
-            relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy")
+            relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
             if not relic then
                 return
             end

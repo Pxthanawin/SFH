@@ -333,6 +333,7 @@ local setFishZone = function(zone)
     HumanoidRootPart.CFrame = CFrame.new(zone)
     task.wait(2)
     Torso.Anchored = true
+    Character.Humanoid:UnequipTools()
 end
 
 local enctRelic = function(Mutation)

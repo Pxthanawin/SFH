@@ -924,7 +924,7 @@ task.spawn(function()
                 ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
             end
 
-            task.wait(0.25)
+            task.wait(0.4)
             Character.Humanoid:UnequipTools()
 
         else

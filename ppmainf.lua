@@ -822,37 +822,44 @@ local autoRodOfTheDepths = function()
 end
 
 local getchest = function()
-    if Torso.Anchored then
-        Torso.Anchored = false
-        task.wait(0.25)
-    end
-    Character.Humanoid:UnequipTools()
-    task.wait()
-    for _, v in ipairs(Backpack:GetChildren()) do
-        if v.Name == "Treasure Map" then
-            Humanoid:EquipTool(v)
-            task.wait(0.25)
-            npcRemote("Jack Marrow")
-
-            for _, vv in ipairs(workspace.world.chests:GetChildren()) do
-                if not vv:FindFirstChild("ProximityPrompt") then
-                    continue
+    for _,v in ipairs(StatsInventory:GetChildren()) do
+        if v.Value == "Treasure Map" then
+            if v:FindFirstChild("Repaired") and not v.Repaired.Value then
+                for _, vv in ipairs(Backpack:GetChildren()) do
+                    if vv.Name == "Treasure Map" then
+                        if tostring(vv.link.Value) == tostring(v.Name) then
+                            if Torso.Anchored then
+                                Torso.Anchored = false
+                                task.wait(0.25)
+                            end
+                            Humanoid:EquipTool(vv)
+                            task.wait(0.25)
+                            npcRemote("Jack Marrow")
+                            task.wait(0.25)
+                            for _, vvv in ipairs(workspace.world.chests:GetChildren()) do
+                                if not vvv:FindFirstChild("ProximityPrompt") then
+                                    continue
+                                end
+                                vvv.CFrame = HumanoidRootPart.CFrame
+                                task.wait()
+                                local pos = vvv.Position
+                                local cameraPosition = pos + Vector3.new(0, 15, 0)
+                                local cameraLookAt = pos
+                                local prompt = vvv.ProximityPrompt
+                                camera.CameraType = Enum.CameraType.Scriptable
+                                camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+                                HumanoidRootPart.CFrame = CFrame.new(pos)
+                                task.wait(0.5)
+                                prompt.HoldDuration = 0
+                                prompt:InputHoldBegin()
+                                prompt:InputHoldEnd()
+                                task.wait(0.25)
+                                camera.CameraType = Enum.CameraType.Custom
+                            end
+                            Humanoid:UnequipTools()
+                        end
+                    end
                 end
-                vv.CFrame = HumanoidRootPart.CFrame
-                task.wait()
-                local pos = vv.Position
-                local cameraPosition = pos + Vector3.new(0, 15, 0)
-                local cameraLookAt = pos
-                local prompt = vv.ProximityPrompt
-                camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
-                HumanoidRootPart.CFrame = CFrame.new(pos)
-                task.wait(0.5)
-                prompt.HoldDuration = 0
-                prompt:InputHoldBegin()
-                prompt:InputHoldEnd()
-                task.wait(0.25)
-                camera.CameraType = Enum.CameraType.Custom
             end
         end
     end
@@ -877,7 +884,7 @@ task.spawn(function()
 
         if not Character:FindFirstChild(rodNameCache) then
             if rod.Parent == Backpack then
-                Character.Humanoid:EquipTool(rod)
+                Humanoid:EquipTool(rod)
                 equipRod(RodPriority)
                 continue
             end
@@ -902,7 +909,7 @@ task.spawn(function()
             --[[
             if __sec >= 24 and rod.values.bite.Value then
                 __sec = 0
-                Character.Humanoid:UnequipTools()
+                Humanoid:UnequipTools()
                 continue
             else
                 __sec += 1
@@ -911,7 +918,7 @@ task.spawn(function()
             if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()
-                Character.Humanoid:UnequipTools()
+                Humanoid:UnequipTools()
             end
 
             __count += 1
@@ -1036,7 +1043,7 @@ elseif config["FarmLevel"] then
             purchaseRod("Destiny Rod", 190000)
         end
 
-        if game.Players.LocalPlayer.leaderstats.Level.Value > 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct and money > 10000 then
+        if (LocalPlayer.leaderstats.Level.Value >= 750 or (LocalPlayer.leaderstats.Level.Value > 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
             gct = false
             iC = 0
             getchest()

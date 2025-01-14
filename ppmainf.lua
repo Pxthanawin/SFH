@@ -487,14 +487,12 @@ local equipRod = function(RodPriority)
     for _, v in ipairs(RodPriority) do
         if StatsRod:FindFirstChild(v) then
             if rodNameCache ~= v then
-                pcall(function()
-                    Character.Humanoid:UnequipTools()
-                    task.wait(0.25)
-                    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(v)
-                    task.wait(0.25)
-                    --__sec = true
-                    rodNameCache = PlayerStats.Stats.rod.Value
-                end)
+                Character.Humanoid:UnequipTools()
+                task.wait(0.25)
+                ReplicatedStorage.packages.Net["RE/Rod/Equip"]:FireServer(v)
+                task.wait(0.25)
+                --__sec = true
+                rodNameCache = PlayerStats.Stats.rod.Value
             end
             return
         end
@@ -914,7 +912,7 @@ task.spawn(function()
             end]]
 
             if PlayerGui:FindFirstChild("reel") then
-                while not rod.values.bite.Value do
+                while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
                     RunService.Heartbeat:Wait()
                 end
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
@@ -926,7 +924,7 @@ task.spawn(function()
 
             if AutoSell and __count >= 30 then
                 __count = 0
-                ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
+                ReplicatedStorage.events.SellAll:InvokeServer()
             end
 
         else

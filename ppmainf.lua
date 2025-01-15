@@ -65,7 +65,8 @@ end
 local zonelist = {
     ["The Depths"] = Vector3.new(841, -750, 1246),
     ["Vertigo"] = Vector3.new(-121, -743, 1234),
-    ["Ancient Isle"] = Vector3.new(-2695, 157, 1752),
+    ["Forsaken Shores"] = Vector3.new(-2695, 157, 1752),
+    ["Ancient Isle"] = Vector3.new(5833, 124, 401),
     ["Sunstone Island"] = Vector3.new(-926.718994, 223.700012, -998.751404),
     ["Aurora Totem"] = Vector3.new(-1810.5636, -136.927948, -3282.44849),
     ["Rod Of The Depths"] = Vector3.new(1704.9292, -902.527039, 1450.42468),
@@ -1066,8 +1067,10 @@ elseif config["FarmLevel"] then
         if farmc then
             farmc = false
             iF = 0
-            if StatsRod:FindFirstChild("Rod Of The Depths") then
+            if LocalPlayer.leaderstats.Level.Value >= 750 then
                 setFishZone(zonelist["Ancient Isle"])
+            elseif StatsRod:FindFirstChild("Rod Of The Depths") then
+                setFishZone(zonelist["Forsaken Shores"])
                 camera.CameraType = Enum.CameraType.Scriptable
                 camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
             else

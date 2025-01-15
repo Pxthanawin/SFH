@@ -376,7 +376,7 @@ local enchantRod = function(RodName, value, value2)
             return
         end
 
-        if checkDayNight() == "Day" then return end
+        if checkDayNight() ~= "Night" then return end
 
         if not StatsRod:FindFirstChild(RodName) then
             return
@@ -398,8 +398,10 @@ local enchantRod = function(RodName, value, value2)
 
         if PlayerStats.Stats.rod.Value ~= RodName then
             if StatsRod:FindFirstChild(RodName) then
-                LocalPlayer.Character.Humanoid:UnequipTools()
-                ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Rod/Equip"):FireServer(RodName)
+                Character.Humanoid:UnequipTools()
+                task.wait(0.25)
+                ReplicatedStorage.packages.Net["RE/Rod/Equip"]:FireServer(RodName)
+                task.wait(0.25)
             end
         end
 
@@ -431,6 +433,7 @@ local enchantRod = function(RodName, value, value2)
 
             HumanoidRootPart.CFrame = CFrame.new(pos)
             Humanoid:EquipTool(relic.equip)
+            task.wait(0.1)
 
             local Highlight = interactable:WaitForChild("Highlight", 60)
             if StatsRod[RodName].Value == value or StatsRod[RodName].Value == value2 then
@@ -469,7 +472,7 @@ local purchaseRod = function(RodName, Price)
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     if StatsRod:FindFirstChild(RodName) then
         return
-    elseif Price <= money then 
+    elseif Price <= money then
         ReplicatedStorage.events.purchase:FireServer(RodName, "Rod", 1)
         return
     else

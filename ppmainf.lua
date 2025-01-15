@@ -445,7 +445,7 @@ local enchantRod = function(RodName, value, value2)
                 ProximityPrompt.HoldDuration = 0
                 ProximityPrompt:InputHoldBegin()
                 ProximityPrompt:InputHoldEnd()
-                local button = PlayerGui.over:FindFirstChild("prompt") and PlayerGui.over.prompt.confirm
+                local button = PlayerGui.over:WaitForChild("prompt", 10) and PlayerGui.over.prompt.confirm
                 if button then
                     GuiService.SelectedObject = button
                     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)

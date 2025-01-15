@@ -904,8 +904,8 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             until PlayerGui:FindFirstChild("shakeui") or Backpack:FindFirstChild(rodNameCache) or not rod:FindFirstChild("bobber")
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
-            while PlayerGui:FindFirstChild("shakeui") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
-                local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
+            while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
+                local button = PlayerGui:FindFirstChild("shakeui") and shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)
                     VirtualUser:Button1Down(Vector2.new(1, 1))
@@ -913,6 +913,7 @@ task.spawn(function()
                 end
                 RunService.Heartbeat:Wait()
             end
+
             --[[
             if __sec >= 24 and rod.values.bite.Value then
                 __sec = 0

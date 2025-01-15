@@ -126,23 +126,6 @@ local crabcframe = {
     CFrame.new(-82.1949234, -736.791931, 1214.10071, -0.629336298, 2.05353174e-08, 0.777133107, 6.62660637e-09, 1, -2.10581099e-08, -0.777133107, -8.10287748e-09, -0.629336298)
 }
 
-if PlayerGui.hud.safezone:FindFirstChild("reward") then
-    GuiService.SelectedObject = PlayerGui.hud.safezone.reward.Claim
-    task.wait(0.1)
-    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-    task.wait(0.1)
-    GuiService.SelectedObject = nil
-end
-if PlayerGui:FindFirstChild("DateReward") and PlayerGui.DateReward.datereward.Visible then
-    GuiService.SelectedObject = PlayerGui.DateReward.datereward.Visible
-    task.wait(0.1)
-    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-    task.wait(0.1)
-    GuiService.SelectedObject = nil
-end
-
 local npcRemote = function(remote)
     local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
     --local currentPos = HumanoidRootPart.Position

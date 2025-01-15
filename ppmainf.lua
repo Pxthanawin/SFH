@@ -890,7 +890,7 @@ local getchest = function()
 end
 
 local RodOfTheForgottenFang = function()
-    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 330000 and LocalPlayer.leaderstats.Level.Value < 749 then
+    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 330000 or LocalPlayer.leaderstats.Level.Value < 749 then
         return
     end
     AutoSell = false

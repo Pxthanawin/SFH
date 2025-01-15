@@ -1081,7 +1081,7 @@ elseif config["FarmLevel"] then
         end
 
         if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Abyssal" then
-            enctRelic("Rod Of The Forgotten Fang", "Abyssal")
+            enchantRod("Rod Of The Forgotten Fang", "Abyssal")
         elseif StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
         elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Abyssal") and not StatsRod:FindFirstChild("Rod Of The Depths") then

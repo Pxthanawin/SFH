@@ -906,7 +906,7 @@ local RodOfTheForgottenFang = function()
             iii += v.Stack.Value
         end
     end
-    if i >= 1 and ii >= 2 and iii >= 2 then
+    if i >= 1 and ii >= 2 and iii >= 2 and extractNumber(LocalPlayer.leaderstats["C$"].Value) >= 330000 and LocalPlayer.leaderstats.Level.Value >= 750 then
         HumanoidRootPart.CFrame = CFrame.new(-3160, -746, 1684)
         task.wait(0.5)
         ReplicatedStorage.events.CanCraft:InvokeServer("Rod Of The Forgotten Fang")

@@ -1073,10 +1073,8 @@ elseif config["FarmLevel"] then
         if farmc then
             farmc = false
             iF = 0
-            if LocalPlayer.leaderstats.Level.Value >= 750 then
+            if StatsRod:FindFirstChild("Rod Of The Depths") then
                 setFishZone(zonelist["Ancient Isle"])
-            elseif StatsRod:FindFirstChild("Rod Of The Depths") then
-                setFishZone(zonelist["Forsaken Shores"])
                 camera.CameraType = Enum.CameraType.Scriptable
                 camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
             else

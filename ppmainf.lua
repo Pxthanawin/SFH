@@ -907,8 +907,10 @@ local RodOfTheForgottenFang = function()
         end
     end
     if i >= 1 and ii >= 2 and iii >= 2 then
-        ReplicatedStorage.events.CanCraft:InvokeServer("Rod Of The Forgotten Fang")
+        HumanoidRootPart.CFrame = CFrame.new(-3160, -746, 1684)
         task.wait(0.5)
+        ReplicatedStorage.events.CanCraft:InvokeServer("Rod Of The Forgotten Fang")
+        task.wait(0.1)
         if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
             AutoSell = true
         end

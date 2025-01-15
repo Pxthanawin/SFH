@@ -913,7 +913,7 @@ task.spawn(function()
                 end
                 RunService.Heartbeat:Wait()
             end
-            while not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
+            while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
                 RunService.Heartbeat:Wait()
             end
 

@@ -512,9 +512,10 @@ local equipRod = function(RodPriority)
 end
 
 local RodPriority = {
-    [1] = "Rod Of The Depths",
-    [2] = "Aurora Rod",
-    [3] = "Steady Rod"
+    [1] = "Rod Of The Forgotten Fang",
+    [2] = "Rod Of The Depths",
+    [3] = "Aurora Rod",
+    [4] = "Steady Rod"
 }
 
 local checkVertigoFish = function()
@@ -881,6 +882,34 @@ local getchest = function()
     end
 end
 
+local RodOfTheForgottenFang = function()
+    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 300000 and LocalPlayer.leaderstats.Level.Value < 749 then
+        return
+    end
+    AutoSell = false
+    local i = 0
+    local ii = 0
+    local iii = 0
+    for _, v in ipairs(StatsInventory:GetChildren()) do
+        if v.Value == "Lunar Thread" then
+            i += v.Stack.Value
+        elseif v.Value == "Meg's Fang" then
+            ii += v.Stack.Value
+        elseif v.Value == "Meg's Spine" then
+            iii += v.Stack.Value
+        end
+    end
+    if i >= 1 and ii >= 2 and iii >= 2 then
+        ReplicatedStorage.events.CanCraft:InvokeServer("Rod Of The Forgotten Fang")
+        task.wait(0.5)
+        if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+            AutoSell = true
+        end
+    else
+        return
+    end
+end
+
 task.spawn(function()
     local rod
     while RunService.Heartbeat:Wait() do
@@ -980,8 +1009,14 @@ elseif config["FarmLevel"] then
             gct = true
             iC = 0
         end
-
-        if StatsRod:FindFirstChild("Rod Of The Depths") then
+        if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+            if not checkLuck() then
+                for i = 1, 6 do
+                    npcRemote("luck")
+                end
+                task.wait(0.25)
+            end
+        elseif StatsRod:FindFirstChild("Rod Of The Depths") then
             if not checkLuck() then
                 for i = 1, 6 do
                     npcRemote("luck")
@@ -998,12 +1033,12 @@ elseif config["FarmLevel"] then
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                     task.wait(math.random(1, 20) / 10)
-                elseif LocalPlayer.leaderstats.Level.Value < 750 then
+                elseif LocalPlayer.leaderstats.Level.Value < 749 then
                     setInterac("Sundial Totem", 3)
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                     task.wait(math.random(1, 20) / 10)
                 end
-                if Backpack:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" and LocalPlayer.leaderstats.Level.Value < 750 then
+                if Backpack:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1
                     VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
@@ -1020,12 +1055,12 @@ elseif config["FarmLevel"] then
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                     task.wait()
-                elseif LocalPlayer.leaderstats.Level.Value < 750 then
+                elseif LocalPlayer.leaderstats.Level.Value < 749 then
                     setInterac("Aurora Totem")
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                     task.wait(math.random(1, 20) / 10)
                 end
-                if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() and LocalPlayer.leaderstats.Level.Value < 750 then
+                if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1
                     VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
@@ -1045,16 +1080,19 @@ elseif config["FarmLevel"] then
             end
         end
 
-        if StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
+        if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Abyssal" then
+            enctRelic("Rod Of The Forgotten Fang", "Abyssal")
+        elseif StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
             enchantRod("Rod Of The Depths", "Clever")
-        elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Divine") and not StatsRod:FindFirstChild("Rod Of The Depths") then
-            enchantRod("Aurora Rod", "Mutated", "Divine")
+        elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Abyssal") and not StatsRod:FindFirstChild("Rod Of The Depths") then
+            enchantRod("Aurora Rod", "Mutated", "Abyssal")
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
         if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
-            task.wait(0.5)
             autoRodOfTheDepths()
+        elseif LocalPlayer.leaderstats.Level.Value >= 749 then
+            RodOfTheForgottenFang()
         end
 
         if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value > 400) then
@@ -1064,7 +1102,7 @@ elseif config["FarmLevel"] then
             purchaseRod("Destiny Rod", 190000)
         end
 
-        if (LocalPlayer.leaderstats.Level.Value >= 750 or (LocalPlayer.leaderstats.Level.Value > 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
+        if (LocalPlayer.leaderstats.Level.Value >= 749 or (LocalPlayer.leaderstats.Level.Value > 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
             gct = false
             iC = 0
             getchest()
@@ -1073,7 +1111,11 @@ elseif config["FarmLevel"] then
         if farmc then
             farmc = false
             iF = 0
-            if StatsRod:FindFirstChild("Rod Of The Depths") then
+            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+                setFishZone(zonelist["The Depths"])
+                camera.CameraType = Enum.CameraType.Scriptable
+                camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+            elseif StatsRod:FindFirstChild("Rod Of The Depths") then
                 setFishZone(zonelist["Ancient Isle"])
                 camera.CameraType = Enum.CameraType.Scriptable
                 camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)

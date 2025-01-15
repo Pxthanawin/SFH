@@ -40,7 +40,7 @@ end
 --
 
 repeat task.wait() until game:IsLoaded()
-setfpscap(15)
+--setfpscap(15)
 
 -- Variable zone
 

@@ -414,6 +414,7 @@ local enchantRod = function(RodName, value, value2)
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(pos)
+        Character.Humanoid:UnequipTools()
         task.wait(0.25)
 
         if not relic then

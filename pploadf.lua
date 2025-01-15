@@ -40,7 +40,7 @@ end
 --
 
 repeat task.wait() until game:IsLoaded()
-setfpscap(30)
+setfpscap(15)
 
 -- Variable zone
 
@@ -492,6 +492,19 @@ for i, v in pairs(npclist) do
 
     end)
 
+end
+
+local codelists = {
+	"GOLDENTIDE",
+    "NewYear",
+    "FISCHMASDAY",
+    "NorthernExpedition",
+    "MERRYFISCHMAS"
+}
+for _, v in ipairs(codelists) do
+    pcall(function()
+        ReplicatedStorage.events.runcode:FireServer(v)
+    end)
 end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxthanawin/SFH/main/ppmainf.lua"))()

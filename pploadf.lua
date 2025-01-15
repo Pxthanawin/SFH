@@ -159,7 +159,7 @@ repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
 
-getgemv().AssetsLoaded = true
+getgenv().AssetsLoaded = true
 
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):FireServer(false)
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):Destroy()

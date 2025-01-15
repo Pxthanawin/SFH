@@ -114,8 +114,6 @@ end)
 local playerName = LocalPlayer.Name
 local userId = LocalPlayer.UserId
 
-local AssetsLoaded
-
 -- function
 
 local function extractNumber(String)
@@ -161,7 +159,7 @@ repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
 
-AssetsLoaded = true
+getgemv().AssetsLoaded = true
 
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):FireServer(false)
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):Destroy()

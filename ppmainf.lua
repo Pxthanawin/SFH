@@ -890,7 +890,7 @@ local getchest = function()
 end
 
 local RodOfTheForgottenFang = function()
-    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 330000 or LocalPlayer.leaderstats.Level.Value < 749 then
+    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 360000 or LocalPlayer.leaderstats.Level.Value < 749 then
         return
     end
     AutoSell = false
@@ -907,8 +907,13 @@ local RodOfTheForgottenFang = function()
         end
     end
     if i >= 1 and ii >= 2 and iii >= 2 and extractNumber(LocalPlayer.leaderstats["C$"].Value) >= 330000 and LocalPlayer.leaderstats.Level.Value >= 750 then
+        if Torso.Anchored then
+            Torso.Anchored = false
+            task.wait(0.25)
+        end
         HumanoidRootPart.CFrame = CFrame.new(-3160, -746, 1684)
         task.wait(0.5)
+        HumanoidRootPart.CFrame = CFrame.new(-3160, -746, 1684)
         ReplicatedStorage.events.CanCraft:InvokeServer("Rod Of The Forgotten Fang")
         task.wait(0.1)
         if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
@@ -1098,7 +1103,7 @@ elseif config["FarmLevel"] then
         end
 
         local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        if (not StatsRod:FindFirstChild("Rod Of The Depths")) and money > 750000 then
+        if not StatsRod:FindFirstChild("Rod Of The Depths") and money > 750000 then
             autoRodOfTheDepths()
         elseif LocalPlayer.leaderstats.Level.Value >= 749 then
             RodOfTheForgottenFang()

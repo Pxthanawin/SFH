@@ -66,7 +66,7 @@ local zonelist = {
     ["The Depths"] = Vector3.new(841, -750, 1246),
     ["Vertigo"] = Vector3.new(-121, -743, 1234),
     ["Forsaken Shores"] = Vector3.new(-2695, 157, 1752),
-    ["Ancient Isle"] = Vector3.new(5833, 124, 401),
+    ["Ancient Isle"] = Vector3.new(5833, 123, 401),
     ["Sunstone Island"] = Vector3.new(-926.718994, 223.700012, -998.751404),
     ["Aurora Totem"] = Vector3.new(-1810.5636, -136.927948, -3282.44849),
     ["Rod Of The Depths"] = Vector3.new(1704.9292, -902.527039, 1450.42468),
@@ -711,6 +711,11 @@ local autoRodOfTheDepths = function()
 
     end
 
+    pcall(function()
+        ReplicatedStorage.packages.Net["RE/Backpack/Favourite"]:FireServer(Backpack:FindFirstChild("The Depths Key"))
+    end)
+    AutoSell = true
+
     if checkVertigoFish() == "Isonade" then
 
         repeat
@@ -747,16 +752,15 @@ local autoRodOfTheDepths = function()
 
     if not PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate") then
         while not Backpack:FindFirstChild("The Depths Key") do
+            AutoSell = false
             setFishZone(zonelist["Vertigo"])
             task.wait(1)
         end
         task.wait(1)
         npcDepthsDoor()
         task.wait(0.5)
+        AutoSell = true
     end
-
-    AutoSell = true
-    ReplicatedStorage:WaitForChild("events"):WaitForChild("SellAll"):InvokeServer()
 
     local setAbysHex = function(purchase)
 
@@ -993,12 +997,13 @@ elseif config["FarmLevel"] then
                         task.wait(0.25)
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                else
+                    task.wait(math.random(1, 20) / 10)
+                elseif LocalPlayer.leaderstats.Level.Value < 750 then
                     setInterac("Sundial Totem", 3)
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
+                    task.wait(math.random(1, 20) / 10)
                 end
-                task.wait(math.random(0, 30) / 10)
-                if checkDayNight() ~= "Night" then
+                if Backpack:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" and LocalPlayer.leaderstats.Level.Value < 750 then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1
                     VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
@@ -1014,12 +1019,13 @@ elseif config["FarmLevel"] then
                         task.wait(0.25)
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                else
+                    task.wait()
+                elseif LocalPlayer.leaderstats.Level.Value < 750 then
                     setInterac("Aurora Totem")
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+                    task.wait(math.random(1, 20) / 10)
                 end
-                task.wait(math.random(0, 20) / 10)
-                if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
+                if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() and LocalPlayer.leaderstats.Level.Value < 750 then
                     local viewportSize = Workspace.CurrentCamera.ViewportSize
                     local x, y = 0, viewportSize.Y - 1
                     VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)

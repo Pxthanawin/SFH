@@ -1098,14 +1098,14 @@ elseif config["FarmLevel"] then
             RodOfTheForgottenFang()
         end
 
-        if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value > 400) then
+        if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 500) then
             purchaseRod("Mythical Rod", 110000)
             purchaseRod("Trident Rod", 150000)
             purchaseRod("Kings Rod", 120000)
             purchaseRod("Destiny Rod", 190000)
         end
 
-        if (LocalPlayer.leaderstats.Level.Value >= 749 or (LocalPlayer.leaderstats.Level.Value > 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
+        if (LocalPlayer.leaderstats.Level.Value >= 749 or (LocalPlayer.leaderstats.Level.Value >= 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
             gct = false
             iC = 0
             getchest()

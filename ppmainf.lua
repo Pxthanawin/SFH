@@ -320,7 +320,7 @@ end]]
 local setFishZone = function(zone)
     task.wait(0.25)
     if Torso.Anchored then
-        if (HumanoidRootPart.Position - zone).Magnitude < 10 then
+        if (HumanoidRootPart.Position - zone).Magnitude < 4 then
             return
         else
             Torso.Anchored = false
@@ -1064,7 +1064,8 @@ elseif config["FarmLevel"] then
                         VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
                         task.wait(1)
                     end
-                elseif not checkAurora() and aurorat then
+                end
+                if checkDayNight() == "Night" and not checkAurora() and aurorat then
                     aurorat = false
                     iA = 0
                     if Backpack:FindFirstChild("Aurora Totem") then

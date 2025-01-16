@@ -912,6 +912,11 @@ task.spawn(function()
     local rod
     while RunService.Heartbeat:Wait() do
 
+        if PlayerGui:FindFirstChild("reel") then
+            PlayerGui.reel:Destroy()
+            Humanoid:UnequipTools()
+        end
+
         if not Torso.Anchored then
             --__sec = 20
             task.wait(0.5)

@@ -403,7 +403,7 @@ end
 for _, v in pairs(workspace.Terrain:GetChildren()) do
     v:Destroy()
 end
---[[
+--
 for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     if v:IsA("Animation") then
         v:Destroy()
@@ -411,7 +411,7 @@ for _, v in pairs(ReplicatedStorage.resources.animations:GetChildren()) do
     for __, vv in pairs(v:GetDescendants()) do
         vv:Destroy()
     end
-end]]
+end
 
 
 local settings = {

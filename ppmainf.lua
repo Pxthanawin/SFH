@@ -133,6 +133,7 @@ local npcRemote = function(remote)
         if money < 5000 then return end
         if Torso.Anchored then
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
@@ -145,6 +146,7 @@ local npcRemote = function(remote)
         if money < 11000 then return end
         if Torso.Anchored then
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
@@ -157,6 +159,7 @@ local npcRemote = function(remote)
         if money < 450 then return end
         if Torso.Anchored then
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(453.076996, 150.501022, 210.481934)
@@ -169,6 +172,7 @@ local npcRemote = function(remote)
         if money < 250 then return end
         if Torso.Anchored then
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(256.994873, 135.709, 58.1402702)
@@ -250,6 +254,7 @@ local setInterac = function(interacname, quantity)
     end
     if Torso.Anchored then
         Torso.Anchored = false
+        Character.Humanoid:UnequipTools()
         task.wait(0.25)
     end
 
@@ -319,6 +324,7 @@ local setFishZone = function(zone)
             return
         else
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
     end
@@ -394,6 +400,7 @@ local enchantRod = function(RodName, value, value2)
         local pos = Vector3.new(1311, -802.427063, -83)
         if Torso.Anchored then
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(pos)
@@ -535,6 +542,7 @@ local npcDepthsDoor = function()
 
     if Torso.Anchored then
         Torso.Anchored = false
+        Character.Humanoid:UnequipTools()
         task.wait(0.25)
     end
 
@@ -580,6 +588,7 @@ local crabCage = function()
     Character.Humanoid:UnequipTools()
     if Torso.Anchored then
         Torso.Anchored = false
+        Character.Humanoid:UnequipTools()
         task.wait(0.25)
     end
     if not Backpack:FindFirstChild("Crab Cage") then
@@ -650,6 +659,7 @@ local autoRodOfTheDepths = function()
                 if v.Name == game.Players.LocalPlayer.Name and v:FindFirstChild("Prompt") and v.Prompt.Enabled then
                     if Torso.Anchored then
                         Torso.Anchored = false
+                        Character.Humanoid:UnequipTools()
                         task.wait(0.25)
                     end
                     local pos = v.handle.Position
@@ -683,6 +693,7 @@ local autoRodOfTheDepths = function()
             if v.Name == game.Players.LocalPlayer.Name and v:FindFirstChild("Prompt") and v.Prompt.Enabled then
                 if Torso.Anchored then
                     Torso.Anchored = false
+                    Character.Humanoid:UnequipTools()
                     task.wait(0.25)
                 end
                 local pos = v.handle.Position
@@ -762,6 +773,7 @@ local autoRodOfTheDepths = function()
             if purchase then
                 if Torso.Anchored then
                     Torso.Anchored = false
+                    Character.Humanoid:UnequipTools()
                     task.wait(0.25)
                 end
                 HumanoidRootPart.CFrame = CFrame.new(Vector3.new(841, -750, 1246))
@@ -838,6 +850,7 @@ local getchest = function()
                         if tostring(vv.link.Value) == tostring(v.Name) then
                             if Torso.Anchored then
                                 Torso.Anchored = false
+                                Character.Humanoid:UnequipTools()
                                 task.wait(0.25)
                             end
                             Humanoid:EquipTool(vv)
@@ -893,6 +906,7 @@ local RodOfTheForgottenFang = function()
     if i >= 1 and ii >= 2 and iii >= 2 and extractNumber(LocalPlayer.leaderstats["C$"].Value) >= 330000 and LocalPlayer.leaderstats.Level.Value >= 750 then
         if Torso.Anchored then
             Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
         HumanoidRootPart.CFrame = CFrame.new(-3160, -746, 1684)
@@ -1032,6 +1046,7 @@ elseif config["FarmLevel"] then
                 if Backpack:FindFirstChild("Sundial Totem") then
                     if Torso.Anchored then
                         Torso.Anchored = false
+                        Character.Humanoid:UnequipTools()
                         task.wait(0.25)
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
@@ -1054,6 +1069,7 @@ elseif config["FarmLevel"] then
                 if Backpack:FindFirstChild("Aurora Totem") then
                     if Torso.Anchored then
                         Torso.Anchored = false
+                        Character.Humanoid:UnequipTools()
                         task.wait(0.25)
                     end
                     Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))

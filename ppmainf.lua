@@ -1026,123 +1026,126 @@ elseif config["FarmLevel"] then
             gct = true
             iC = 0
         end
-        if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
-            if not checkLuck() then
-                for i = 1, 6 do
-                    npcRemote("luck")
-                end
-            end
-        elseif StatsRod:FindFirstChild("Rod Of The Depths") then
-            if not checkLuck() then
-                for i = 1, 6 do
-                    npcRemote("luck")
-                end
-            end
-            if checkDayNight() ~= "Night" and sundialt then
-                sundialt = false
-                iS = 0
-                if Backpack:FindFirstChild("Sundial Totem") then
-                    if Torso.Anchored then
-                        Torso.Anchored = false
-                        Character.Humanoid:UnequipTools()
-                        task.wait(0.5)
+
+        pcall(function()
+            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+                if not checkLuck() then
+                    for i = 1, 6 do
+                        npcRemote("luck")
                     end
-                    Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                    task.wait(math.random(1, 20) / 10)
-                elseif LocalPlayer.leaderstats.Level.Value < 749 then
-                    setInterac("Sundial Totem", 3)
-                    Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                    task.wait(math.random(1, 20) / 10)
                 end
-                if Backpack:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" then
-                    local viewportSize = Workspace.CurrentCamera.ViewportSize
-                    local x, y = 0, viewportSize.Y - 1
-                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
-                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-                    task.wait(1)
-                end
-            elseif not checkAurora() and aurorat then
-                aurorat = false
-                iA = 0
-                if Backpack:FindFirstChild("Aurora Totem") then
-                    if Torso.Anchored then
-                        Torso.Anchored = false
-                        Character.Humanoid:UnequipTools()
-                        task.wait(0.5)
-                    end
-                    Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                    task.wait()
-                elseif LocalPlayer.leaderstats.Level.Value < 749 then
-                    setInterac("Aurora Totem")
-                    Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                    task.wait(math.random(1, 20) / 10)
-                end
-                if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
-                    local viewportSize = Workspace.CurrentCamera.ViewportSize
-                    local x, y = 0, viewportSize.Y - 1
-                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
-                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-                    task.wait(1)
-                end
-            end
-        elseif StatsRod:FindFirstChild("Aurora Rod") then
-            if not checkLuck() then
-                for i = 1, 3 do
-                    npcRemote("luck")
-                end
-            end
-        elseif StatsRod:FindFirstChild("Steady Rod") then
-            if not checkLuck() then
-                npcRemote("luck")
-            end
-        end
-
-        if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Abyssal" then
-            enchantRod("Rod Of The Forgotten Fang", "Abyssal")
-        elseif StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
-            enchantRod("Rod Of The Depths", "Clever")
-        elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Abyssal") and not StatsRod:FindFirstChild("Rod Of The Depths") then
-            enchantRod("Aurora Rod", "Mutated", "Abyssal")
-        end
-
-        local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
-        if not StatsRod:FindFirstChild("Rod Of The Depths") and money > 750000 then
-            autoRodOfTheDepths()
-        elseif LocalPlayer.leaderstats.Level.Value >= 749 then
-            RodOfTheForgottenFang()
-        end
-
-        if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 500) then
-            purchaseRod("Mythical Rod", 110000)
-            purchaseRod("Trident Rod", 150000)
-            purchaseRod("Kings Rod", 120000)
-            purchaseRod("Destiny Rod", 190000)
-        end
-
-        if (LocalPlayer.leaderstats.Level.Value >= 749 or (LocalPlayer.leaderstats.Level.Value >= 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
-            gct = false
-            iC = 0
-            getchest()
-        end
-
-        if farmc then
-            farmc = false
-            iF = 0
-            if LocalPlayer.leaderstats.Level.Value >= 749 then --StatsRod:FindFirstChild("Rod Of The Forgotten Fang")
-                setFishZone(zonelist["Ancient Isle"])
-                camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
             elseif StatsRod:FindFirstChild("Rod Of The Depths") then
-                --setFishZone(zonelist["Ancient Isle"])
-                setFishZone(zonelist["Forsaken Shores"])
-                camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
-            else
-                setFishZone(zonelist["The Depths"])
-                camera.CameraType = Enum.CameraType.Scriptable
-                camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+                if not checkLuck() then
+                    for i = 1, 6 do
+                        npcRemote("luck")
+                    end
+                end
+                if checkDayNight() ~= "Night" and sundialt then
+                    sundialt = false
+                    iS = 0
+                    if Backpack:FindFirstChild("Sundial Totem") then
+                        if Torso.Anchored then
+                            Torso.Anchored = false
+                            Character.Humanoid:UnequipTools()
+                            task.wait(0.5)
+                        end
+                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
+                        task.wait(math.random(1, 20) / 10)
+                    elseif LocalPlayer.leaderstats.Level.Value < 749 then
+                        setInterac("Sundial Totem", 3)
+                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
+                        task.wait(math.random(1, 20) / 10)
+                    end
+                    if Backpack:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" then
+                        local viewportSize = Workspace.CurrentCamera.ViewportSize
+                        local x, y = 0, viewportSize.Y - 1
+                        VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                        VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                        task.wait(1)
+                    end
+                elseif not checkAurora() and aurorat then
+                    aurorat = false
+                    iA = 0
+                    if Backpack:FindFirstChild("Aurora Totem") then
+                        if Torso.Anchored then
+                            Torso.Anchored = false
+                            Character.Humanoid:UnequipTools()
+                            task.wait(0.5)
+                        end
+                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+                        task.wait()
+                    elseif LocalPlayer.leaderstats.Level.Value < 749 then
+                        setInterac("Aurora Totem")
+                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+                        task.wait(math.random(1, 20) / 10)
+                    end
+                    if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
+                        local viewportSize = Workspace.CurrentCamera.ViewportSize
+                        local x, y = 0, viewportSize.Y - 1
+                        VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                        VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+                        task.wait(1)
+                    end
+                end
+            elseif StatsRod:FindFirstChild("Aurora Rod") then
+                if not checkLuck() then
+                    for i = 1, 3 do
+                        npcRemote("luck")
+                    end
+                end
+            elseif StatsRod:FindFirstChild("Steady Rod") then
+                if not checkLuck() then
+                    npcRemote("luck")
+                end
             end
-        end
+
+            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Abyssal" then
+                enchantRod("Rod Of The Forgotten Fang", "Abyssal")
+            elseif StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
+                enchantRod("Rod Of The Depths", "Clever")
+            elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Abyssal") and not StatsRod:FindFirstChild("Rod Of The Depths") then
+                enchantRod("Aurora Rod", "Mutated", "Abyssal")
+            end
+
+            local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
+            if not StatsRod:FindFirstChild("Rod Of The Depths") and money > 750000 then
+                autoRodOfTheDepths()
+            elseif LocalPlayer.leaderstats.Level.Value >= 749 then
+                RodOfTheForgottenFang()
+            end
+
+            if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 500) then
+                purchaseRod("Mythical Rod", 110000)
+                purchaseRod("Trident Rod", 150000)
+                purchaseRod("Kings Rod", 120000)
+                purchaseRod("Destiny Rod", 190000)
+            end
+
+            if (LocalPlayer.leaderstats.Level.Value >= 749 or (LocalPlayer.leaderstats.Level.Value >= 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
+                gct = false
+                iC = 0
+                getchest()
+            end
+
+            if farmc then
+                farmc = false
+                iF = 0
+                if LocalPlayer.leaderstats.Level.Value >= 749 then --StatsRod:FindFirstChild("Rod Of The Forgotten Fang")
+                    setFishZone(zonelist["Ancient Isle"])
+                    camera.CameraType = Enum.CameraType.Scriptable
+                    camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+                elseif StatsRod:FindFirstChild("Rod Of The Depths") then
+                    --setFishZone(zonelist["Ancient Isle"])
+                    setFishZone(zonelist["Forsaken Shores"])
+                    camera.CameraType = Enum.CameraType.Scriptable
+                    camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+                else
+                    setFishZone(zonelist["The Depths"])
+                    camera.CameraType = Enum.CameraType.Scriptable
+                    camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+                end
+            end
+        end)
 
         iS += 1
         iA += 1

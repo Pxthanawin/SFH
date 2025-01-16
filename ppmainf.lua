@@ -1048,16 +1048,15 @@ elseif config["FarmLevel"] then
                         if Torso.Anchored then
                             Torso.Anchored = false
                             Character.Humanoid:UnequipTools()
-                            task.wait(0.5)
+                            task.wait(0.25)
                         end
-                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                        task.wait(math.random(1, 20) / 10)
+                        Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                     elseif LocalPlayer.leaderstats.Level.Value < 749 then
                         setInterac("Sundial Totem", 3)
-                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                        task.wait(math.random(1, 20) / 10)
+                        Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                     end
-                    if Backpack:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" then
+                    task.wait(math.random(1, 20) / 10)
+                    if Character:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" then
                         local viewportSize = Workspace.CurrentCamera.ViewportSize
                         local x, y = 0, viewportSize.Y - 1
                         VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
@@ -1072,16 +1071,16 @@ elseif config["FarmLevel"] then
                         if Torso.Anchored then
                             Torso.Anchored = false
                             Character.Humanoid:UnequipTools()
-                            task.wait(0.5)
+                            task.wait(0.25)
                         end
                         Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                        task.wait()
                     elseif LocalPlayer.leaderstats.Level.Value < 749 then
                         setInterac("Aurora Totem")
-                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                        task.wait(math.random(1, 20) / 10)
+                        Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+                        task.wait(1)
                     end
-                    if Backpack:FindFirstChild("Aurora Totem") and not checkAurora() then
+                    task.wait(math.random(1, 20) / 10)
+                    if Character:FindFirstChild("Aurora Totem") and not checkAurora() then
                         local viewportSize = Workspace.CurrentCamera.ViewportSize
                         local x, y = 0, viewportSize.Y - 1
                         VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)

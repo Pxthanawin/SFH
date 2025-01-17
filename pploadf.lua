@@ -295,8 +295,13 @@ task.spawn(function()
         end
         if countM % 20 == 0 then
             LocalPlayer.Character.Humanoid:UnequipTools()
+            task.wait()
+            local viewportSize = Workspace.CurrentCamera.ViewportSize
+            local x, y = 0, viewportSize.Y - 1
+            VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+            VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
         end
-        if countM >= 150 then
+        if countM >= 120 then
             if rejoin then
                 print(LocalPlayer.Name, "Rejoin")
                 local tpservice = game:GetService("TeleportService")

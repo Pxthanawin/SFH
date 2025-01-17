@@ -1030,7 +1030,7 @@ task.spawn(function()
                 ReplicatedStorage.events.SellAll:InvokeServer()
             end
 
-        else
+        elseif rod:FindFirstChild("events") then
             rod.events.cast:FireServer(100)
         end
 

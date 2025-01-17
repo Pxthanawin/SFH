@@ -329,7 +329,7 @@ local setFishZone = function(zone)
         end
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(1)
+    task.wait(2)
     HumanoidRootPart.CFrame = CFrame.new(zone)
     task.wait(0.25)
     Torso.Anchored = true
@@ -1070,10 +1070,10 @@ elseif config["FarmLevel"] then
                     if Backpack:FindFirstChild("Aurora Totem") then
                         if Torso.Anchored then
                             Torso.Anchored = false
-                            Character.Humanoid:UnequipTools()
+                            Humanoid:UnequipTools()
                             task.wait(0.25)
                         end
-                        Character.Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+                        Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                     elseif LocalPlayer.leaderstats.Level.Value < 749 then
                         setInterac("Aurora Totem")
                         Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))

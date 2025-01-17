@@ -35,8 +35,8 @@ local aurorat = true
 local farmc = true
 local gct = true
 
-local iS = 1000
-local iA = 1000
+local iS = 50
+local iA = 50
 local iF = 1000
 local iC = 1000
 

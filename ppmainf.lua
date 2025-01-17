@@ -332,7 +332,7 @@ local setFishZone = function(zone)
     HumanoidRootPart.CFrame = CFrame.new(zone)
     task.wait(2)
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(0.25)
+    task.wait(0.1)
     Torso.Anchored = true
 end
 
@@ -996,7 +996,7 @@ task.spawn(function()
             end
             local shakeUI = PlayerGui:FindFirstChild("shakeui")
             while PlayerGui:FindFirstChild("shakeui") do
-                local button = shakeUI:FindFirstChild("safezone") and shakeUI.safezone:FindFirstChild("button")
+                local button = shakeUI.safezone:FindFirstChild("button")
                 if button then
                     button.Size = UDim2.new(1001, 0, 1001, 0)
                     VirtualUser:Button1Down(Vector2.new(1, 1))

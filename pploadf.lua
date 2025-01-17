@@ -298,9 +298,11 @@ task.spawn(function()
         end
         if countM >= 150 then
             if rejoin then
+                print(LocalPlayer.Name, "Rejoin")
                 local tpservice = game:GetService("TeleportService")
                 tpservice:Teleport(16732694052, LocalPlayer)
             else
+                print(LocalPlayer.Name, "Shutdown")
                 game:Shutdown()
             end
         end

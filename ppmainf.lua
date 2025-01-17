@@ -561,20 +561,9 @@ local npcDepthsDoor = function()
     repeat
         pcall(function()
             HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
-            local viewportSize = Workspace.CurrentCamera.ViewportSize
-            local x, y = 0, viewportSize.Y - 1
-            VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
-            VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
             task.wait(0.1)
 
-            local Highlight = workspace.world.npcs.Custos:GetChildren()[15]
             local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
-
-            if Highlight then
-                dialog.HoldDuration = 0
-                dialog:InputHoldBegin()
-                dialog:InputHoldEnd()
-            end
 
             local button = PlayerGui:FindFirstChild("options") and PlayerGui.options.safezone["1option"].button
             if button then
@@ -583,6 +572,11 @@ local npcDepthsDoor = function()
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 task.wait(0.1)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            else
+                dialog.HoldDuration = 0
+                dialog:InputHoldBegin()
+                dialog:InputHoldEnd()
+                task.wait(0.5)
             end
         end)
     until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")

@@ -77,7 +77,7 @@ textLabel.Parent = backgroundFrame
 textLabel.Size = UDim2.new(0, 1000, 0, 250)
 textLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-textLabel.Text = "00:00:00"
+textLabel.Text = "00:00:00\n"..LocalPlayer.Name
 textLabel.TextColor3 = Color3.new(1, 1, 1)
 textLabel.BackgroundTransparency = 1
 textLabel.TextScaled = true
@@ -92,7 +92,7 @@ local function updateTime()
     local minutes = math.floor((currentTime % 3600) / 60)
     local seconds = math.floor(currentTime % 60)
 
-    textLabel.Text = string.format("%02d:%02d:%02d", hours, minutes, seconds)
+    textLabel.Text = string.format("%02d:%02d:%02d\n"..LocalPlayer.Name, hours, minutes, seconds)
 end
 
 task.spawn(function()

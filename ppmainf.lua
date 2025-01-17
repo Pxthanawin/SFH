@@ -634,6 +634,7 @@ local autoRodOfTheDepths = function()
     end
 
     camera.CameraType = Enum.CameraType.Custom
+    AutoSell = false
 
     if checkVertigoFish() == "Vertigo" then
 
@@ -654,6 +655,7 @@ local autoRodOfTheDepths = function()
                 if i < 22 then
                     crabCage()
                 elseif i ~= 100001 then
+                    AutoSell = true
                     return
                 end
             end
@@ -681,7 +683,6 @@ local autoRodOfTheDepths = function()
                 end
             end
 
-            AutoSell = false
             setFishZone(zonelist["Vertigo"])
 
         until task.wait(1) and checkVertigoFish() ~= "Vertigo"
@@ -717,22 +718,14 @@ local autoRodOfTheDepths = function()
 
     end
 
-    pcall(function()
-        ReplicatedStorage.packages.Net["RE/Backpack/Favourite"]:FireServer(Backpack:FindFirstChild("The Depths Key"))
-    end)
-    AutoSell = true
-
     if checkVertigoFish() == "Isonade" then
 
         repeat
 
             if not workspace.zones.fishing:FindFirstChild("Isonade") then
-                setFishZone(zonelist["The Depths"])
+                --AutoSell = true
+                return
             end
-
-            repeat
-                task.wait()
-            until workspace.zones.fishing:FindFirstChild("Isonade")
 
             local pos = workspace.zones.fishing:FindFirstChild("Isonade") and workspace.zones.fishing.Isonade.Position
             if not pos then
@@ -765,8 +758,9 @@ local autoRodOfTheDepths = function()
         task.wait(1)
         npcDepthsDoor()
         task.wait(0.5)
-        AutoSell = true
     end
+
+    AutoSell = true
 
     local setAbysHex = function(purchase)
 
@@ -1226,10 +1220,12 @@ elseif config["FarmLevel"] then
                     setFishZone(zonelist["Forsaken Shores"])
                     camera.CameraType = Enum.CameraType.Scriptable
                     camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+                --[[
                 elseif StatsRod:FindFirstChild("Aurora Rod") or StatsRod:FindFirstChild("Steady Rod") then
                     setFishZone(zonelist["Grand Reef"])
                     camera.CameraType = Enum.CameraType.Scriptable
                     camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
+                ]]
                 else
                     setFishZone(zonelist["The Depths"])
                     camera.CameraType = Enum.CameraType.Scriptable

@@ -1059,7 +1059,7 @@ elseif config["FarmLevel"] then
             aurorat = true
             iA = 0
         end
-        if iC > 300 then
+        if iC > 600 then
             gct = true
             iC = 0
         end
@@ -1198,7 +1198,7 @@ elseif config["FarmLevel"] then
                 purchaseRod("Destiny Rod", 190000)
             end
 
-            if (LocalPlayer.leaderstats.Level.Value >= 749 or (LocalPlayer.leaderstats.Level.Value >= 500 and not StatsRod:FindFirstChild("Sunken Rod") and gct)) and money > 10000 then
+            if LocalPlayer.leaderstats.Level.Value >= 200 and gct and money > 10000 then
                 gct = false
                 iC = 0
                 getchest()

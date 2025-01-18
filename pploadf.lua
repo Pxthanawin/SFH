@@ -473,8 +473,10 @@ for i, v in pairs(npclist) do
         local camera = workspace.Camera
         camera.CameraType = Enum.CameraType.Scriptable
         camera.CFrame = npc.cam
+        HumanoidRootPart.CFrame = npc.cframe
+        task.wait(0.25)
 
-        while PlayerGui.hud.safezone:FindFirstChild("options") do
+        while not PlayerGui.hud.safezone:FindFirstChild("options") do
             HumanoidRootPart.CFrame = npc.cframe
 
             if not npc.npc then return end

@@ -336,7 +336,7 @@ local setFishZone = function(zone)
         return
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(3)
+    task.wait(2)
     HumanoidRootPart.CFrame = CFrame.new(zone)
     task.wait(0.1)
     Torso.Anchored = true
@@ -612,7 +612,7 @@ local crabCage = function()
         local x, y = 0, viewportSize.Y - 1
         local cameraPosition = HumanoidRootPart.Position + Vector3.new(0, 15, 0)
         local cameraLookAt = HumanoidRootPart.Position
-        camera.CameraType = Enum.CameraType.Attach
+        camera.CameraType = Enum.CameraType.Scriptable
         camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
         if Backpack:FindFirstChild("Crab Cage") then
             Humanoid:EquipTool(Backpack:FindFirstChild("Crab Cage"))
@@ -677,7 +677,7 @@ local autoRodOfTheDepths = function()
                     local cameraPosition = pos + Vector3.new(0, 15, 0)
                     local cameraLookAt = pos
                     local prompt = v.Prompt
-                    camera.CameraType = Enum.CameraType.Attach
+                    camera.CameraType = Enum.CameraType.Scriptable
                     camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
                     task.wait(0.25)
@@ -857,23 +857,23 @@ local getchest = function()
                                 task.wait(0.5)
                             end
                             Humanoid:EquipTool(vv)
-                            task.wait(0.25)
                             npcRemote("Jack Marrow")
                             task.wait(0.25)
                             for _, vvv in ipairs(workspace.world.chests:GetChildren()) do
+                                task.wait(0.1)
                                 if not vvv:FindFirstChild("ProximityPrompt") then
                                     continue
                                 end
                                 vvv.CFrame = HumanoidRootPart.CFrame
-                                task.wait()
+                                task.wait(0.25)
                                 local pos = vvv.Position
                                 local cameraPosition = pos + Vector3.new(0, 15, 0)
                                 local cameraLookAt = pos
                                 local prompt = vvv.ProximityPrompt
-                                camera.CameraType = Enum.CameraType.Attach
+                                camera.CameraType = Enum.CameraType.Scriptable
                                 camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
                                 HumanoidRootPart.CFrame = CFrame.new(pos)
-                                task.wait(0.5)
+                                task.wait(0.25)
                                 prompt.HoldDuration = 0
                                 prompt:InputHoldBegin()
                                 prompt:InputHoldEnd()

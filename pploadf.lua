@@ -466,6 +466,8 @@ for i, v in pairs(npclist) do
             npc.npc = workspace.world.npcs:WaitForChild("Merlin", 10)
         elseif i == "Appraiser" then
             npc.npc = workspace.world.npcs:WaitForChild("Appraiser", 10)
+        elseif i == "Jack Marrow" then
+            npc.npc = workspace.world.npcs:WaitForChild("Jack Marrow", 10)
         end
 
         local camera = workspace.Camera

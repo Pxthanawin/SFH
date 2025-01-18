@@ -176,7 +176,7 @@ local npcRemote = function(remote)
             Character.Humanoid:UnequipTools()
             task.wait(0.5)
         end
-        HumanoidRootPart.CFrame = CFrame.new(256.994873, 135.709, 58.1402702)
+        HumanoidRootPart.CFrame = CFrame.new(-2831.02246, 215.351669, 1518.76208, 0.667300344, -1.11774305e-08, -0.744788706, -6.68319666e-09, 1, -2.09953903e-08, 0.744788706, 1.89878016e-08, 0.667300344)
         task.wait(0.1)
         pcall(function()
             workspace.world.npcs:WaitForChild("Jack Marrow", math.huge).treasure.repairmap:InvokeServer()
@@ -670,7 +670,7 @@ local autoRodOfTheDepths = function()
                     local cameraPosition = pos + Vector3.new(0, 15, 0)
                     local cameraLookAt = pos
                     local prompt = v.Prompt
-                    camera.CameraType = Enum.CameraType.Scriptable
+                    camera.CameraType = Enum.CameraType.Attach
                     camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
                     task.wait(0.25)
@@ -863,7 +863,7 @@ local getchest = function()
                                 local cameraPosition = pos + Vector3.new(0, 15, 0)
                                 local cameraLookAt = pos
                                 local prompt = vvv.ProximityPrompt
-                                camera.CameraType = Enum.CameraType.Scriptable
+                                camera.CameraType = Enum.CameraType.Attach
                                 camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
                                 HumanoidRootPart.CFrame = CFrame.new(pos)
                                 task.wait(0.5)

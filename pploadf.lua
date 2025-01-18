@@ -398,8 +398,9 @@ end
 OptimizeGamePerformance()
 
 if LocalPlayer and LocalPlayer.PlayerScripts then
-    LocalPlayer.PlayerScripts.weather.Disabled = true
-    --LocalPlayer.PlayerScripts.windcontroller.Disabled = true
+    if LocalPlayer.PlayerScripts:FindFirstChild("weather") then
+        LocalPlayer.PlayerScripts.weather.Disabled = true
+    end
 end
 
 for _, v in pairs(workspace.Terrain:GetChildren()) do

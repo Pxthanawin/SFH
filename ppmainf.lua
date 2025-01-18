@@ -953,6 +953,7 @@ local RodOfTheForgottenFang = function()
 
         GuiService.SelectedObject = nil
         camera.CameraType = Enum.CameraType.Custom
+        AutoSell = false
     else
         return
     end

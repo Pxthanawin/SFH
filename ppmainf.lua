@@ -565,7 +565,7 @@ local npcDepthsDoor = function()
 
             local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
 
-            local button = PlayerGui:FindFirstChild("options") and PlayerGui.options.safezone["1option"].button
+            local button = PlayerGui.hud.safezone:FindFirstChild("options") and PlayerGui.hud.safezone.options.button.responses["1option"]
             if button then
                 GuiService.SelectedObject = button
                 task.wait(0.1)

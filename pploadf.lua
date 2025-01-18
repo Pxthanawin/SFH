@@ -473,23 +473,26 @@ for i, v in pairs(npclist) do
         local camera = workspace.Camera
         camera.CameraType = Enum.CameraType.Scriptable
         camera.CFrame = npc.cam
-        HumanoidRootPart.CFrame = npc.cframe
 
-        if not npc.npc then return end
+        while PlayerGui.hud.safezone:FindFirstChild("options") do
+            HumanoidRootPart.CFrame = npc.cframe
 
-        local Highlight = npc.npc:WaitForChild("Highlight", 10)
-        local dialog = npc.npc:FindFirstChild("dialogprompt")
+            if not npc.npc then return end
 
-        if Highlight then
-            if dialog then
-                dialog.HoldDuration = 0
-                dialog:InputHoldBegin()
-                dialog:InputHoldEnd()
-                task.wait()
+            local Highlight = npc.npc:FindFirstChild("Highlight")
+            local dialog = npc.npc:FindFirstChild("dialogprompt")
+
+            if Highlight then
+                if dialog then
+                    dialog.HoldDuration = 0
+                    dialog:InputHoldBegin()
+                    dialog:InputHoldEnd()
+                    task.wait()
+                end
             end
-        end
 
-        task.wait(0.25)
+            task.wait(0.25)
+        end
 
         camera.CameraType = Enum.CameraType.Custom
 

@@ -578,7 +578,7 @@ local npcDepthsDoor = function()
                 dialog:InputHoldEnd()
                 task.wait(0.5)
             end
-            task.wait(1)
+            task.wait(2)
         end)
     until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
 

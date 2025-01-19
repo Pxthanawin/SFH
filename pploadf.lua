@@ -476,7 +476,7 @@ for i, v in pairs(npclist) do
         HumanoidRootPart.CFrame = npc.cframe
         task.wait(0.25)
 
-        while not PlayerGui.hud.safezone:FindFirstChild("options") do
+        while not (PlayerGui.hud.safezone:FindFirstChild("options") or PlayerGui:FindFirstChild("options")) do
             HumanoidRootPart.CFrame = npc.cframe
 
             if not npc.npc then return end

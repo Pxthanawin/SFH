@@ -1097,7 +1097,7 @@ elseif config["FarmLevel"] then
         end
 
         pcall(function()
-            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and extractNumber(LocalPlayer.leaderstats["C$"].Value) < 10500000 then
                 if not checkLuck() then
                     for i = 1, 6 do
                         npcRemote("luck")
@@ -1152,6 +1152,7 @@ elseif config["FarmLevel"] then
                 if checkDayNight() ~= "Night" and sundialt then
                     sundialt = false
                     iS = 0
+                    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
                     if Backpack:FindFirstChild("Sundial Totem") then
                         if Torso.Anchored then
                             Torso.Anchored = false
@@ -1159,7 +1160,7 @@ elseif config["FarmLevel"] then
                             task.wait(0.25)
                         end
                         Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                    elseif LocalPlayer.leaderstats.Level.Value < 749 then
+                    elseif (LocalPlayer.leaderstats.Level.Value < 749 and money >= 5000) or money >= 10500000 then
                         setInterac("Sundial Totem", 3)
                         Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                     end
@@ -1175,6 +1176,7 @@ elseif config["FarmLevel"] then
                 if checkDayNight() == "Night" and not checkAurora() and aurorat then
                     aurorat = false
                     iA = 0
+                    local money = extractNumber(LocalPlayer.leaderstats["C$"].Value)
                     if Backpack:FindFirstChild("Aurora Totem") then
                         if Torso.Anchored then
                             Torso.Anchored = false
@@ -1182,7 +1184,7 @@ elseif config["FarmLevel"] then
                             task.wait(0.25)
                         end
                         Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                    elseif LocalPlayer.leaderstats.Level.Value < 749 then
+                    elseif (LocalPlayer.leaderstats.Level.Value < 749 and money >= 500000) or money >= 10500000 then
                         setInterac("Aurora Totem")
                         Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                         task.wait(1)

@@ -336,7 +336,7 @@ local setFishZone = function(zone)
         return
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(3)
+    task.wait(2.5)
     HumanoidRootPart.CFrame = CFrame.new(zone)
     task.wait(0.1)
     Torso.Anchored = true
@@ -887,6 +887,7 @@ local getchest = function()
             end
         end
     end
+    task.wait(4)
 end
 
 local RodOfTheForgottenFang = function()
@@ -1074,6 +1075,7 @@ elseif config["FarmLevel"] then
         end
         camera.CameraType = Enum.CameraType.Custom
     end
+    task.wait(2)
 
     while task.wait(1) do
 

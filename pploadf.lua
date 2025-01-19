@@ -469,7 +469,7 @@ for i, v in pairs(npclist) do
 
         task.wait(1)
 
-        if i == "Marlin" then
+        if i == "Marlin" and LocalPlayer.leaderstats.Level.Value >= 200 then
             npc.npc = workspace.world.npcs:WaitForChild("Merlin", 10)
         elseif i == "Appraiser" then
             npc.npc = workspace.world.npcs:WaitForChild("Appraiser", 10)

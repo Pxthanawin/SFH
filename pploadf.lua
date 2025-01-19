@@ -493,7 +493,7 @@ for i, v in pairs(npclist) do
                 end
             end
 
-            task.wait(0.25)
+            task.wait(0.5)
         end
 
         camera.CameraType = Enum.CameraType.Custom

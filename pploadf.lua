@@ -63,38 +63,39 @@ local Backpack = LocalPlayer:WaitForChild("Backpack")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- Monitor Money Changes
-task.spawn(function()
-    repeat task.wait() until game:IsLoaded()
-    task.wait(100)
-    local countM = 1
-    local money
+if not disablecheckafk then
+    task.spawn(function()
+        task.wait(100)
+        local countM = 1
+        local money
 
-    while task.wait(1) do
-        countM = countM + 1
-        local currentMoney = money
-        pcall(function()
-            currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value
-        end)
-        if money ~= currentMoney then
-            countM = 1
-            money = currentMoney
-        end
-        if countM % 20 == 0 then
-            if LocalPlayer.Character then
-                LocalPlayer.Character.Humanoid:UnequipTools()
+        while task.wait(1) do
+            countM = countM + 1
+            local currentMoney = money
+            pcall(function()
+                currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value
+            end)
+            if money ~= currentMoney then
+                countM = 1
+                money = currentMoney
+            end
+            if countM % 20 == 0 then
+                if LocalPlayer.Character then
+                    LocalPlayer.Character.Humanoid:UnequipTools()
+                end
+            end
+            if countM >= 120 then
+                if rejoin then
+                    print(LocalPlayer.Name, "Rejoin")
+                    tpservice:Teleport(16732694052, LocalPlayer)
+                else
+                    print(LocalPlayer.Name, "Shutdown")
+                    game:Shutdown()
+                end
             end
         end
-        if countM >= 120 then
-            if rejoin then
-                print(LocalPlayer.Name, "Rejoin")
-                tpservice:Teleport(16732694052, LocalPlayer)
-            else
-                print(LocalPlayer.Name, "Shutdown")
-                game:Shutdown()
-            end
-        end
-    end
-end)
+    end)
+end
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = PlayerGui

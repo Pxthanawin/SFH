@@ -860,24 +860,22 @@ local getchest = function()
                             npcRemote("Jack Marrow")
                             task.wait(0.25)
                             for _, vvv in ipairs(workspace.world.chests:GetChildren()) do
-                                task.wait(0.1)
-                                if not vvv:FindFirstChild("ProximityPrompt") then
-                                    continue
-                                end
-                                vvv.CFrame = HumanoidRootPart.CFrame
-                                task.wait(0.25)
-                                local pos = vvv.Position
-                                local cameraPosition = pos + Vector3.new(0, 15, 0)
-                                local cameraLookAt = pos
+                                while vvv:FindFirstChild("ProximityPrompt") do
                                 local prompt = vvv.ProximityPrompt
                                 camera.CameraType = Enum.CameraType.Scriptable
                                 camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
                                 HumanoidRootPart.CFrame = CFrame.new(pos)
                                 task.wait(0.25)
+                                vvv.CFrame = HumanoidRootPart.CFrame
+                                local pos = vvv.Position
+                                local cameraPosition = pos + Vector3.new(0, 15, 0)
+                                local cameraLookAt = pos
+                                task.wait()
                                 prompt.HoldDuration = 0
                                 prompt:InputHoldBegin()
                                 prompt:InputHoldEnd()
                                 task.wait(0.25)
+                                end
                                 camera.CameraType = Enum.CameraType.Custom
                             end
                             Humanoid:UnequipTools()

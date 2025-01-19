@@ -40,6 +40,7 @@ end
 --
 
 repeat task.wait() until game:IsLoaded()
+
 --setfpscap(15)
 
 -- Variable zone
@@ -53,12 +54,47 @@ local GuiService = game:GetService("GuiService")
 local VirtualUser = game:GetService("VirtualUser")
 local tweenService = game:GetService("TweenService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local tpservice = game:GetService("TeleportService")
 local Workspace = game:GetService("Workspace")
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Monitor Money Changes
+task.spawn(function()
+    repeat task.wait() until game:IsLoaded()
+    task.wait(100)
+    local countM = 1
+    local money
+
+    while task.wait(1) do
+        countM = countM + 1
+        local currentMoney = money
+        pcall(function()
+            currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value
+        end)
+        if money ~= currentMoney then
+            countM = 1
+            money = currentMoney
+        end
+        if countM % 20 == 0 then
+            if LocalPlayer.Character then
+                LocalPlayer.Character.Humanoid:UnequipTools()
+            end
+        end
+        if countM >= 120 then
+            if rejoin then
+                print(LocalPlayer.Name, "Rejoin")
+                tpservice:Teleport(16732694052, LocalPlayer)
+            else
+                print(LocalPlayer.Name, "Shutdown")
+                game:Shutdown()
+            end
+        end
+    end
+end)
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = PlayerGui
@@ -277,36 +313,6 @@ end)
 
 workspace.DescendantAdded:Connect(function(descendant)
     applySettings(descendant)
-end)
-
--- Monitor Money Changes
-task.spawn(function()
-    repeat task.wait() until game:IsLoaded()
-    task.wait(100)
-    local countM = 1
-    local money = LocalPlayer:FindFirstChild("leaderstats") and game.Players.LocalPlayer.leaderstats:FindFirstChild("C$") and LocalPlayer.leaderstats["C$"].Value or 0
-
-    while task.wait(1) do
-        countM = countM + 1
-        local currentMoney = LocalPlayer.leaderstats["C$"] and LocalPlayer.leaderstats["C$"].Value or 0
-        if money ~= currentMoney then
-            countM = 1
-            money = currentMoney
-        end
-        if countM % 20 == 0 then
-            LocalPlayer.Character.Humanoid:UnequipTools()
-        end
-        if countM >= 120 then
-            if rejoin then
-                print(LocalPlayer.Name, "Rejoin")
-                local tpservice = game:GetService("TeleportService")
-                tpservice:Teleport(16732694052, LocalPlayer)
-            else
-                print(LocalPlayer.Name, "Shutdown")
-                game:Shutdown()
-            end
-        end
-    end
 end)
 
 -- --

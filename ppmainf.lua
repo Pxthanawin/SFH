@@ -861,20 +861,22 @@ local getchest = function()
                             task.wait(0.25)
                             for _, vvv in ipairs(workspace.world.chests:GetChildren()) do
                                 while vvv:FindFirstChild("ProximityPrompt") do
-                                local prompt = vvv.ProximityPrompt
-                                camera.CameraType = Enum.CameraType.Scriptable
-                                camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
-                                HumanoidRootPart.CFrame = CFrame.new(pos)
-                                task.wait(0.25)
-                                vvv.CFrame = HumanoidRootPart.CFrame
-                                local pos = vvv.Position
-                                local cameraPosition = pos + Vector3.new(0, 15, 0)
-                                local cameraLookAt = pos
-                                task.wait()
-                                prompt.HoldDuration = 0
-                                prompt:InputHoldBegin()
-                                prompt:InputHoldEnd()
-                                task.wait(0.25)
+                                    pcall(function()
+                                        local prompt = vvv.ProximityPrompt
+                                        local pos = vvv.Position
+                                        HumanoidRootPart.CFrame = CFrame.new(pos)
+                                        task.wait(0.25)
+                                        vvv.CFrame = HumanoidRootPart.CFrame
+                                        camera.CameraType = Enum.CameraType.Scriptable
+                                        local cameraPosition = pos + Vector3.new(0, 15, 0)
+                                        local cameraLookAt = pos
+                                        camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+                                        task.wait()
+                                        prompt.HoldDuration = 0
+                                        prompt:InputHoldBegin()
+                                        prompt:InputHoldEnd()
+                                    end)
+                                    task.wait(0.25)
                                 end
                                 camera.CameraType = Enum.CameraType.Custom
                             end
@@ -1050,6 +1052,28 @@ if config["C$_100k"] then
     camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
 
 elseif config["FarmLevel"] then
+
+    for _, vvv in ipairs(workspace.world.chests:GetChildren()) do
+        while vvv:FindFirstChild("ProximityPrompt") do
+            pcall(function()
+                local prompt = vvv.ProximityPrompt
+                local pos = vvv.Position
+                HumanoidRootPart.CFrame = CFrame.new(pos)
+                task.wait(0.25)
+                vvv.CFrame = HumanoidRootPart.CFrame
+                camera.CameraType = Enum.CameraType.Scriptable
+                local cameraPosition = pos + Vector3.new(0, 15, 0)
+                local cameraLookAt = pos
+                camera.CFrame = CFrame.new(cameraPosition, cameraLookAt)
+                task.wait()
+                prompt.HoldDuration = 0
+                prompt:InputHoldBegin()
+                prompt:InputHoldEnd()
+            end)
+            task.wait(0.25)
+        end
+        camera.CameraType = Enum.CameraType.Custom
+    end
 
     while task.wait(1) do
 

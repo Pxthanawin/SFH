@@ -903,6 +903,7 @@ local getchest = function()
                             Humanoid:EquipTool(vv)
                             npcRemote("Jack Marrow")
                             task.wait(0.25)
+                            Humanoid:UnequipTools()
                             for _, vvv in ipairs(workspace.world.chests:GetChildren()) do
                                 while vvv:FindFirstChild("ProximityPrompt") do
                                     pcall(function()

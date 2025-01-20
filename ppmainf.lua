@@ -431,11 +431,7 @@ local enchantRod = function(RodName, value, value2)
 
             HumanoidRootPart.CFrame = CFrame.new(pos)
 
-            local interactable = workspace.world.interactables:FindFirstChild("Enchant Altar")
-            if not interactable then
-                continue
-            end
-            local ProximityPrompt = interactable.ProximityPrompt
+            local ProximityPrompt = workspace.world.interactables:FindFirstChild("Enchant Altar") and workspace.world.interactables["Enchant Altar"]:FindFirstChild("ProximityPrompt")
 
             relic = enctRelic() or enctRelic("Aurora") or enctRelic("Glossy") or enctRelic("Albino") or enctRelic("Darkened")
 
@@ -459,12 +455,12 @@ local enchantRod = function(RodName, value, value2)
                 ProximityPrompt:InputHoldBegin()
                 ProximityPrompt:InputHoldEnd()
             end
-            local button = PlayerGui.over:WaitForChild("prompt", 10) and PlayerGui.over.prompt.confirm
+            local button = PlayerGui.over:FindFirstChild("prompt") and PlayerGui.over.prompt.confirm
             if button then
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                task.wait(0.5)
                 GuiService.SelectedObject = nil
             end
 

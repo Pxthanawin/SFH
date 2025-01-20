@@ -72,7 +72,9 @@ local zonelist = {
     ["Aurora Totem"] = Vector3.new(-1810.5636, -136.927948, -3282.44849),
     ["Rod Of The Depths"] = Vector3.new(1704.9292, -902.527039, 1450.42468),
     ["Enchant"] = Vector3.new(1311, -802.427063, -83),
-    ["Moosewood"] = Vector3.new(453.076996, 150.501022, 210.481934)
+    ["Moosewood"] = Vector3.new(453.076996, 150.501022, 210.481934),
+    ["Roslit Bay"] = Vector3.new(-1937.4725341796875, 123, 441.02899169921875),
+    ["Magma"] = CFrame.new(-1915.58899, 164.500015, 308.168335, 0.0436145514, -7.89108157e-08, 0.999048412, -4.81796256e-08, 1, 8.10893113e-08, -0.999048412, -5.16704546e-08, 0.0436145514)
 }
 
 local ListRod = {
@@ -444,7 +446,6 @@ local enchantRod = function(RodName, value, value2)
             Humanoid:EquipTool(relic.equip)
             task.wait(0.1)
 
-            local Highlight = interactable:FindFirstChild("Highlight")
             if StatsRod[RodName].Value == value or StatsRod[RodName].Value == value2 then
                 camera.CameraType = Enum.CameraType.Custom
                 return
@@ -453,21 +454,18 @@ local enchantRod = function(RodName, value, value2)
                 camera.CameraType = Enum.CameraType.Custom
                 return
             end
-            if not Highlight then
-                continue
-            end
             if ProximityPrompt then
                 ProximityPrompt.HoldDuration = 0
                 ProximityPrompt:InputHoldBegin()
                 ProximityPrompt:InputHoldEnd()
-                local button = PlayerGui.over:WaitForChild("prompt", 10) and PlayerGui.over.prompt.confirm
-                if button then
-                    GuiService.SelectedObject = button
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                    repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
-                    GuiService.SelectedObject = nil
-                end
+            end
+            local button = PlayerGui.over:WaitForChild("prompt", 10) and PlayerGui.over.prompt.confirm
+            if button then
+                GuiService.SelectedObject = button
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                repeat task.wait() until not PlayerGui.over:FindFirstChild("prompt")
+                GuiService.SelectedObject = nil
             end
 
         end
@@ -842,6 +840,52 @@ local autoRodOfTheDepths = function()
     end
 
     setAbysHex(true)
+end
+
+local magmaRod = function()
+
+    if Torso.Anchored then
+        Torso.Anchored = false
+        Character.Humanoid:UnequipTools()
+        task.wait(0.5)
+    end
+
+    Character = LocalPlayer.Character
+    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
+
+    task.wait(0.5)
+
+    camera.CameraType = Enum.CameraType.Scriptable
+    camera.CFrame = CFrame.new(4.40501785, -698.242615, 1247.79309, -0.142213896, 0.299789965, -0.943345785, 0, 0.953032434, 0.302868336, 0.989835918, 0.0430720858, -0.135534465)
+
+    repeat
+        pcall(function()
+            HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
+            task.wait(0.1)
+
+            local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
+
+            local button = (PlayerGui.hud.safezone:FindFirstChild("options") and PlayerGui.hud.safezone.options.responses["1option"]) or (PlayerGui:FindFirstChild("options") and PlayerGui.options.safezone["1option"].button)
+            if button then
+                GuiService.SelectedObject = button
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            else
+                dialog.HoldDuration = 0
+                dialog:InputHoldBegin()
+                dialog:InputHoldEnd()
+                task.wait(0.5)
+            end
+            task.wait(0.5)
+        end)
+    until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
+
+    GuiService.SelectedObject = nil
+    camera.CameraType = Enum.CameraType.Custom
 end
 
 local getchest = function()

@@ -98,7 +98,7 @@ if not disablecheckafk then
 end
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = PlayerGui
+screenGui.Parent = game:GetService("CoreGui")
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 

@@ -1266,7 +1266,12 @@ elseif config["FarmLevel"] then
                 RodOfTheForgottenFang()
             end
 
-            if StatsRod:FindFirstChild("Rod Of The Depths") and (money > 1000000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 450) then
+            if _500k and StatsRod:FindFirstChild("Rod Of The Depths") and (money > 570000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 450) then
+                purchaseRod("Mythical Rod", 110000)
+                purchaseRod("Trident Rod", 150000)
+                purchaseRod("Kings Rod", 120000)
+                purchaseRod("Destiny Rod", 190000)
+            elseif StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and money > 570000 then
                 purchaseRod("Mythical Rod", 110000)
                 purchaseRod("Trident Rod", 150000)
                 purchaseRod("Kings Rod", 120000)
@@ -1308,6 +1313,12 @@ elseif config["FarmLevel"] then
                 end
             end
         end)
+
+        if _500k and LocalPlayer.leaderstats.Level.Value >= 500 and #StatsRod:GetChildren() == 10 then
+            print(LocalPlayer.Name, "Shutdown, Success")
+            task.wait(10)
+            game:Shutdown()
+        end
 
         iS += 1
         iA += 1

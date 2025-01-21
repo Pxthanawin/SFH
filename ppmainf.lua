@@ -421,10 +421,12 @@ local enchantRod = function(RodName, value, value2)
             return
         end
 
-        --camera.CameraType = Enum.CameraType.Scriptable
-        --camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = CFrame.new(1310.2572, -765.473999, -89.2070618, -0.992915571, 0.117016889, -0.0206332784, 0, 0.173648536, 0.98480773, 0.118822068, 0.977830946, -0.172418341)
 
         while task.wait(0.5) do
+
+            GuiService.SelectedObject = nil
 
             Character.Humanoid:UnequipTools()
             task.wait(0.1)
@@ -465,8 +467,6 @@ local enchantRod = function(RodName, value, value2)
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                task.wait(0.25)
-                GuiService.SelectedObject = nil
             end
 
         end

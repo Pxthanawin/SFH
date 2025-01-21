@@ -461,6 +461,10 @@ local enchantRod = function(RodName, value, value2)
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                task.wait(0.5)
+                GuiService.SelectedObject = button
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 task.wait(0.25)
                 GuiService.SelectedObject = nil
             end

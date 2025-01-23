@@ -160,8 +160,8 @@ end
 -- Main Script zone
 
 -- ---- Assets Load
-
-repeat
+--[[
+while not (LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value) do
 
     local skip = PlayerGui:FindFirstChild("loading") and PlayerGui.loading:FindFirstChild("loading") and PlayerGui.loading.loading:FindFirstChild("skip")
     if skip and skip.Visible then
@@ -190,21 +190,16 @@ repeat
     end
     task.wait()
 
-until LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value
+end
 
 repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")
-
+]]
 getgenv().AssetsLoaded = true
 
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):FireServer(false)
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):Destroy()
-
-LocalPlayer.Idled:connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
-end)
 
 local Character = LocalPlayer.Character
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")

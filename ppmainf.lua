@@ -330,8 +330,7 @@ local setFishZone = function(zone)
             Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
-    end
-    if (HumanoidRootPart.Position - zone).Magnitude < 4 then
+    elseif (HumanoidRootPart.Position - zone).Magnitude < 4 then
         HumanoidRootPart.CFrame = CFrame.new(zone)
         task.wait(0.25)
         Torso.Anchored = true

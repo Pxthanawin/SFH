@@ -137,14 +137,14 @@ task.spawn(function()
         updateTime()
     end
 end)
---[[
+
 task.spawn(function()
     while task.wait(2) do
         RunService:Set3dRenderingEnabled(true)
         task.wait(0.05)
         RunService:Set3dRenderingEnabled(false)
     end
-end)]]
+end)
 
 -- ---- Other Variable
 
@@ -196,7 +196,7 @@ repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")]]
 
-task.wait(3)
+task.wait(4)
 getgenv().AssetsLoaded = true
 
 ReplicatedStorage:WaitForChild("events"):WaitForChild("afk"):FireServer(false)

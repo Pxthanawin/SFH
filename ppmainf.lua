@@ -1063,7 +1063,7 @@ task.spawn(function()
 
         if rod:FindFirstChild("bobber") then
 
-            while rod:FindFirstChild("bobber") and not (PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")) do
+            while rod:FindFirstChild("bobber") and not (PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone") and PlayerGui.shakeui.safezone:FindFirstChild("button")) do
                 RunService.Heartbeat:Wait()
             end
             local shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")

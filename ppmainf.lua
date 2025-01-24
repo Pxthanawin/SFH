@@ -1053,9 +1053,30 @@ task.spawn(function()
             while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI:FindFirstChild("button")
                 if button then
-                    button.Size = UDim2.new(1001, 0, 1001, 0)
-                    VirtualUser:Button1Down(Vector2.new(1, 1))
-                    VirtualUser:Button1Up(Vector2.new(1, 1))
+                    local buttonAbsolutePosition = button.AbsolutePosition
+                    local buttonAbsoluteSize = button.AbsoluteSize
+                    local buttonCenter = Vector2.new(
+                        buttonAbsolutePosition.X + (buttonAbsoluteSize.X / 2),
+                        buttonAbsolutePosition.Y + (buttonAbsoluteSize.Y / 2)
+                    )
+            
+                    VirtualInputManager:SendMouseButtonEvent(
+                        buttonCenter.X,     -- ตำแหน่ง X
+                        buttonCenter.Y,     -- ตำแหน่ง Y
+                        0,                  -- MouseButton ID (0 สำหรับคลิกซ้าย)
+                        true,               -- กดปุ่มลง
+                        button,             -- เป้าหมาย: button
+                        0            -- ID สำหรับคลิก
+                    )
+            
+                    VirtualInputManager:SendMouseButtonEvent(
+                        buttonCenter.X,
+                        buttonCenter.Y,
+                        0,
+                        false,              -- ปล่อยปุ่ม
+                        button,             -- เป้าหมาย: button
+                        0
+                    )
                 end
                 RunService.Heartbeat:Wait()
             end

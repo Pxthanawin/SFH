@@ -1050,12 +1050,36 @@ task.spawn(function()
                 RunService.Heartbeat:Wait()
             end
             local shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")
+            local buttonAbsoluteSize = shakeUI.button.AbsoluteSize
+            local buttonAbsoluteSizeX = buttonAbsoluteSize.X / 2
+            local buttonAbsoluteSizeY = buttonAbsoluteSize.Y
+
             while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI:FindFirstChild("button")
                 if button then
-                    GuiService.SelectedObject = button
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    local buttonAbsolutePosition = button.AbsolutePosition
+                    local buttonCenter = Vector2.new(
+                        buttonAbsolutePosition.X + (buttonAbsoluteSizeX),
+                        buttonAbsolutePosition.Y + (buttonAbsoluteSizeY)
+                    )
+
+                    VirtualInputManager:SendMouseButtonEvent(
+                        buttonCenter.X,     -- ตำแหน่ง X
+                        buttonCenter.Y,     -- ตำแหน่ง Y
+                        0,                  -- MouseButton ID (0 สำหรับคลิกซ้าย)
+                        true,               -- กดปุ่มลง
+                        button,             -- เป้าหมาย: button
+                        0            -- ID สำหรับคลิก
+                    )
+
+                    VirtualInputManager:SendMouseButtonEvent(
+                        buttonCenter.X,
+                        buttonCenter.Y,
+                        0,
+                        false,              -- ปล่อยปุ่ม
+                        button,             -- เป้าหมาย: button
+                        0
+                    )
                 end
                 RunService.Heartbeat:Wait()
             end

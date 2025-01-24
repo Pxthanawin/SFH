@@ -1120,7 +1120,6 @@ task.spawn(function()
             else
                 __sec += 1
             end]]
-            task.wait(0.1)
             if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()

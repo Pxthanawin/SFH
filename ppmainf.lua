@@ -1129,7 +1129,7 @@ task.spawn(function()
 
             __count += 1
 
-            if AutoSell and __count >= 30 then
+            if (AutoSell and __count >= 30) or rodNameCache == "Flimsy Rod" then
                 __count = 0
                 ReplicatedStorage.events.SellAll:InvokeServer()
             end

@@ -1066,15 +1066,18 @@ task.spawn(function()
             while rod:FindFirstChild("bobber") and not (PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")) do
                 RunService.Heartbeat:Wait()
             end
-            local shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")
+            local shakeUI
             local buttonAbsoluteSizeX
             local buttonAbsoluteSizeY
             repeat
-                local button = shakeUI:FindFirstChild("button")
-                if button then
-                    local buttonAbsoluteSize = shakeUI.button.AbsoluteSize
-                    buttonAbsoluteSizeX = buttonAbsoluteSize.X / 2
-                    buttonAbsoluteSizeY = buttonAbsoluteSize.Y
+                shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")
+                if shakeUI then
+                    local button = shakeUI:FindFirstChild("button")
+                    if button then
+                        local buttonAbsoluteSize = shakeUI.button.AbsoluteSize
+                        buttonAbsoluteSizeX = buttonAbsoluteSize.X / 2
+                        buttonAbsoluteSizeY = buttonAbsoluteSize.Y
+                    end
                 end
                 RunService.Heartbeat:Wait()
             until buttonAbsoluteSizeX

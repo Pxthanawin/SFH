@@ -1032,23 +1032,6 @@ task.spawn(function()
             continue
         end
 
-        if PlayerGui.DailyRewards.Enabled then
-            local button = PlayerGui.DailyRewards.Main.Reward.Claim
-            GuiService.SelectedObject = button
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-            task.wait(0.1)
-            GuiService.SelectedObject = nil
-        end
-        if PlayerGui.DateReward.Enabled then
-            local button = PlayerGui.DateReward.datereward.Close
-            GuiService.SelectedObject = button
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-            task.wait(0.1)
-            GuiService.SelectedObject = nil
-        end
-
         rodNameCache = PlayerStats.Stats.rod.Value
         rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
 
@@ -1068,48 +1051,16 @@ task.spawn(function()
 
         if rod:FindFirstChild("bobber") then
 
-            local shakeUI
-            local buttonAbsoluteSizeX
-            local buttonAbsoluteSizeY
-            repeat
-                shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")
-                if shakeUI then
-                    local button = shakeUI:FindFirstChild("button")
-                    if button then
-                        local buttonAbsoluteSize = shakeUI.button.AbsoluteSize
-                        buttonAbsoluteSizeX = buttonAbsoluteSize.X / 2
-                        buttonAbsoluteSizeY = buttonAbsoluteSize.Y
-                    end
-                end
+            while rod:FindFirstChild("bobber") and not (PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")) do
                 RunService.Heartbeat:Wait()
-            until not rod:FindFirstChild("bobber") or buttonAbsoluteSizeX
-
+            end
+            local shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")
             while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI:FindFirstChild("button")
                 if button then
-                    local buttonAbsolutePosition = button.AbsolutePosition
-                    local buttonCenter = Vector2.new(
-                        buttonAbsolutePosition.X + (buttonAbsoluteSizeX),
-                        buttonAbsolutePosition.Y + (buttonAbsoluteSizeY)
-                    )
-
-                    VirtualInputManager:SendMouseButtonEvent(
-                        buttonCenter.X,     -- ตำแหน่ง X
-                        buttonCenter.Y,     -- ตำแหน่ง Y
-                        0,                  -- MouseButton ID (0 สำหรับคลิกซ้าย)
-                        true,               -- กดปุ่มลง
-                        button,             -- เป้าหมาย: button
-                        0            -- ID สำหรับคลิก
-                    )
-
-                    VirtualInputManager:SendMouseButtonEvent(
-                        buttonCenter.X,
-                        buttonCenter.Y,
-                        0,
-                        false,              -- ปล่อยปุ่ม
-                        button,             -- เป้าหมาย: button
-                        0
-                    )
+                    button.Size = UDim2.new(1001, 0, 1001, 0)
+                    VirtualUser:Button1Down(Vector2.new(1, 1))
+                    VirtualUser:Button1Up(Vector2.new(1, 1))
                 end
                 RunService.Heartbeat:Wait()
             end
@@ -1125,6 +1076,7 @@ task.spawn(function()
             else
                 __sec += 1
             end]]
+
             if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()

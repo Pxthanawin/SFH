@@ -87,7 +87,7 @@ if not disablecheckafk then
             if countM >= 120 then
                 if rejoin then
                     print(LocalPlayer.Name, "Rejoin")
-                    tpservice:Teleport(4483381587, LocalPlayer)
+                    tpservice:Teleport(16732694052, LocalPlayer)
                 else
                     print(LocalPlayer.Name, "Shutdown")
                     game:Shutdown()

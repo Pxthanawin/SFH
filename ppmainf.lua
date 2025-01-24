@@ -1058,9 +1058,10 @@ task.spawn(function()
 
         if not Character:FindFirstChild(rodNameCache) then
             if rod.Parent == Backpack then
-                task.wait(0.1)
-                Humanoid:EquipTool(rod)
-                equipRod(RodPriority)
+                pcall(function()
+                    Humanoid:EquipTool(rod)
+                    equipRod(RodPriority)
+                end)
                 continue
             end
         end

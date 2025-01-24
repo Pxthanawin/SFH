@@ -1028,6 +1028,23 @@ task.spawn(function()
             continue
         end
 
+        if PlayerGui.DailyRewards.Enabled then
+            local button = PlayerGui.DailyRewards.Main.Reward.Claim
+            GuiService.SelectedObject = button
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            task.wait(0.1)
+            GuiService.SelectedObject = nil
+        end
+        if PlayerGui.DateReward.Enabled then
+            local button = PlayerGui.DateReward.datereward.Close
+            GuiService.SelectedObject = button
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            task.wait(0.1)
+            GuiService.SelectedObject = nil
+        end
+
         rodNameCache = PlayerStats.Stats.rod.Value
         rod = Backpack:FindFirstChild(rodNameCache) or (Character and Character:FindFirstChild(rodNameCache))
 

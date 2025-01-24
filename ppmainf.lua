@@ -338,7 +338,7 @@ local setFishZone = function(zone)
         return
     end
     HumanoidRootPart.CFrame = CFrame.new(zone)
-    task.wait(3)
+    task.wait(5)
     HumanoidRootPart.CFrame = CFrame.new(zone)
     task.wait(0.1)
     Torso.Anchored = true
@@ -1120,7 +1120,6 @@ task.spawn(function()
             else
                 __sec += 1
             end]]
-            task.wait(0.1)
             if PlayerGui:FindFirstChild("reel") then
                 ReplicatedStorage.events.reelfinished:FireServer(100, true)
                 PlayerGui.reel:Destroy()

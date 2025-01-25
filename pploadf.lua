@@ -160,7 +160,7 @@ end
 -- Main Script zone
 
 -- ---- Assets Load
---[[
+
 while not (LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstChild("assetsloaded").Value) do
 
     local skip = PlayerGui:FindFirstChild("loading") and PlayerGui.loading:FindFirstChild("loading") and PlayerGui.loading.loading:FindFirstChild("skip")
@@ -191,12 +191,12 @@ while not (LocalPlayer:FindFirstChild("assetsloaded") and LocalPlayer:FindFirstC
     task.wait()
 
 end
-
+--[[
 repeat
     task.wait()
 until not game:GetService("Players").LocalPlayer.PlayerGui.loading:FindFirstChild("TitleMusic")]]
 
-task.wait(2)
+task.wait(3)
 for i = 1, math.random(2,4) do
     VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Space, false, nil)
     task.wait(math.random(1,50)/100)

@@ -1061,6 +1061,8 @@ task.spawn(function()
                     button.Size = UDim2.new(1001, 0, 1001, 0)
                     VirtualUser:Button1Down(Vector2.new(1, 1))
                     VirtualUser:Button1Up(Vector2.new(1, 1))
+                    VirtualUser:Button1Down(Vector2.new(1, 1))
+                    VirtualUser:Button1Up(Vector2.new(1, 1))
                 end
                 RunService.Heartbeat:Wait()
             end

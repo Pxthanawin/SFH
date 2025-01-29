@@ -23,6 +23,7 @@ local PlayerStats = ReplicatedStorage.playerstats[LocalPlayer.Name]
 local StatsRod = PlayerStats.Rods
 local StatsInventory = PlayerStats.Inventory
 local rodNameCache = PlayerStats.Stats.rod.Value
+local rod
 
 local AutoSell = true
 --local __sec = 20
@@ -1031,11 +1032,15 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
             end
         end)
     elseif descendant.Name == "reel" and descendant.Parent == PlayerGui then
-        ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
-        descendant:Destroy()
-        Humanoid:UnequipTools()
+        while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
+            RunService.Heartbeat:Wait()
+        end
+        if PlayerGui:FindFirstChild("reel") then
+            ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
+            PlayerGui.reel:Destroy()
+            Humanoid:UnequipTools()
+        end
         __count += 1
-
         if (AutoSell and __count >= 30) or rodNameCache == "Flimsy Rod" then
             __count = 0
             ReplicatedStorage.events.SellAll:InvokeServer()
@@ -1044,7 +1049,6 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
 end)
 
 task.spawn(function()
-    local rod
     while RunService.Heartbeat:Wait() do
 
         if PlayerGui:FindFirstChild("reel") then

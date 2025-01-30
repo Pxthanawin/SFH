@@ -131,12 +131,12 @@ local function updateTime()
 
     textLabel.Text = string.format("%02d:%02d:%02d\n"..LocalPlayer.Name, hours, minutes, seconds)
 end
-
+--[[
 task.spawn(function()
     while task.wait(0.25) do
         updateTime()
     end
-end)
+end)]]
 
 task.spawn(function()
     while task.wait(2) do
@@ -513,7 +513,7 @@ for i, v in pairs(npclist) do
 
             task.wait(0.5)
         end
-
+        GuiService.SelectedObject = nil
         camera.CameraType = Enum.CameraType.Custom
 
     end)

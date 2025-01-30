@@ -131,20 +131,20 @@ local function updateTime()
 
     textLabel.Text = string.format("%02d:%02d:%02d\n"..LocalPlayer.Name, hours, minutes, seconds)
 end
---[[
+
 task.spawn(function()
     while task.wait(0.25) do
         updateTime()
     end
-end)]]
-
+end)
+--[[
 task.spawn(function()
     while task.wait(2) do
         RunService:Set3dRenderingEnabled(true)
         task.wait(0.05)
         RunService:Set3dRenderingEnabled(false)
     end
-end)
+end)]]
 
 -- ---- Other Variable
 

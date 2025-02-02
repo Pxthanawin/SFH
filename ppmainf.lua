@@ -75,6 +75,7 @@ local zonelist = {
     ["Enchant"] = Vector3.new(1311, -802.427063, -83),
     ["Moosewood"] = Vector3.new(453.076996, 150.501022, 210.481934),
     ["Roslit Bay"] = Vector3.new(-1937.4725341796875, 123, 441.02899169921875),
+    ["Pufferfish"] = Vector3.new(-1427.500244140625, 123, 449.02447509765625),
     ["Magma"] = CFrame.new(-1915.58899, 164.500015, 308.168335, 0.0436145514, -7.89108157e-08, 0.999048412, -4.81796256e-08, 1, 8.10893113e-08, -0.999048412, -5.16704546e-08, 0.0436145514)
 }
 
@@ -552,12 +553,6 @@ end
 
 local npcDepthsDoor = function()
 
-    if Torso.Anchored then
-        Torso.Anchored = false
-        Character.Humanoid:UnequipTools()
-        task.wait(0.5)
-    end
-
     Character = LocalPlayer.Character
     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
@@ -859,39 +854,160 @@ local magmaRod = function()
     Character = LocalPlayer.Character
     HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
-    HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
+    HumanoidRootPart.CFrame = CFrame.new(-1848.354248046875, 165.71112060546875, 165.3882293701172)
 
     task.wait(0.5)
 
     camera.CameraType = Enum.CameraType.Scriptable
-    camera.CFrame = CFrame.new(4.40501785, -698.242615, 1247.79309, -0.142213896, 0.299789965, -0.943345785, 0, 0.953032434, 0.302868336, 0.989835918, 0.0430720858, -0.135534465)
+    camera.CFrame = CFrame.new(-1839.97339, 188.776886, 152.810043, -0.832190037, -0.454073191, 0.31824106, 0, 0.573934197, 0.818901539, -0.554490566, 0.681481719, -0.477622271)
 
-    repeat
-        pcall(function()
-            HumanoidRootPart.CFrame = CFrame.new(23.8910046, -705.998718, 1250.59277, -0.0548401251, 6.33398187e-08, -0.998495162, 9.3198544e-08, 1, 5.83165551e-08, 0.998495162, -8.98602082e-08, -0.0548401251)
-            task.wait(0.1)
+    HumanoidRootPart.CFrame = CFrame.new(-1848.354248046875, 165.71112060546875, 165.3882293701172)
+    task.wait(0.1)
 
-            local dialog = workspace.world.npcs.Custos:FindFirstChild("dialogprompt")
+    local dialog = workspace.world.npcs:WaitForChild("Orc", 20):FindFirstChild("dialogprompt")
 
-            local button = (PlayerGui.hud.safezone:FindFirstChild("options") and PlayerGui.hud.safezone.options.responses["1option"]) or (PlayerGui:FindFirstChild("options") and PlayerGui.options.safezone["1option"].button)
-            if button then
-                GuiService.SelectedObject = button
-                task.wait(0.1)
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                task.wait(0.1)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-            else
-                dialog.HoldDuration = 0
-                dialog:InputHoldBegin()
-                dialog:InputHoldEnd()
-                task.wait(0.5)
-            end
-            task.wait(0.5)
-        end)
-    until PlayerStats.Cache:FindFirstChild("Door.TheDepthsGate")
+    dialog.HoldDuration = 0
+    dialog:InputHoldBegin()
+    dialog:InputHoldEnd()
+
+    task.wait(0.25)
+    workspace.world.npcs.Orc.Orc.startQuest:InvokeServer()
+
+    while not Backpack:FindFirstChild("Pufferfish") do
+        setFishZone(zonelist["Pufferfish"])
+        task.wait(0.5)
+    end
+
+    if Torso.Anchored then
+        Torso.Anchored = false
+        Character.Humanoid:UnequipTools()
+        task.wait(0.5)
+    end
+    Humanoid:EquipTool(Backpack:FindFirstChild("Pufferfish"))
+    task.wait()
+
+    HumanoidRootPart.CFrame = CFrame.new(-1848.354248046875, 165.71112060546875, 165.3882293701172)
+    workspace.world.npcs.Orc.Orc.give:InvokeServer()
 
     GuiService.SelectedObject = nil
     camera.CameraType = Enum.CameraType.Custom
+end
+
+local RodofTheEternalKing = function()
+    if StatsRod:FindFirstChild("Rod of The Eternal King") then
+        return
+    end
+    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 250000 or LocalPlayer.leaderstats.Level.Value < 749 then
+        return
+    end
+    AutoSell = false
+    local i = 0
+    local ii = 0
+    local iii = 0
+    for _, v in ipairs(StatsInventory:GetChildren()) do
+        if v.Value == "Lunar Thread" then
+            i += v.Stack.Value
+        elseif v.Value == "Golden Sea Pearl" and not v:FindFirstChild("Mutation") then
+            ii += v.Stack.Value
+        elseif v.Value == "Inferno Wood" and not v:FindFirstChild("Mutation") then
+            iii += v.Stack.Value
+        end
+    end
+    if i < 1 then
+        return
+    end
+    if ii < 2 then
+        repeat
+            setFishZone(zonelist["Roslit Bay"])
+            task.wait(1)
+            ii = 0
+            for _, v in ipairs(StatsInventory:GetChildren()) do
+                if v.Value == "Golden Sea Pearl" and not v:FindFirstChild("Mutation") then
+                    ii += v.Stack.Value
+                end
+            end
+        until ii >= 2
+    end
+    if iii < 3 then
+        if not StatsRod:FindFirstChild("Magma Rod") then
+            magmaRod()
+        end
+        task.wait(0.5)
+        RodPriority = {
+            [1] = "Magma Rod"
+        }
+        repeat
+            setFishZone(zonelist["Magma"])
+            task.wait(1)
+            iii = 0
+            for _, v in ipairs(StatsInventory:GetChildren()) do
+                if v.Value == "Inferno Wood" and not v:FindFirstChild("Mutation") then
+                    iii += v.Stack.Value
+                end
+            end
+        until iii >= 3
+    end
+    RodPriority = {
+        [1] = "Rod Of The Forgotten Fang",
+        [2] = "Rod Of The Depths",
+        [3] = "Aurora Rod",
+        [4] = "Steady Rod"
+    }
+    if i >= 1 and ii >= 2 and iii >= 3 and extractNumber(LocalPlayer.leaderstats["C$"].Value) >= 250000 and LocalPlayer.leaderstats.Level.Value >= 750 then
+        if Torso.Anchored then
+            Torso.Anchored = false
+            Character.Humanoid:UnequipTools()
+            task.wait(0.5)
+        end
+
+        Character = LocalPlayer.Character
+        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+        HumanoidRootPart.CFrame = CFrame.new(-3160.4353, -745.464111, 1675.45667, -1, 9.87624293e-09, -2.04887041e-08, 9.87624205e-09, 1, 3.51660248e-08, 2.04887041e-08, 3.51660248e-08, -1)
+
+        task.wait(0.5)
+
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = CFrame.new(-3160.14819, -725.017517, 1667.23328, -0.9993909, -0.0320101529, 0.0139018157, 0, 0.398349136, 0.917233944, -0.0348985717, 0.91667527, -0.398106486)
+
+        repeat
+            pcall(function()
+                HumanoidRootPart.CFrame = CFrame.new(-3160.4353, -745.464111, 1675.45667, -1, 9.87624293e-09, -2.04887041e-08, 9.87624205e-09, 1, 3.51660248e-08, 2.04887041e-08, 3.51660248e-08, -1)
+                task.wait(0.1)
+                local Highlight = workspace.RodCrafting.InteractPart:FindFirstChild("Highlight")
+                local dialog = workspace.RodCrafting.InteractPart:FindFirstChild("prompt")
+
+                if Highlight then
+                    dialog.HoldDuration = 0
+                    dialog:InputHoldBegin()
+                    dialog:InputHoldEnd()
+                end
+
+                local button = PlayerGui.hud.safezone.crafting.Visible and PlayerGui.hud.safezone.crafting.items.Rods["Rod of The Eternal King"]
+                if button then
+                    GuiService.SelectedObject = button
+                    task.wait(0.1)
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    task.wait(0.1)
+                end
+                button = PlayerGui.hud.safezone.crafting.Visible and PlayerGui.hud.safezone.crafting.preview.Craft
+                if button then
+                    GuiService.SelectedObject = button
+                    task.wait(0.1)
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    task.wait(0.1)
+                end
+            end)
+        until StatsRod:FindFirstChild("Rod of The Eternal King")
+
+        GuiService.SelectedObject = nil
+        camera.CameraType = Enum.CameraType.Custom
+        AutoSell = true
+    else
+        return
+    end
 end
 
 local getchest = function()
@@ -1012,7 +1128,7 @@ local RodOfTheForgottenFang = function()
 
         GuiService.SelectedObject = nil
         camera.CameraType = Enum.CameraType.Custom
-        AutoSell = false
+        AutoSell = true
     else
         return
     end
@@ -1140,7 +1256,7 @@ elseif config["FarmLevel"] then
         end
 
         pcall(function()
-            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and extractNumber(LocalPlayer.leaderstats["C$"].Value) < 10500000 then
+            --[[if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and extractNumber(LocalPlayer.leaderstats["C$"].Value) > 800000 then
                 if not checkLuck() then
                     for i = 1, 6 do
                         npcRemote("luck")
@@ -1186,7 +1302,7 @@ elseif config["FarmLevel"] then
                         task.wait(1)
                     end
                 end
-            elseif StatsRod:FindFirstChild("Rod Of The Depths") then
+            else]]if StatsRod:FindFirstChild("Rod Of The Depths") then
                 if not checkLuck() then
                     for i = 1, 6 do
                         npcRemote("luck")
@@ -1203,7 +1319,7 @@ elseif config["FarmLevel"] then
                             task.wait(0.25)
                         end
                         Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
-                    elseif (LocalPlayer.leaderstats.Level.Value < 749 and money >= 5000) or money >= 10500000 then
+                    elseif (LocalPlayer.leaderstats.Level.Value < 749 and money >= 5000) or money >= 800000 then
                         setInterac("Sundial Totem", 3)
                         Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
                     end
@@ -1227,7 +1343,7 @@ elseif config["FarmLevel"] then
                             task.wait(0.25)
                         end
                         Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
-                    elseif (LocalPlayer.leaderstats.Level.Value < 749 and money >= 500000) or money >= 10500000 then
+                    elseif (LocalPlayer.leaderstats.Level.Value < 749 and money >= 500000) or money >= 800000 then
                         setInterac("Aurora Totem")
                         Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
                         task.wait(1)
@@ -1254,7 +1370,7 @@ elseif config["FarmLevel"] then
             end
 
             if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Abyssal" then
-                enchantRod("Rod Of The Forgotten Fang", "Abyssal")
+                enchantRod("Rod Of The Forgotten Fang", "Clever")
             elseif StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
                 enchantRod("Rod Of The Depths", "Clever")
             elseif StatsRod:FindFirstChild("Aurora Rod") and (StatsRod["Aurora Rod"].Value ~= "Mutated" and StatsRod["Aurora Rod"].Value ~= "Abyssal") and not StatsRod:FindFirstChild("Rod Of The Depths") then
@@ -1266,6 +1382,8 @@ elseif config["FarmLevel"] then
                 autoRodOfTheDepths()
             elseif not StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and LocalPlayer.leaderstats.Level.Value >= 749 then
                 RodOfTheForgottenFang()
+            elseif StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and not StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+                RodofTheEternalKing()
             end
 
             if _500k and StatsRod:FindFirstChild("Rod Of The Depths") and (money > 570000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 450) then
@@ -1290,7 +1408,7 @@ elseif config["FarmLevel"] then
                 farmc = false
                 iF = 0
                 if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
-                    setFishZone(zonelist["Grand Reef"])
+                    setFishZone(zonelist["Forsaken Shores"])
                     camera.CameraType = Enum.CameraType.Scriptable
                     camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)
                 elseif LocalPlayer.leaderstats.Level.Value >= 749 then --StatsRod:FindFirstChild("Rod Of The Forgotten Fang")

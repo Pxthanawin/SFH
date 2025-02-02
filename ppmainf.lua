@@ -76,7 +76,7 @@ local zonelist = {
     ["Moosewood"] = Vector3.new(453.076996, 150.501022, 210.481934),
     ["Roslit Bay"] = Vector3.new(-1937.4725341796875, 123, 441.02899169921875),
     ["Pufferfish"] = Vector3.new(-1427.500244140625, 123, 449.02447509765625),
-    ["Magma"] = CFrame.new(-1920.58899, 175.500015, 308.168335, 0.0436145514, -7.89108157e-08, 0.999048412, -4.81796256e-08, 1, 8.10893113e-08, -0.999048412, -5.16704546e-08, 0.0436145514)
+    ["Magma"] = Vector3.new(-1920.58899, 175.500015, 308.168335)
 }
 
 local ListRod = {
@@ -325,14 +325,14 @@ end]]
 local setFishZone = function(zone)
     task.wait(0.25)
     if Torso.Anchored then
-        if (HumanoidRootPart.Position - Vector3.new(zone)).Magnitude < 4 then
+        if (HumanoidRootPart.Position - zone).Magnitude < 4 then
             return
         else
             Torso.Anchored = false
             Character.Humanoid:UnequipTools()
             task.wait(0.25)
         end
-    elseif (HumanoidRootPart.Position - Vector3.new(zone)).Magnitude < 4 then
+    elseif (HumanoidRootPart.Position - zone).Magnitude < 4 then
         HumanoidRootPart.CFrame = CFrame.new(zone)
         task.wait(0.25)
         Torso.Anchored = true

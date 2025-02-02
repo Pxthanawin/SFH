@@ -897,7 +897,8 @@ local RodofTheEternalKing = function()
     if StatsRod:FindFirstChild("Rod of The Eternal King") then
         return
     end
-    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 250000 or LocalPlayer.leaderstats.Level.Value < 749 then
+    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 300000 or LocalPlayer.leaderstats.Level.Value < 749 then
+        AutoSell = true
         return
     end
     AutoSell = false
@@ -1061,7 +1062,8 @@ local RodOfTheForgottenFang = function()
     if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
         return
     end
-    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 360000 or LocalPlayer.leaderstats.Level.Value < 749 then
+    if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 380000 or LocalPlayer.leaderstats.Level.Value < 749 then
+        AutoSell = true
         return
     end
     AutoSell = false

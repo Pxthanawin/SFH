@@ -137,14 +137,14 @@ task.spawn(function()
         updateTime()
     end
 end)
-
+--[[
 task.spawn(function()
     while task.wait(2) do
         RunService:Set3dRenderingEnabled(true)
         task.wait(0.05)
         RunService:Set3dRenderingEnabled(false)
     end
-end)
+end)]]
 
 -- ---- Other Variable
 
@@ -234,7 +234,7 @@ FpsPart.Transparency = 0
 local humanoid = LocalPlayer.Character.Humanoid
 humanoid.Sit = true
 
-workspace.Gravity = 30
+--workspace.Gravity = 30
 
 local function applySettings(object)
     if object:IsA("BasePart") then

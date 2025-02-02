@@ -1382,7 +1382,7 @@ elseif config["FarmLevel"] then
                 autoRodOfTheDepths()
             elseif not StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and LocalPlayer.leaderstats.Level.Value >= 749 then
                 RodOfTheForgottenFang()
-            elseif _RodOfTheForgottenFang and StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and not StatsRod:FindFirstChild("Rod Of The Forgotten Fang") then
+            elseif _RodofTheEternalKing and StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and not StatsRod:FindFirstChild("Rod of The Eternal King") then
                 RodofTheEternalKing()
             end
 

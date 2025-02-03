@@ -1385,7 +1385,7 @@ elseif config["FarmLevel"] then
             elseif not StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and LocalPlayer.leaderstats.Level.Value >= 749 then
                 RodOfTheForgottenFang()
             elseif _RodofTheEternalKing and StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and not StatsRod:FindFirstChild("Rod Of The Eternal King") then
-                RodofTheEternalKing()
+                RodOfTheEternalKing()
             end
 
             if _500k and StatsRod:FindFirstChild("Rod Of The Depths") and (money > 570000 or game.Players.LocalPlayer.leaderstats.Level.Value >= 450) then

@@ -893,8 +893,8 @@ local magmaRod = function()
     camera.CameraType = Enum.CameraType.Custom
 end
 
-local RodofTheEternalKing = function()
-    if StatsRod:FindFirstChild("Rod of The Eternal King") then
+local RodOfTheEternalKing = function()
+    if StatsRod:FindFirstChild("Rod Of The Eternal King") then
         return
     end
     if extractNumber(LocalPlayer.leaderstats["C$"].Value) < 300000 or LocalPlayer.leaderstats.Level.Value < 749 then
@@ -984,7 +984,7 @@ local RodofTheEternalKing = function()
                     dialog:InputHoldEnd()
                 end
 
-                local button = PlayerGui.hud.safezone.crafting.Visible and PlayerGui.hud.safezone.crafting.items.Rods["Rod of The Eternal King"]
+                local button = PlayerGui.hud.safezone.crafting.Visible and PlayerGui.hud.safezone.crafting.items.Rods["Rod Of The Eternal King"]
                 if button then
                     GuiService.SelectedObject = button
                     task.wait(0.1)
@@ -1001,7 +1001,7 @@ local RodofTheEternalKing = function()
                     task.wait(0.1)
                 end
             end)
-        until StatsRod:FindFirstChild("Rod of The Eternal King")
+        until StatsRod:FindFirstChild("Rod Of The Eternal King")
 
         GuiService.SelectedObject = nil
         camera.CameraType = Enum.CameraType.Custom
@@ -1384,7 +1384,7 @@ elseif config["FarmLevel"] then
                 autoRodOfTheDepths()
             elseif not StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and LocalPlayer.leaderstats.Level.Value >= 749 then
                 RodOfTheForgottenFang()
-            elseif _RodofTheEternalKing and StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and not StatsRod:FindFirstChild("Rod of The Eternal King") then
+            elseif _RodofTheEternalKing and StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and not StatsRod:FindFirstChild("Rod Of The Eternal King") then
                 RodofTheEternalKing()
             end
 

@@ -917,18 +917,6 @@ local RodOfTheEternalKing = function()
     if i < 1 then
         return
     end
-    if ii < 2 then
-        repeat
-            setFishZone(zonelist["Roslit Bay"])
-            task.wait(1)
-            ii = 0
-            for _, v in ipairs(StatsInventory:GetChildren()) do
-                if v.Value == "Golden Sea Pearl" and not v:FindFirstChild("Mutation") then
-                    ii += v.Stack.Value
-                end
-            end
-        until ii >= 2
-    end
     if iii < 3 then
         if not StatsRod:FindFirstChild("Magma Rod") then
             magmaRod()
@@ -949,11 +937,20 @@ local RodOfTheEternalKing = function()
         until iii >= 3
     end
     RodPriority = {
-        [1] = "Rod Of The Forgotten Fang",
-        [2] = "Rod Of The Depths",
-        [3] = "Aurora Rod",
-        [4] = "Steady Rod"
+        [1] = "Rod Of The Forgotten Fang"
     }
+    if ii < 2 then
+        repeat
+            setFishZone(zonelist["Roslit Bay"])
+            task.wait(1)
+            ii = 0
+            for _, v in ipairs(StatsInventory:GetChildren()) do
+                if v.Value == "Golden Sea Pearl" and not v:FindFirstChild("Mutation") then
+                    ii += v.Stack.Value
+                end
+            end
+        until ii >= 2
+    end
     if i >= 1 and ii >= 2 and iii >= 3 and extractNumber(LocalPlayer.leaderstats["C$"].Value) >= 250000 and LocalPlayer.leaderstats.Level.Value >= 750 then
         if Torso.Anchored then
             Torso.Anchored = false
@@ -1371,7 +1368,7 @@ elseif config["FarmLevel"] then
                 end
             end
 
-            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Abyssal" then
+            if StatsRod:FindFirstChild("Rod Of The Forgotten Fang") and StatsRod["Rod Of The Forgotten Fang"].Value ~= "Clever" then
                 enchantRod("Rod Of The Forgotten Fang", "Clever")
             elseif StatsRod:FindFirstChild("Rod Of The Depths") and StatsRod["Rod Of The Depths"].Value ~= "Clever" then
                 enchantRod("Rod Of The Depths", "Clever")

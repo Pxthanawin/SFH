@@ -1141,15 +1141,18 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
                 GuiService.SelectedObject = button
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
             end
-            return
         end)
     elseif descendant.Name == "reel" and descendant.Parent == PlayerGui then
         while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
             RunService.Heartbeat:Wait()
         end
-        if PlayerGui:FindFirstChild("reel") then
+        if rod:FindFirstChild("bobber") and rod.values.bite.Value then
             ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
+        end
+        if PlayerGui:FindFirstChild("reel") then
             PlayerGui.reel:Destroy()
             Humanoid:UnequipTools()
         end
@@ -1163,6 +1166,11 @@ end)
 
 task.spawn(function()
     while RunService.Heartbeat:Wait() do
+
+        if PlayerGui:FindFirstChild("reel") then
+            PlayerGui.reel:Destroy()
+            Humanoid:UnequipTools()
+        end
 
         if not Torso.Anchored then
             --__sec = 20

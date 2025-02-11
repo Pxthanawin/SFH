@@ -1133,41 +1133,6 @@ local RodOfTheForgottenFang = function()
     end
 end
 
-PlayerGui.DescendantAdded:Connect(function(descendant)
-    if descendant.Name == "safezone" and descendant.Parent.Name == "shakeui" then
-        PlayerGui.shakeui.safezone.DescendantAdded:Connect(function(button)
-            if button.Name == "button" then
-                button.Size = UDim2.new(1001, 0, 1001, 0)
-                while RunService.Heartbeat:Wait() do
-                    if button.IsLoaded then
-                        VirtualUser:Button1Down(Vector2.new(1, 1))
-                        VirtualUser:Button1Up(Vector2.new(1, 1))
-                        VirtualUser:Button1Down(Vector2.new(1, 1))
-                        VirtualUser:Button1Up(Vector2.new(1, 1))
-                        return
-                    elseif not button.Parent then
-                        return
-                    end
-                end
-            end
-        end)
-    elseif descendant.Name == "reel" and descendant.Parent == PlayerGui then
-        while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
-            RunService.Heartbeat:Wait()
-        end
-        if PlayerGui:FindFirstChild("reel") then
-            ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
-            PlayerGui.reel:Destroy()
-            Humanoid:UnequipTools()
-        end
-        __count += 1
-        if (AutoSell and __count >= 30) or rodNameCache == "Flimsy Rod" then
-            __count = 0
-            ReplicatedStorage.events.SellAll:InvokeServer()
-        end
-    end
-end)
-
 task.spawn(function()
     while RunService.Heartbeat:Wait() do
 
@@ -1201,6 +1166,47 @@ task.spawn(function()
 
         if rod:FindFirstChild("bobber") then
 
+            while rod:FindFirstChild("bobber") and not (PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")) do
+                RunService.Heartbeat:Wait()
+            end
+            local shakeUI = PlayerGui:FindFirstChild("shakeui") and PlayerGui.shakeui:FindFirstChild("safezone")
+            while PlayerGui:FindFirstChild("shakeui") do
+                local button = shakeUI:FindFirstChild("button")
+                if button then
+                    GuiService.SelectedObject = button
+                    GuiService.SelectedObject = button
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                end
+                RunService.Heartbeat:Wait()
+            end
+            while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
+                RunService.Heartbeat:Wait()
+            end
+
+            --[[
+            if __sec >= 24 and rod.values.bite.Value then
+                __sec = 0
+                Humanoid:UnequipTools()
+                continue
+            else
+                __sec += 1
+            end]]
+
+            if PlayerGui:FindFirstChild("reel") then
+                ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
+                PlayerGui.reel:Destroy()
+                Humanoid:UnequipTools()
+            end
+
+            __count += 1
+
+            if (AutoSell and __count >= 30) or rodNameCache == "Flimsy Rod" then
+                __count = 0
+                ReplicatedStorage.events.SellAll:InvokeServer()
+            end
 
         elseif rod:FindFirstChild("events") then
             rod.events.cast:FireServer(100)

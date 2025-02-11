@@ -1173,12 +1173,9 @@ task.spawn(function()
             while PlayerGui:FindFirstChild("shakeui") do
                 local button = shakeUI:FindFirstChild("button")
                 if button then
-                    GuiService.SelectedObject = button
-                    GuiService.SelectedObject = button
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                    button.Size = UDim2.new(1001, 0, 1001, 0)
+                    VirtualUser:Button1Down(Vector2.new(1, 1))
+                    VirtualUser:Button1Up(Vector2.new(1, 1))
                 end
                 RunService.Heartbeat:Wait()
             end

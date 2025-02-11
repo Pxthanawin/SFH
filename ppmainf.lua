@@ -1144,6 +1144,7 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
             end
+            return
         end)
     elseif descendant.Name == "reel" and descendant.Parent == PlayerGui then
         while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do

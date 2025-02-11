@@ -1167,7 +1167,6 @@ task.spawn(function()
 
         if PlayerGui:FindFirstChild("reel") then
             PlayerGui.reel:Destroy()
-            Humanoid:UnequipTools()
         end
 
         if not Torso.Anchored then

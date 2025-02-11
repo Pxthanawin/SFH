@@ -1163,6 +1163,7 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
             ReplicatedStorage.events.SellAll:InvokeServer()
         end
     end
+    return
 end)
 
 task.spawn(function()

@@ -645,6 +645,8 @@ local autoRodOfTheDepths = function()
 
         repeat
 
+            task.wait(1)
+
             if not PlayerStats.Bestiary:FindFirstChild("Night Shrimp") then
                 local i = 0
                 for _, v in pairs(workspace.active.crabcages:GetChildren()) do
@@ -690,7 +692,7 @@ local autoRodOfTheDepths = function()
 
             setFishZone(zonelist["Vertigo"])
 
-        until task.wait(1) and checkVertigoFish() ~= "Vertigo"
+        until checkVertigoFish() ~= "Vertigo"
 
         for _, v in ipairs(workspace.active.crabcages:GetChildren()) do
             while v.Name == game.Players.LocalPlayer.Name do
@@ -727,6 +729,8 @@ local autoRodOfTheDepths = function()
 
         repeat
 
+            task.wait(1)
+
             if not workspace.zones.fishing:FindFirstChild("Isonade") then
                 --AutoSell = true
                 return
@@ -750,7 +754,7 @@ local autoRodOfTheDepths = function()
                 setFishZone(pos)
             end
 
-        until task.wait(1) and checkVertigoFish() ~= "Isonade"
+        until checkVertigoFish() ~= "Isonade"
 
     end
 

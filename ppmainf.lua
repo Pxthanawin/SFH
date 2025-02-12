@@ -64,7 +64,7 @@ local function checkLuck()
 end
 
 local zonelist = {
-    ["The Depths"] = Vector3.new(841, -750, 1246),
+    ["The Depths"] = Vector3.new(841, -751, 1246),
     ["Vertigo"] = Vector3.new(-121, -743, 1234),
     ["Forsaken Shores"] = Vector3.new(-2695, 157, 1752),
     ["Grand Reef"] = Vector3.new(-3613, 123, 563),

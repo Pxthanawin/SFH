@@ -64,7 +64,7 @@ local function checkLuck()
 end
 
 local zonelist = {
-    ["The Depths"] = Vector3.new(841, -749, 1246),
+    ["The Depths"] = Vector3.new(893.439453, -772.387634, 975.62616),
     ["Vertigo"] = Vector3.new(-121, -743, 1234),
     ["Forsaken Shores"] = Vector3.new(-2695, 157, 1752),
     ["Grand Reef"] = Vector3.new(-3613, 123, 563),
@@ -1205,8 +1205,6 @@ task.spawn(function()
 end)
 
 if config["C$_100k"] then
-
-    task.wait(2)
 
     setFishZone(zonelist["The Depths"])
     camera.CameraType = Enum.CameraType.Scriptable

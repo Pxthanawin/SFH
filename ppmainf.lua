@@ -1137,41 +1137,39 @@ local RodOfTheForgottenFang = function()
     end
 end
 
-task.spawn(function()
-    PlayerGui.ChildAdded:Connect(function(Child)
-        if Child.Name == "shakeui" then
-            Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
-                if button.Name == "button" then
-                    GuiService.SelectedObject = button
-                    GuiService.SelectedObject = button
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                else
-                    RunService.Heartbeat:Wait()
-                    button:Destroy()
-                end
-            end)
-        elseif Child.Name == "reel" then
-            while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
+PlayerGui.ChildAdded:Connect(function(Child)
+    if Child.Name == "shakeui" then
+        Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
+            if button.Name == "button" then
+                GuiService.SelectedObject = button
+                GuiService.SelectedObject = button
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            else
                 RunService.Heartbeat:Wait()
+                button:Destroy()
             end
-            if rod.values.bite.Value then
-                ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
-            end
+        end)
+    elseif Child.Name == "reel" then
+        while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
             RunService.Heartbeat:Wait()
-            if Child.Parent == PlayerGui then
-                Child:Destroy()
-                Humanoid:UnequipTools()
-            end
-            __count += 1
-            if (AutoSell and __count >= 30) or rodNameCache == "Flimsy Rod" then
-                __count = 0
-                ReplicatedStorage.events.SellAll:InvokeServer()
-            end
         end
-    end)
+        if rod.values.bite.Value then
+            ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
+        end
+        RunService.Heartbeat:Wait()
+        if Child.Parent == PlayerGui then
+            Child:Destroy()
+            Humanoid:UnequipTools()
+        end
+        __count += 1
+        if (AutoSell and __count >= 30) or rodNameCache == "Flimsy Rod" then
+            __count = 0
+            ReplicatedStorage.events.SellAll:InvokeServer()
+        end
+    end
 end)
 task.spawn(function()
     while RunService.Heartbeat:Wait() do

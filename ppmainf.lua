@@ -1141,12 +1141,18 @@ PlayerGui.ChildAdded:Connect(function(Child)
     if Child.Name == "shakeui" then
         Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
             if button.Name == "button" then
-                GuiService.SelectedObject = button
-                GuiService.SelectedObject = button
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                button.Size = UDim2.new(1001, 0, 1001, 0)
+                while RunService.Heartbeat:Wait() do
+                    if button.IsLoaded then
+                        VirtualUser:Button1Down(Vector2.new(1, 1))
+                        VirtualUser:Button1Up(Vector2.new(1, 1))
+                        VirtualUser:Button1Down(Vector2.new(1, 1))
+                        VirtualUser:Button1Up(Vector2.new(1, 1))
+                        return
+                    elseif not button.Parent then
+                        return
+                    end
+                end
             else
                 RunService.Heartbeat:Wait()
                 button:Destroy()

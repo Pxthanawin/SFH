@@ -1142,7 +1142,7 @@ PlayerGui.ChildAdded:Connect(function(Child)
         Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
             if button.Name == "button" then
                 button.Size = UDim2.new(1001, 0, 1001, 0)
-                while button.Parent do
+                while Child.Parent do
                     if button.IsLoaded then
                         VirtualUser:Button1Down(Vector2.new(1, 1))
                         VirtualUser:Button1Up(Vector2.new(1, 1))
@@ -1150,7 +1150,7 @@ PlayerGui.ChildAdded:Connect(function(Child)
                         VirtualUser:Button1Up(Vector2.new(1, 1))
                         return
                     end
-                    RunService.Heartbeat:Wait()
+                    RunService.RenderStepped:Wait()
                 end
             elseif button.Name == "ripple" then
                 RunService.Heartbeat:Wait()

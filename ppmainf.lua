@@ -1147,7 +1147,8 @@ PlayerGui.ChildAdded:Connect(function(Child)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
-            elseif button.Name == "ripple" then
+                GuiService.SelectedObject = nil
+            else
                 RunService.Heartbeat:Wait()
                 button:Destroy()
             end

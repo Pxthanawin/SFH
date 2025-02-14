@@ -1139,20 +1139,16 @@ end
 
 PlayerGui.ChildAdded:Connect(function(Child)
     if Child.Name == "shakeui" then
+        while Child.Parent do
+            VirtualUser:Button1Down(Vector2.new(1, 1))
+            VirtualUser:Button1Up(Vector2.new(1, 1))
+            VirtualUser:Button1Down(Vector2.new(1, 1))
+            VirtualUser:Button1Up(Vector2.new(1, 1))
+            RunService.Heartbeat:Wait()
+        end
         Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
             if button.Name == "button" then
                 button.Size = UDim2.new(1001, 0, 1001, 0)
-                while RunService.Heartbeat:Wait() do
-                    if button.IsLoaded then
-                        VirtualUser:Button1Down(Vector2.new(1, 1))
-                        VirtualUser:Button1Up(Vector2.new(1, 1))
-                        VirtualUser:Button1Down(Vector2.new(1, 1))
-                        VirtualUser:Button1Up(Vector2.new(1, 1))
-                        return
-                    elseif not button.Parent then
-                        return
-                    end
-                end
             end
         end)
     elseif Child.Name == "reel" then

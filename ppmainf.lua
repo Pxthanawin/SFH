@@ -1139,8 +1139,7 @@ end
 
 PlayerGui.ChildAdded:Connect(function(Child)
     if Child.Name == "shakeui" then
-        local connect
-        connect = Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
+        Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
             if button.Name == "button" then
                 GuiService.SelectedObject = button
                 GuiService.SelectedObject = button
@@ -1152,7 +1151,6 @@ PlayerGui.ChildAdded:Connect(function(Child)
                 RunService.Heartbeat:Wait()
                 button:Destroy()
             end
-            connect:Disconnect()
         end)
     elseif Child.Name == "reel" then
         while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
@@ -1161,7 +1159,6 @@ PlayerGui.ChildAdded:Connect(function(Child)
         if rod.values.bite.Value then
             ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
         end
-        RunService.Heartbeat:Wait()
         if Child.Parent == PlayerGui then
             Child:Destroy()
             Humanoid:UnequipTools()

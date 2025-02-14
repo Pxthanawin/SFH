@@ -1139,7 +1139,8 @@ end
 
 PlayerGui.ChildAdded:Connect(function(Child)
     if Child.Name == "shakeui" then
-        Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
+        local connect
+        connect = Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
             if button.Name == "button" then
                 GuiService.SelectedObject = button
                 GuiService.SelectedObject = button
@@ -1151,6 +1152,7 @@ PlayerGui.ChildAdded:Connect(function(Child)
                 RunService.Heartbeat:Wait()
                 button:Destroy()
             end
+            connect:Disconnect()
         end)
     elseif Child.Name == "reel" then
         while rod:FindFirstChild("bobber") and not rod.values.bite.Value do

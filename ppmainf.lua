@@ -1137,9 +1137,9 @@ local RodOfTheForgottenFang = function()
     end
 end
 
-PlayerGui.DescendantAdded:Connect(function(descendant)
-    if descendant.Name == "safezone" and descendant.Parent and descendant.Parent.Name == "shakeui" then
-        PlayerGui.shakeui.safezone.DescendantAdded:Connect(function(button)
+PlayerGui.ChildAdded:Connect(function(Child)
+    if Child.Name == "shakeui" then
+        Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
             if button.Name == "button" then
                 GuiService.SelectedObject = button
                 GuiService.SelectedObject = button
@@ -1147,17 +1147,21 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            elseif button.Name == "ripple" then
+                RunService.Heartbeat:Wait()
+                button:Destroy()
             end
         end)
-    elseif descendant.Name == "reel" and descendant.Parent == PlayerGui then
-        while rod:FindFirstChild("bobber") and not (rod.values.bite.Value and PlayerGui:FindFirstChild("reel")) do
+    elseif Child.Name == "reel" then
+        while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
             RunService.Heartbeat:Wait()
         end
-        if rod:FindFirstChild("bobber") and rod.values.bite.Value then
+        if rod.values.bite.Value then
             ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
         end
-        if PlayerGui:FindFirstChild("reel") then
-            PlayerGui.reel:Destroy()
+        RunService.Heartbeat:Wait()
+        if Child.Parent == PlayerGui then
+            Child:Destroy()
             Humanoid:UnequipTools()
         end
         __count += 1
@@ -1167,13 +1171,8 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
         end
     end
 end)
-
 task.spawn(function()
     while RunService.Heartbeat:Wait() do
-
-        if PlayerGui:FindFirstChild("reel") then
-            PlayerGui.reel:Destroy()
-        end
 
         if not Torso.Anchored then
             --__sec = 20

@@ -1153,9 +1153,6 @@ PlayerGui.ChildAdded:Connect(function(Child)
                         return
                     end
                 end
-            else
-                RunService.Heartbeat:Wait()
-                button:Destroy()
             end
         end)
     elseif Child.Name == "reel" then

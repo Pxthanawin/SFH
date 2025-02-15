@@ -1150,7 +1150,7 @@ PlayerGui.ChildAdded:Connect(function(Child)
                         VirtualUser:Button1Up(Vector2.new(1, 1))
                         return
                     end
-                    RunService.PreAnimation:Wait()
+                    RunService.Heartbeat:Wait()
                 end
             elseif button.Name == "ripple" then
                 RunService.Heartbeat:Wait()

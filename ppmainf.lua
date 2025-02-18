@@ -1165,6 +1165,7 @@ PlayerGui.ChildAdded:Connect(function(Child)
             ReplicatedStorage.events["reelfinished "]:FireServer(100, true)
         end
         if Child.Parent == PlayerGui then
+            RunService.Heartbeat:Wait()
             Child:Destroy()
             Humanoid:UnequipTools()
         end

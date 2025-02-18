@@ -137,14 +137,13 @@ task.spawn(function()
         updateTime()
     end
 end)
---[[
 task.spawn(function()
     while task.wait(2) do
         RunService:Set3dRenderingEnabled(true)
         task.wait(0.05)
         RunService:Set3dRenderingEnabled(false)
     end
-end)]]
+end)
 
 -- ---- Other Variable
 

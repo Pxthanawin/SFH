@@ -523,11 +523,10 @@ local equipRod = function(RodPriority)
 end
 
 local RodPriority = {
-    [1] = "Ethereal Prism Rod",
-    [2] = "Rod Of The Forgotten Fang",
-    [3] = "Rod Of The Depths",
-    [4] = "Aurora Rod",
-    [5] = "Steady Rod"
+    "Rod Of The Forgotten Fang",
+    "Rod Of The Depths",
+    "Aurora Rod",
+    "Steady Rod"
 }
 
 local checkVertigoFish = function()
@@ -1215,6 +1214,14 @@ end)
 
 if config["C$_100k"] then
 
+    RodPriority = {
+        [1] = "Ethereal Prism Rod",
+        [2] = "Kraken Rod",
+        [3] = "Rod Of The Forgotten Fang",
+        [4] = "Rod Of The Depths",
+        [5] = "Aurora Rod",
+        [6] = "Steady Rod"
+    }
     setFishZone(zonelist["The Depths"])
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = CFrame.new(0.943815053, 141.073318, -0.428265214, -0.999930441, -0.0116165085, 0.00204831036, 0, 0.173648715, 0.98480773, -0.0117957117, 0.984739244, -0.173636645)

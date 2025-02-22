@@ -523,10 +523,11 @@ local equipRod = function(RodPriority)
 end
 
 local RodPriority = {
-    [1] = "Rod Of The Forgotten Fang",
-    [2] = "Rod Of The Depths",
-    [3] = "Aurora Rod",
-    [4] = "Steady Rod"
+    [1] = "Ethereal Prism Rod",
+    [2] = "Rod Of The Forgotten Fang",
+    [3] = "Rod Of The Depths",
+    [4] = "Aurora Rod",
+    [5] = "Steady Rod"
 }
 
 local checkVertigoFish = function()

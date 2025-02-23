@@ -1215,8 +1215,8 @@ end)
 if config["C$_100k"] then
 
     RodPriority = {
-        --"Ethereal Prism Rod",
-        --"Kraken Rod",
+        "Ethereal Prism Rod",
+        "Kraken Rod",
         "Rod Of The Forgotten Fang",
         "Rod Of The Depths",
         "Aurora Rod",

@@ -1215,12 +1215,12 @@ end)
 if config["C$_100k"] then
 
     RodPriority = {
-        [1] = "Ethereal Prism Rod",
-        [2] = "Kraken Rod",
-        [3] = "Rod Of The Forgotten Fang",
-        [4] = "Rod Of The Depths",
-        [5] = "Aurora Rod",
-        [6] = "Steady Rod"
+        --"Ethereal Prism Rod",
+        --"Kraken Rod",
+        "Rod Of The Forgotten Fang",
+        "Rod Of The Depths",
+        "Aurora Rod",
+        "Steady Rod"
     }
     setFishZone(zonelist["The Depths"])
     camera.CameraType = Enum.CameraType.Scriptable

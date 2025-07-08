@@ -1678,7 +1678,7 @@ function remoteHandler(data)
     -- Generate the script string representing the remote call
     local scriptToCopy = genScript(data.remote, data.args)
     -- Copy the generated script to the clipboard
-    setclipboard(scriptToCopy)
+    console.log(scriptToCopy)
     -- [[ MODIFICATION END ]]
     
     if configs.autoblock then

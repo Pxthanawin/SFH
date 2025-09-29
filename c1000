@@ -388,7 +388,7 @@ task.spawn(function()
    _G.Config = {
    UserID = "01d1b337-a46c-41fc-9b7d-1ff092125538",
    discord_id = "528175611311816714" ,
-   Note = "Pc-37",
+   Note = PC_NAME,
    }
    loadstring(game:HttpGet("https://raw.githubusercontent.com/skadidau/unfazedfree/refs/heads/main/fisch"))()
 end)
@@ -436,7 +436,7 @@ task.spawn(function()
    			["Aurora Rod"] = true,
    			["Kraken Rod"] = false,
    			["Poseidon Rod"] = true,
-   			["Ethereal Prism Rod"] = true,
+   			["Ethereal Prism Rod"] = false,
    			["Great Rod of Oscar"] = true,
    		}, 
    		["Default Equip"] = {
@@ -444,7 +444,6 @@ task.spawn(function()
    			"Rapid Rod",
    			"Aurora Rod",
    			"Poseidon Rod",
-   			"Ethereal Prism Rod",
    			"Great Rod of Oscar",
    		},
    	}, 
@@ -456,7 +455,7 @@ task.spawn(function()
    	}, 
    	["Quest Manager"] = { 
    		["Leviathan's Fang Rod"] = {
-   			["Enable"] = true,
+   			["Enable"] = false,
    			["Doing After"] = {
    				["Level"] = 500,
    				["Money"] = 1200000,

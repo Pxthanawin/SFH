@@ -1,383 +1,581 @@
-task.wait(10)
--- Configuration
-local SERVER_HOST = "localhost"
-local SERVER_PORT = 8766
-local HEARTBEAT_INTERVAL = 3
-local CHARACTER_LOAD_TIMEOUT = 75
-local INITIAL_LOAD_TIMEOUT = 60
-local ERROR_SHUTDOWN_DELAY = 15
-local SHUTDOWN_ON_TELEPORT_ERROR = true
-local SUCCESS_CHECK_INTERVAL = 15 -- Check for success every 10 seconds
-
-local Players = game:GetService("Players")
-local HttpService = game:GetService("HttpService")
-local RunService = game:GetService("RunService")
-local TeleportService = game:GetService("TeleportService")
-local GuiService = game:GetService("GuiService")
-
-local LocalPlayer = nil
-local ShouldBeRunning = true
-local HeartbeatLoopConnection = nil
-local SuccessCheckLoopConnection = nil
-local TeleportConnection = nil
-local ErrorMessageChangedConnection = nil
-
-local lastHeartbeatSend = 0
-local lastSuccessCheck = 0
-local lastErrorTime = 0
-local errorCooldown = 10
-local http_request_func = nil
-local hasSentSuccessSignal = false -- To prevent sending multiple success signals
-
---[[
-    ********************************************************************************
-    * DEFINE YOUR SUCCESS CONDITION FUNCTION HERE                                  *
-    * This function will be called every SUCCESS_CHECK_INTERVAL seconds.           *
-    * It should return `true` if the success condition is met, `false` otherwise.  *
-    ********************************************************************************
---]]
-local function CheckForSuccessCondition()
-    -- Example: Success if player's level is 2650 or higher
-    --if LocalPlayer and LocalPlayer:FindFirstChild("Data") and LocalPlayer.Data:FindFirstChild("Level") and LocalPlayer.Data.Level.Value >= 2750 then
-    --    return true
-    --end
-
-    --if LocalPlayer and LocalPlayer:GetAttribute("TodayLotteryLimited") then
-    --    return true
-    --end
-
-    if LocalPlayer and LocalPlayer.leaderstats.Level.Value >= 1000 then
-        return true
-    end
-    return false
-end
---[[ ****************************************************************************** ]]
-
-
-if http_request and type(http_request) == "function" then
-    http_request_func = http_request
-    print("Heartbeat: Using global 'http_request'.")
-elseif syn and syn.request and type(syn.request) == "function" then
-    http_request_func = syn.request
-    print("Heartbeat: Using 'syn.request'.")
-elseif request and type(request) == "function" then
-    http_request_func = request
-    print("Heartbeat: Using global 'request'.")
-elseif game.HttpGetAsync and type(game.HttpGetAsync) == "function" then
-    print("Heartbeat Warning: Using game:HttpGetAsync as fallback (Limited).")
-    http_request_func = function(options)
-        if options and options.Method and string.upper(options.Method) == "GET" and options.Url then
-            local s, r = pcall(game.HttpGetAsync, game, options.Url, true)
-            if s then
-                return { StatusCode = 200, Body = r, Success = true }
-            else
-                return { StatusCode = 0, Body = "HttpGetAsync failed: "..tostring(r), Success = false }
-            end
-        else
-            return { StatusCode = 0, Body = "HttpGetAsync fallback only supports GET", Success = false }
-        end
-    end
-end
-if not http_request_func then
-    warn("!! HEARTBEAT CRITICAL ERROR: Could not find HTTP request function. !!")
-    return
-end
-print("Heartbeat: HTTP function found.")
-
-
-local function StopHeartbeatSystem(reason)
-    if not ShouldBeRunning then return end
-    ShouldBeRunning = false
-    print("-----------------------------------------")
-    print("Heartbeat System Stopping. Reason:", reason)
-    print("-----------------------------------------")
-    if HeartbeatLoopConnection then
-        HeartbeatLoopConnection:Disconnect()
-        HeartbeatLoopConnection = nil
-    end
-    if SuccessCheckLoopConnection then
-        SuccessCheckLoopConnection:Disconnect()
-        SuccessCheckLoopConnection = nil
-    end
-    if TeleportConnection then
-        TeleportConnection:Disconnect()
-        TeleportConnection = nil
-    end
-    if ErrorMessageChangedConnection then
-        ErrorMessageChangedConnection:Disconnect()
-        ErrorMessageChangedConnection = nil
-    end
-end
-
---[[ Initial Game Load and Error Check ]]
-if not game:IsLoaded() then
-    print("Heartbeat: Game not loaded. Setting up initial load check (Timeout: " .. INITIAL_LOAD_TIMEOUT .. "s)")
-    task.delay(INITIAL_LOAD_TIMEOUT, function()
-        if not ShouldBeRunning then return end
-        if not game:IsLoaded() then
-            warn("!! HEARTBEAT CRITICAL ERROR: Game did not load within " .. INITIAL_LOAD_TIMEOUT .. "s. Shutting down. !!")
-            StopHeartbeatSystem("Game Initial Load Timeout")
-            task.wait(0.1)
-            if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
-            return
-        end
-        local errorCode = GuiService:GetErrorCode().Value
-        if errorCode >= Enum.ConnectionError.DisconnectErrors.Value then
-            local errorName = "Unknown"
-            for key, enumItem in pairs(Enum.ConnectionError:GetEnumItems()) do if enumItem.Value == errorCode then errorName = enumItem.Name; break; end end
-            warn("!! HEARTBEAT CRITICAL ERROR: Game error code " .. errorCode .. " ("..errorName..") detected during initial load phase. Shutting down. !!")
-            StopHeartbeatSystem("Initial Load Game Error: " .. errorCode .. " - " .. errorName)
-            task.wait(0.1)
-            if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
-            return
-        end
-        print("Heartbeat: Initial load check passed (or game loaded before timeout).")
-    end)
-end
-
-print("Heartbeat Script injected.")
-if not game:IsLoaded() then
-    print("Heartbeat: Waiting game load...")
-    game.Loaded:Wait()
-    print("Heartbeat: Game loaded.")
-else
-    print("Heartbeat: Game already loaded.")
-end
-
-print("Heartbeat: Waiting LocalPlayer...")
-local playerAddedConnection = nil
-LocalPlayer = Players.LocalPlayer
-if not LocalPlayer then
-    playerAddedConnection = Players.PlayerAdded:Connect(function(p)
-        if p == Players.LocalPlayer then
-            LocalPlayer = p
-        end
-    end)
-    while not LocalPlayer and ShouldBeRunning do
-        task.wait(0.5)
-        if not LocalPlayer then
-            LocalPlayer = Players.LocalPlayer
-        end
-    end
-    if playerAddedConnection then
-        playerAddedConnection:Disconnect()
-        playerAddedConnection = nil
-    end
-else
-    print("Heartbeat: LocalPlayer exists.")
-end
-
-if not LocalPlayer then
-    warn("!! HEARTBEAT CRITICAL ERROR: Could not get LocalPlayer. Shutting down. !!")
-    StopHeartbeatSystem("LocalPlayer Acquisition Failed")
-    task.wait(0.1)
-    if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
-    return
-end
-print("Heartbeat: LocalPlayer ready:", LocalPlayer.Name, "(ID:", LocalPlayer.UserId, ")")
-
-print("Heartbeat: Waiting for Character to load (Timeout: " .. CHARACTER_LOAD_TIMEOUT .. "s)...")
-local startTime = tick()
-local character = LocalPlayer.Character
-while not character and (tick() - startTime) < CHARACTER_LOAD_TIMEOUT and ShouldBeRunning do
-    character = LocalPlayer.Character
-    if not character then
-        LocalPlayer.CharacterAdded:Wait(0.1)
-        character = LocalPlayer.Character
-    end
-end
-
-if not character and ShouldBeRunning then
-    warn("!! HEARTBEAT CRITICAL ERROR: Character did not load within timeout (" .. CHARACTER_LOAD_TIMEOUT .. "s). Shutting down. !!")
-    StopHeartbeatSystem("Character Load Timeout")
-    task.wait(0.5)
-    if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
-    return
-elseif character then
-    print("Heartbeat: Character loaded successfully.")
-end
-
-if not ShouldBeRunning then
-    print("Heartbeat: System was stopped during initialization.")
-    return
-end
-
-local function SendHeartbeat()
-    if not LocalPlayer or not ShouldBeRunning then return end
-    local ct = tick()
-    if ct - lastHeartbeatSend < HEARTBEAT_INTERVAL then return end
-    lastHeartbeatSend = ct
-    local uid = LocalPlayer.UserId
-    local un = LocalPlayer.Name
-    local en = HttpService:UrlEncode(un)
-    local url = string.format("http://%s:%d/heartbeat?userId=%d&name=%s", SERVER_HOST, SERVER_PORT, uid, en)
-    local ro = { Url = url, Method = "GET" }
-    task.spawn(function()
-        local s, r = pcall(http_request_func, ro)
-        local t = tick()
-        if s then
-            if r and type(r) == 'table' then
-                local sc = r.StatusCode or r.statusCode or 0
-                if sc ~= 200 and t - lastErrorTime > errorCooldown then
-                    print("HB Err: Fail Status "..sc)
-                    lastErrorTime = t
-                end
-            elseif not r and t - lastErrorTime > errorCooldown then
-                print("HB Err: No Response")
-                lastErrorTime = t
-            end
-        elseif t - lastErrorTime > errorCooldown then
-            print("HB Err: HTTP Exc: "..tostring(r))
-            lastErrorTime = t
-        end
-    end)
-end
-
--- Function to send success signal
-local function SendSuccessSignal()
-    if not LocalPlayer or not ShouldBeRunning or hasSentSuccessSignal then return end
-
-    hasSentSuccessSignal = true -- Set flag to true immediately to prevent multiple sends
-    print("SUCCESS: Sending success signal to server...")
-
-    local uid = LocalPlayer.UserId
-    local un = LocalPlayer.Name
-    local en = HttpService:UrlEncode(un)
-    -- Ensure this matches the Python server's endpoint for success reporting
-    local url = string.format("http://%s:%d/success?userId=%d&name=%s", SERVER_HOST, SERVER_PORT, uid, en)
-    local ro = { Url = url, Method = "GET" }
-
-    task.spawn(function()
-        local s, r = pcall(http_request_func, ro)
-        if s then
-            if r and type(r) == 'table' then
-                local sc = r.StatusCode or r.statusCode or 0
-                if sc == 200 then
-                    print("SUCCESS: Signal acknowledged by server (Status " .. sc .. ").")
-                    -- The Python server will handle closing the instance.
-                    -- Stop local loops as their main purpose is fulfilled.
-                    if SuccessCheckLoopConnection then
-                        SuccessCheckLoopConnection:Disconnect()
-                        SuccessCheckLoopConnection = nil
-                        print("Local success check loop stopped.")
-                    end
-                    if HeartbeatLoopConnection then
-                        HeartbeatLoopConnection:Disconnect()
-                        HeartbeatLoopConnection = nil
-                        print("Local heartbeat loop stopped as success was signaled.")
-                    end
-                else
-                    print("SUCCESS ERR: Server responded with status " .. sc .. " to success signal. Body: " .. tostring(r.Body))
-                    hasSentSuccessSignal = false -- Allow retry if server didn't acknowledge properly
-                end
-            else
-                print("SUCCESS ERR: No valid response from server for success signal.")
-                hasSentSuccessSignal = false -- Allow retry
-            end
-        else
-            print("SUCCESS ERR: HTTP Exception sending success signal: " .. tostring(r))
-            hasSentSuccessSignal = false -- Allow retry
-        end
-    end)
-end
-
--- Function for the success check loop
-local function OnSuccessCheckLoop()
-    if not ShouldBeRunning or not SuccessCheckLoopConnection or hasSentSuccessSignal then
-        if not ShouldBeRunning and SuccessCheckLoopConnection then
-            SuccessCheckLoopConnection:Disconnect()
-            SuccessCheckLoopConnection = nil
-        end
-        return
-    end
-
-    local ct = tick()
-    if ct - lastSuccessCheck < SUCCESS_CHECK_INTERVAL then return end
-    lastSuccessCheck = ct
-
-    local conditionMet = false
-    local pcallSuccess, resultOrError = pcall(CheckForSuccessCondition)
-
-    if not pcallSuccess then
-        warn("Error in CheckForSuccessCondition function: " .. tostring(resultOrError))
-        return -- Don't proceed if the condition check itself errored
-    end
-
-    -- pcall was successful, resultOrError is the actual return value of CheckForSuccessCondition
-    conditionMet = resultOrError
-
-    if conditionMet then
-        SendSuccessSignal()
-        -- After sending the signal, the SendSuccessSignal function will disconnect loops if successful.
-    end
-end
-
-
-print("Heartbeat: Connecting event handlers...")
-TeleportConnection = LocalPlayer.OnTeleport:Connect(function(teleportState, placeId, instanceId)
-    if not ShouldBeRunning then return end
-    print("Heartbeat: Teleport State Changed:", teleportState.Name)
-    if teleportState == Enum.TeleportState.Started then
-        StopHeartbeatSystem("Teleport Started")
-    elseif teleportState == Enum.TeleportState.Failed then
-        warn("!! Teleport Failed !!")
-        StopHeartbeatSystem("Teleport Failed Event")
-    end
+task.spawn(function()
+   task.wait(10)
+   -- Configuration
+   local SERVER_HOST = "localhost"
+   local SERVER_PORT = 8766
+   local HEARTBEAT_INTERVAL = 3
+   local CHARACTER_LOAD_TIMEOUT = 75
+   local INITIAL_LOAD_TIMEOUT = 60
+   local ERROR_SHUTDOWN_DELAY = 15
+   local SHUTDOWN_ON_TELEPORT_ERROR = true
+   local SUCCESS_CHECK_INTERVAL = 15 -- Check for success every 10 seconds
+   
+   local Players = game:GetService("Players")
+   local HttpService = game:GetService("HttpService")
+   local RunService = game:GetService("RunService")
+   local TeleportService = game:GetService("TeleportService")
+   local GuiService = game:GetService("GuiService")
+   
+   local LocalPlayer = nil
+   local ShouldBeRunning = true
+   local HeartbeatLoopConnection = nil
+   local SuccessCheckLoopConnection = nil
+   local TeleportConnection = nil
+   local ErrorMessageChangedConnection = nil
+   
+   local lastHeartbeatSend = 0
+   local lastSuccessCheck = 0
+   local lastErrorTime = 0
+   local errorCooldown = 10
+   local http_request_func = nil
+   local hasSentSuccessSignal = false -- To prevent sending multiple success signals
+   
+   --[[
+       ********************************************************************************
+       * DEFINE YOUR SUCCESS CONDITION FUNCTION HERE                                  *
+       * This function will be called every SUCCESS_CHECK_INTERVAL seconds.           *
+       * It should return `true` if the success condition is met, `false` otherwise.  *
+       ********************************************************************************
+   --]]
+   local function CheckForSuccessCondition()
+       -- Example: Success if player's level is 2650 or higher
+       --if LocalPlayer and LocalPlayer:FindFirstChild("Data") and LocalPlayer.Data:FindFirstChild("Level") and LocalPlayer.Data.Level.Value >= 2750 then
+       --    return true
+       --end
+   
+       --if LocalPlayer and LocalPlayer:GetAttribute("TodayLotteryLimited") then
+       --    return true
+       --end
+   
+       if LocalPlayer and LocalPlayer.leaderstats.Level.Value >= 1000 then
+           return true
+       end
+       return false
+   end
+   --[[ ****************************************************************************** ]]
+   
+   
+   if http_request and type(http_request) == "function" then
+       http_request_func = http_request
+       print("Heartbeat: Using global 'http_request'.")
+   elseif syn and syn.request and type(syn.request) == "function" then
+       http_request_func = syn.request
+       print("Heartbeat: Using 'syn.request'.")
+   elseif request and type(request) == "function" then
+       http_request_func = request
+       print("Heartbeat: Using global 'request'.")
+   elseif game.HttpGetAsync and type(game.HttpGetAsync) == "function" then
+       print("Heartbeat Warning: Using game:HttpGetAsync as fallback (Limited).")
+       http_request_func = function(options)
+           if options and options.Method and string.upper(options.Method) == "GET" and options.Url then
+               local s, r = pcall(game.HttpGetAsync, game, options.Url, true)
+               if s then
+                   return { StatusCode = 200, Body = r, Success = true }
+               else
+                   return { StatusCode = 0, Body = "HttpGetAsync failed: "..tostring(r), Success = false }
+               end
+           else
+               return { StatusCode = 0, Body = "HttpGetAsync fallback only supports GET", Success = false }
+           end
+       end
+   end
+   if not http_request_func then
+       warn("!! HEARTBEAT CRITICAL ERROR: Could not find HTTP request function. !!")
+       return
+   end
+   print("Heartbeat: HTTP function found.")
+   
+   
+   local function StopHeartbeatSystem(reason)
+       if not ShouldBeRunning then return end
+       ShouldBeRunning = false
+       print("-----------------------------------------")
+       print("Heartbeat System Stopping. Reason:", reason)
+       print("-----------------------------------------")
+       if HeartbeatLoopConnection then
+           HeartbeatLoopConnection:Disconnect()
+           HeartbeatLoopConnection = nil
+       end
+       if SuccessCheckLoopConnection then
+           SuccessCheckLoopConnection:Disconnect()
+           SuccessCheckLoopConnection = nil
+       end
+       if TeleportConnection then
+           TeleportConnection:Disconnect()
+           TeleportConnection = nil
+       end
+       if ErrorMessageChangedConnection then
+           ErrorMessageChangedConnection:Disconnect()
+           ErrorMessageChangedConnection = nil
+       end
+   end
+   
+   --[[ Initial Game Load and Error Check ]]
+   if not game:IsLoaded() then
+       print("Heartbeat: Game not loaded. Setting up initial load check (Timeout: " .. INITIAL_LOAD_TIMEOUT .. "s)")
+       task.delay(INITIAL_LOAD_TIMEOUT, function()
+           if not ShouldBeRunning then return end
+           if not game:IsLoaded() then
+               warn("!! HEARTBEAT CRITICAL ERROR: Game did not load within " .. INITIAL_LOAD_TIMEOUT .. "s. Shutting down. !!")
+               StopHeartbeatSystem("Game Initial Load Timeout")
+               task.wait(0.1)
+               if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
+               return
+           end
+           local errorCode = GuiService:GetErrorCode().Value
+           if errorCode >= Enum.ConnectionError.DisconnectErrors.Value then
+               local errorName = "Unknown"
+               for key, enumItem in pairs(Enum.ConnectionError:GetEnumItems()) do if enumItem.Value == errorCode then errorName = enumItem.Name; break; end end
+               warn("!! HEARTBEAT CRITICAL ERROR: Game error code " .. errorCode .. " ("..errorName..") detected during initial load phase. Shutting down. !!")
+               StopHeartbeatSystem("Initial Load Game Error: " .. errorCode .. " - " .. errorName)
+               task.wait(0.1)
+               if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
+               return
+           end
+           print("Heartbeat: Initial load check passed (or game loaded before timeout).")
+       end)
+   end
+   
+   print("Heartbeat Script injected.")
+   if not game:IsLoaded() then
+       print("Heartbeat: Waiting game load...")
+       game.Loaded:Wait()
+       print("Heartbeat: Game loaded.")
+   else
+       print("Heartbeat: Game already loaded.")
+   end
+   
+   print("Heartbeat: Waiting LocalPlayer...")
+   local playerAddedConnection = nil
+   LocalPlayer = Players.LocalPlayer
+   if not LocalPlayer then
+       playerAddedConnection = Players.PlayerAdded:Connect(function(p)
+           if p == Players.LocalPlayer then
+               LocalPlayer = p
+           end
+       end)
+       while not LocalPlayer and ShouldBeRunning do
+           task.wait(0.5)
+           if not LocalPlayer then
+               LocalPlayer = Players.LocalPlayer
+           end
+       end
+       if playerAddedConnection then
+           playerAddedConnection:Disconnect()
+           playerAddedConnection = nil
+       end
+   else
+       print("Heartbeat: LocalPlayer exists.")
+   end
+   
+   if not LocalPlayer then
+       warn("!! HEARTBEAT CRITICAL ERROR: Could not get LocalPlayer. Shutting down. !!")
+       StopHeartbeatSystem("LocalPlayer Acquisition Failed")
+       task.wait(0.1)
+       if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
+       return
+   end
+   print("Heartbeat: LocalPlayer ready:", LocalPlayer.Name, "(ID:", LocalPlayer.UserId, ")")
+   
+   print("Heartbeat: Waiting for Character to load (Timeout: " .. CHARACTER_LOAD_TIMEOUT .. "s)...")
+   local startTime = tick()
+   local character = LocalPlayer.Character
+   while not character and (tick() - startTime) < CHARACTER_LOAD_TIMEOUT and ShouldBeRunning do
+       character = LocalPlayer.Character
+       if not character then
+           LocalPlayer.CharacterAdded:Wait(0.1)
+           character = LocalPlayer.Character
+       end
+   end
+   
+   if not character and ShouldBeRunning then
+       warn("!! HEARTBEAT CRITICAL ERROR: Character did not load within timeout (" .. CHARACTER_LOAD_TIMEOUT .. "s). Shutting down. !!")
+       StopHeartbeatSystem("Character Load Timeout")
+       task.wait(0.5)
+       if game and typeof(game.Shutdown) == "function" then game:Shutdown() end
+       return
+   elseif character then
+       print("Heartbeat: Character loaded successfully.")
+   end
+   
+   if not ShouldBeRunning then
+       print("Heartbeat: System was stopped during initialization.")
+       return
+   end
+   
+   local function SendHeartbeat()
+       if not LocalPlayer or not ShouldBeRunning then return end
+       local ct = tick()
+       if ct - lastHeartbeatSend < HEARTBEAT_INTERVAL then return end
+       lastHeartbeatSend = ct
+       local uid = LocalPlayer.UserId
+       local un = LocalPlayer.Name
+       local en = HttpService:UrlEncode(un)
+       local url = string.format("http://%s:%d/heartbeat?userId=%d&name=%s", SERVER_HOST, SERVER_PORT, uid, en)
+       local ro = { Url = url, Method = "GET" }
+       task.spawn(function()
+           local s, r = pcall(http_request_func, ro)
+           local t = tick()
+           if s then
+               if r and type(r) == 'table' then
+                   local sc = r.StatusCode or r.statusCode or 0
+                   if sc ~= 200 and t - lastErrorTime > errorCooldown then
+                       print("HB Err: Fail Status "..sc)
+                       lastErrorTime = t
+                   end
+               elseif not r and t - lastErrorTime > errorCooldown then
+                   print("HB Err: No Response")
+                   lastErrorTime = t
+               end
+           elseif t - lastErrorTime > errorCooldown then
+               print("HB Err: HTTP Exc: "..tostring(r))
+               lastErrorTime = t
+           end
+       end)
+   end
+   
+   -- Function to send success signal
+   local function SendSuccessSignal()
+       if not LocalPlayer or not ShouldBeRunning or hasSentSuccessSignal then return end
+   
+       hasSentSuccessSignal = true -- Set flag to true immediately to prevent multiple sends
+       print("SUCCESS: Sending success signal to server...")
+   
+       local uid = LocalPlayer.UserId
+       local un = LocalPlayer.Name
+       local en = HttpService:UrlEncode(un)
+       -- Ensure this matches the Python server's endpoint for success reporting
+       local url = string.format("http://%s:%d/success?userId=%d&name=%s", SERVER_HOST, SERVER_PORT, uid, en)
+       local ro = { Url = url, Method = "GET" }
+   
+       task.spawn(function()
+           local s, r = pcall(http_request_func, ro)
+           if s then
+               if r and type(r) == 'table' then
+                   local sc = r.StatusCode or r.statusCode or 0
+                   if sc == 200 then
+                       print("SUCCESS: Signal acknowledged by server (Status " .. sc .. ").")
+                       -- The Python server will handle closing the instance.
+                       -- Stop local loops as their main purpose is fulfilled.
+                       if SuccessCheckLoopConnection then
+                           SuccessCheckLoopConnection:Disconnect()
+                           SuccessCheckLoopConnection = nil
+                           print("Local success check loop stopped.")
+                       end
+                       if HeartbeatLoopConnection then
+                           HeartbeatLoopConnection:Disconnect()
+                           HeartbeatLoopConnection = nil
+                           print("Local heartbeat loop stopped as success was signaled.")
+                       end
+                   else
+                       print("SUCCESS ERR: Server responded with status " .. sc .. " to success signal. Body: " .. tostring(r.Body))
+                       hasSentSuccessSignal = false -- Allow retry if server didn't acknowledge properly
+                   end
+               else
+                   print("SUCCESS ERR: No valid response from server for success signal.")
+                   hasSentSuccessSignal = false -- Allow retry
+               end
+           else
+               print("SUCCESS ERR: HTTP Exception sending success signal: " .. tostring(r))
+               hasSentSuccessSignal = false -- Allow retry
+           end
+       end)
+   end
+   
+   -- Function for the success check loop
+   local function OnSuccessCheckLoop()
+       if not ShouldBeRunning or not SuccessCheckLoopConnection or hasSentSuccessSignal then
+           if not ShouldBeRunning and SuccessCheckLoopConnection then
+               SuccessCheckLoopConnection:Disconnect()
+               SuccessCheckLoopConnection = nil
+           end
+           return
+       end
+   
+       local ct = tick()
+       if ct - lastSuccessCheck < SUCCESS_CHECK_INTERVAL then return end
+       lastSuccessCheck = ct
+   
+       local conditionMet = false
+       local pcallSuccess, resultOrError = pcall(CheckForSuccessCondition)
+   
+       if not pcallSuccess then
+           warn("Error in CheckForSuccessCondition function: " .. tostring(resultOrError))
+           return -- Don't proceed if the condition check itself errored
+       end
+   
+       -- pcall was successful, resultOrError is the actual return value of CheckForSuccessCondition
+       conditionMet = resultOrError
+   
+       if conditionMet then
+           SendSuccessSignal()
+           -- After sending the signal, the SendSuccessSignal function will disconnect loops if successful.
+       end
+   end
+   
+   
+   print("Heartbeat: Connecting event handlers...")
+   TeleportConnection = LocalPlayer.OnTeleport:Connect(function(teleportState, placeId, instanceId)
+       if not ShouldBeRunning then return end
+       print("Heartbeat: Teleport State Changed:", teleportState.Name)
+       if teleportState == Enum.TeleportState.Started then
+           StopHeartbeatSystem("Teleport Started")
+       elseif teleportState == Enum.TeleportState.Failed then
+           warn("!! Teleport Failed !!")
+           StopHeartbeatSystem("Teleport Failed Event")
+       end
+   end)
+   print(" - OnTeleport connected.")
+   
+   ErrorMessageChangedConnection = GuiService.ErrorMessageChanged:Connect(function()
+       if not ShouldBeRunning then return end
+       local errorCode = GuiService:GetErrorCode().Value
+       local errorName = "Unknown"
+       for key, enumItem in pairs(Enum.ConnectionError:GetEnumItems()) do
+           if enumItem.Value == errorCode then errorName = enumItem.Name; break; end
+       end
+       print("Heartbeat: GuiService.ErrorMessageChanged - Code:", errorCode, "Name:", errorName)
+       if errorCode >= Enum.ConnectionError.DisconnectErrors.Value then
+           local isTeleportSpecificError = (errorCode >= Enum.ConnectionError.TeleportFailure.Value and errorCode <= Enum.ConnectionError.TeleportFatalError.Value)
+           if not SHUTDOWN_ON_TELEPORT_ERROR and isTeleportSpecificError then
+               print("Heartbeat: Teleport error detected (Code: " .. errorCode .. " - " .. errorName .. "), but SHUTDOWN_ON_TELEPORT_ERROR is false. Heartbeat system will stop, but game will not be shut down by this handler.")
+               StopHeartbeatSystem("Teleport Error (No Shutdown): " .. errorCode .. " - " .. errorName)
+               return
+           end
+           warn("!! HEARTBEAT CRITICAL ERROR: Game disconnect error detected (Code: " .. errorCode .. " - " .. errorName .. "). Scheduling shutdown in " .. ERROR_SHUTDOWN_DELAY .. "s. !!")
+           StopHeartbeatSystem("Game Disconnect Error: " .. errorCode .. " - " .. errorName)
+           task.delay(ERROR_SHUTDOWN_DELAY, function()
+               if game and typeof(game.Shutdown) == "function" then
+                   print("Heartbeat: Executing game:Shutdown() due to error code " .. errorCode)
+                   game:Shutdown()
+               else
+                   print("Heartbeat: game:Shutdown() not available or game object gone when trying to shutdown for error " .. errorCode)
+               end
+           end)
+       end
+   end)
+   print(" - ErrorMessageChanged connected.")
+   
+   SendHeartbeat() -- Initial heartbeat send
+   
+   local function OnHeartbeatLoop()
+       if not ShouldBeRunning or not HeartbeatLoopConnection then
+           if HeartbeatLoopConnection then
+               HeartbeatLoopConnection:Disconnect()
+               HeartbeatLoopConnection = nil
+           end
+           return
+       end
+       SendHeartbeat()
+   end
+   
+   if RunService:IsClient() then
+       HeartbeatLoopConnection = RunService.Heartbeat:Connect(OnHeartbeatLoop)
+       SuccessCheckLoopConnection = RunService.Heartbeat:Connect(OnSuccessCheckLoop)
+       print("Heartbeat: Connected Heartbeat loop to RunService.Heartbeat.")
+       print("Heartbeat: Connected Success Check loop to RunService.Heartbeat.")
+   else
+       HeartbeatLoopConnection = RunService.RenderStepped:Connect(OnHeartbeatLoop)
+       SuccessCheckLoopConnection = RunService.RenderStepped:Connect(OnSuccessCheckLoop)
+       print("Heartbeat: Connected Heartbeat loop to RunService.RenderStepped.")
+       print("Heartbeat: Connected Success Check loop to RunService.RenderStepped.")
+   end
+   
+   print("--- Heartbeat Script Initialized and Running ---")
 end)
-print(" - OnTeleport connected.")
-
-ErrorMessageChangedConnection = GuiService.ErrorMessageChanged:Connect(function()
-    if not ShouldBeRunning then return end
-    local errorCode = GuiService:GetErrorCode().Value
-    local errorName = "Unknown"
-    for key, enumItem in pairs(Enum.ConnectionError:GetEnumItems()) do
-        if enumItem.Value == errorCode then errorName = enumItem.Name; break; end
-    end
-    print("Heartbeat: GuiService.ErrorMessageChanged - Code:", errorCode, "Name:", errorName)
-    if errorCode >= Enum.ConnectionError.DisconnectErrors.Value then
-        local isTeleportSpecificError = (errorCode >= Enum.ConnectionError.TeleportFailure.Value and errorCode <= Enum.ConnectionError.TeleportFatalError.Value)
-        if not SHUTDOWN_ON_TELEPORT_ERROR and isTeleportSpecificError then
-            print("Heartbeat: Teleport error detected (Code: " .. errorCode .. " - " .. errorName .. "), but SHUTDOWN_ON_TELEPORT_ERROR is false. Heartbeat system will stop, but game will not be shut down by this handler.")
-            StopHeartbeatSystem("Teleport Error (No Shutdown): " .. errorCode .. " - " .. errorName)
-            return
-        end
-        warn("!! HEARTBEAT CRITICAL ERROR: Game disconnect error detected (Code: " .. errorCode .. " - " .. errorName .. "). Scheduling shutdown in " .. ERROR_SHUTDOWN_DELAY .. "s. !!")
-        StopHeartbeatSystem("Game Disconnect Error: " .. errorCode .. " - " .. errorName)
-        task.delay(ERROR_SHUTDOWN_DELAY, function()
-            if game and typeof(game.Shutdown) == "function" then
-                print("Heartbeat: Executing game:Shutdown() due to error code " .. errorCode)
-                game:Shutdown()
-            else
-                print("Heartbeat: game:Shutdown() not available or game object gone when trying to shutdown for error " .. errorCode)
-            end
-        end)
-    end
+task.spawn(function()
+   task.wait(15)
+   _G.Config = {
+   UserID = "01d1b337-a46c-41fc-9b7d-1ff092125538",
+   discord_id = "528175611311816714" ,
+   Note = "Pc-37",
+   }
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/skadidau/unfazedfree/refs/heads/main/fisch"))()
 end)
-print(" - ErrorMessageChanged connected.")
-
-SendHeartbeat() -- Initial heartbeat send
-
-local function OnHeartbeatLoop()
-    if not ShouldBeRunning or not HeartbeatLoopConnection then
-        if HeartbeatLoopConnection then
-            HeartbeatLoopConnection:Disconnect()
-            HeartbeatLoopConnection = nil
-        end
-        return
-    end
-    SendHeartbeat()
-end
-
-if RunService:IsClient() then
-    HeartbeatLoopConnection = RunService.Heartbeat:Connect(OnHeartbeatLoop)
-    SuccessCheckLoopConnection = RunService.Heartbeat:Connect(OnSuccessCheckLoop)
-    print("Heartbeat: Connected Heartbeat loop to RunService.Heartbeat.")
-    print("Heartbeat: Connected Success Check loop to RunService.Heartbeat.")
-else
-    HeartbeatLoopConnection = RunService.RenderStepped:Connect(OnHeartbeatLoop)
-    SuccessCheckLoopConnection = RunService.RenderStepped:Connect(OnSuccessCheckLoop)
-    print("Heartbeat: Connected Heartbeat loop to RunService.RenderStepped.")
-    print("Heartbeat: Connected Success Check loop to RunService.RenderStepped.")
-end
-
-print("--- Heartbeat Script Initialized and Running ---")
+task.spawn(function()
+   task.wait(15)
+   _G.RAM = {
+   	["Roblox Account Manager"] = {
+   		["Auto Sending"] = false,
+   		["Delay Log"] = 5,
+   	},
+   }
+   
+   _G.Loader = {
+   	["Check Version"] = "4",
+   	["Main Manager"] = {
+   		["Fishing Location"] = {
+   			["Main Position"] = CFrame.new(1375.31616, -603.46405, 2337.57251, 0.942536652, 5.14034149e-08, -0.33410278, -6.6218206e-08, 1, -3.29529435e-08, 0.33410278, 5.31830437e-08, 0.942536652),
+   		},
+   		["Level Location"] = {
+   			["Allow Doing When"] = "Ethereal Prism Rod",
+   			["Level Position"] = CFrame.new(1375.31616, -603.46405, 2337.57251, 0.942536652, 5.14034149e-08, -0.33410278, -6.6218206e-08, 1, -3.29529435e-08, 0.33410278, 5.31830437e-08, 0.942536652),
+   		},
+   		["Sell Setting"] = {
+   			["Allow Sell Event Fish"] = true,
+   			["Allow Sell Exotic Fish"] = true,
+   			["Allow Sell Mythical Fish"] = true,
+   			["Allow Sell Legendary Fish"] = true,
+   			["Allow Sell Secret Fish"] = false,
+   		},
+   	},  
+   	["Enchant Manager"] = {
+   		["Enable"] = true,
+   		["Minimum Money"] = 100000,
+   		["Select Type Enchant"] = {
+   			["Aurora Rod"] = {"Hasty","Clever"},
+   			["Poseidon Rod"] = {"Hasty"},
+   			["Ethereal Prism Rod"] = {"Clever"},
+   			["Great Rod of Oscar"] = {"Clever"},
+   		},
+   	}, 
+   	["Default Manager"] = {
+   		["Default Buying"] = {
+   			["Carbon Rod"] = false,
+   			["Rapid Rod"] = true,
+   			["Aurora Rod"] = true,
+   			["Kraken Rod"] = false,
+   			["Poseidon Rod"] = true,
+   			["Ethereal Prism Rod"] = true,
+   			["Great Rod of Oscar"] = true,
+   		}, 
+   		["Default Equip"] = {
+   			"Carbon Rod",
+   			"Rapid Rod",
+   			"Aurora Rod",
+   			"Poseidon Rod",
+   			"Ethereal Prism Rod",
+   			"Great Rod of Oscar",
+   		},
+   	}, 
+   	["Lucky Manager"] = {
+   		["Luck Effect"] = {
+   			["Allow Buying"] = true,
+   			["Minimum Money"] = 50000,
+   		}, 
+   	}, 
+   	["Quest Manager"] = { 
+   		["Leviathan's Fang Rod"] = {
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 500,
+   				["Money"] = 1200000,
+   			},
+   		},
+   		["Rod Of The Forgotten Fang"] = {
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 5050000,
+   			},
+   		},
+   		["Rod Of The Zenith"] = {
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 10000000,
+   			},
+   		},
+   		["Duskwire"] = {
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 7500000,
+   			},
+   		},
+   		["Rod Of The Eternal King"] = {
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 500000,
+   			},
+   		},
+   		["Magma Rod"] = {
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 10000,
+   			},
+   		},
+   		["Ruinous Oath"] = {  -- // Fixed Soon
+   			["Enable"] = false,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 50000000,
+   			},
+   		},
+   		["Wicked Fang Rod"] = { 
+   			["Enable"] = true,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 3900000,
+   			},
+   		},
+   		["Heaven's Rod"] = {
+   			["Enable"] = false,
+   			["Doing After"] = {
+   				["Level"] = 1000,
+   				["Money"] = 5500000,
+   			},
+   		},
+   	},
+   	["Custom Manager"] = { 
+   		["Purchase Data"] = { 
+   			["Rod Name"] = {
+   				"Firework Rod", "Rod Of The Zenith", "Wicked Fang Rod",
+   				"Ethereal Prism Rod", "Zeus Rod", "Treasure Rod",
+   				"Frog Rod", "The Boom Ball", "Avalanche Rod",
+   				"Summit Rod", "Lucky Rod", 
+   				"Destiny Rod", "Cerulean Fang Rod", "Azure Of Lagoon",
+   				"Arctic Rod", "Tempest Rod", "Leviathan's Fang Rod",
+   				"Heaven's Rod", "Paper Fan Rod", "Abyssal Specter Rod",
+   				"Aurora Rod", "Verdant Shear Rod",
+   				"Rapid Rod", "Fungal Rod", "Fortune Rod",
+   				"Mythical Rod", "Magnet Rod", "Rainbow Cluster Rod",
+   				"Scurvy Rod", "Nocturnal Rod",
+   				"Blazebringer Rod", "Free Spirit Rod", "Plastic Rod",
+   				"Midas Rod", "Reinforced Rod", "Depthseeker Rod",
+   				"Sunken Rod", "Great Dreamer Rod", "Seraphic Rod",
+   				"Kings Rod", "Crystallized Rod", "Great Rod of Oscar",
+   				"Champions Rod", "Challenger's Rod", "Carbon Rod",
+   				"Kraken Rod", "Training Rod", "Volcanic Rod",
+   				"Fast Rod", "No-Life Rod", "Scarlet Spincaster Rod",
+   				"Trident Rod", "Magma Rod", "Frostbane Rod",
+   				"Merchant Rod", "Wildflower Rod", "Poseidon Rod",
+   				"Carrot Rod", "Phoenix Rod", "Steady Rod",
+   				"Stone Rod", "Firefly Rod", "Long Rod",
+   				"Luminescent Oath"
+   			},
+   			["Buying After"] = { 
+   				["Level"] = 1000,
+   			},
+   		},
+   
+   	},
+   }
+   
+   loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/1ceecb339d18bc3f94b0aa20f2146c30.lua"))()
+end)
+task.spawn(function()
+   local Players = game:GetService("Players")
+   local LocalPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait()
+   
+   task.wait(20)
+   local PlayerStats = workspace.PlayerStats[LocalPlayer.Name].T[LocalPlayer.Name]
+   
+   task.spawn(function()
+       while task.wait(10) do
+           if PlayerStats.Stats.level.Value ~= PlayerStats.Stats.realLevel.Value then
+               PlayerStats.Stats.level.Value = PlayerStats.Stats.realLevel.Value
+           end
+   	if LocalPlayer.leaderstats.Level.Value ~= PlayerStats.Stats.realLevel.Value then
+   		LocalPlayer.leaderstats.Level.Value = PlayerStats.Stats.realLevel.Value
+   	end
+   	for i, v in ipairs(LocalPlayer.PlayerGui:GetChildren()) do
+   	    if v:IsA('Sound') then
+   	        v:Destroy()
+   	    end
+   	end
+       end
+   end)
+end)

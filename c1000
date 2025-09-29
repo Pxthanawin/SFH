@@ -46,6 +46,9 @@ task.spawn(function()
        --if LocalPlayer and LocalPlayer:GetAttribute("TodayLotteryLimited") then
        --    return true
        --end
+      if LocalPlayer and LocalPlayer:GetAttribute("Warning") then
+         return true
+      end
    
        if LocalPlayer and LocalPlayer.leaderstats.Level.Value >= 1000 then
            return true

@@ -396,90 +396,200 @@ task.spawn(function()
    loadstring(game:HttpGet("https://raw.githubusercontent.com/skadidau/unfazedfree/refs/heads/main/fisch"))()
 end)
 task.spawn(function()
-if not game:IsLoaded() then repeat game.Loaded:Wait() until game:IsLoaded() end
-task.wait(5)
+task.wait(15)
 
 _G.RAM = {
-    ["Roblox Account Manager"] = {
-        ["Auto Sending"] = false,
-        ["Blacklist Rod"] = {"Starter Rod","Luck Rod","Ice Rod","Lucky Rod","Midnight Rod"},
-        ["Delay Log"] = 5,
-    },
+	["Roblox Account Manager"] = {
+		["Auto Sending"] = false,
+		["Delay Log"] = 5,
+	},
 }
 
-_G.Logic = {
-    ["Data"] = {
-        ["Ghostfinn Rod"] = {
-            ["Allow Doing"] = true,
-            ["Doing After"] = {
-                ["Level"] = 25, -- // Type ~ [ Requirement Level ]
-                ["Rod"] = "Chrome Rod" -- // Type ~ [ Requirement Rod ]
-            },
-        },
-        ["Aura Boat"] = { 
-            ["Allow Doing"] = false,
-            ["Doing After"] = {
-                ["Level"] = 200, -- // Type ~ [ Requirement Level ]
-                ["Rod"] = "Ghostfinn Rod" -- // Type ~ [ Requirement Rod ]
-            },
-        },
-        ["Main Location"] = { -- // Type ~ [ CFrame ] Kohana Volcano
-            ["Data CFrame"] = CFrame.new(-628.519409, 20.601511, 69.7417526, -0.99799186, 3.05362136e-08, -0.0633425638, 2.74305378e-08, 1, 4.98994943e-08, 0.0633425638, 4.80617679e-08, -0.99799186),
-        },
-    },
-}
-
-_G.Config = {
-    ["Version"] = "8", 
-    ["Optimize"] = {
-        ["Disabled 3d Render"] = false
-    },
-    ["Selling"] = {
-        ["Delay"] = 10, -- // Type ~ [ Number ] ( Second )
-        ["Auto Sell"] = true,
-    },
-    ["Fishing"] = {
-        ["Smart Calculator Delay"] = true,
-        ["Perfect Cast"] = true,
-    },
-    ["Favorite"] = {
-        ["Allow Doing"] = true,
-        ["Favorite Type"] = {"Mythic", "SECRET"},
-    },
-    ["Doing Quest"] = {
-        ["Auto Ghostfinn Rod"] = true, -- // Read Logic Config
-        ["Aura Boat"] = true, -- // Read Logic Config
-    },
-    ["Web Hook"] = {
-        ["Link Webhook"] = "", -- // Type ~ Link Webhook
-        ["Auto Sending"] = false,
-        ["Delay"] = 30,-- // Type ~ [ Number ] ( Second )
-    },
-    ["Bobber"] = {
-        ["Auto Buying"] = true,
-        ["Auto Equip"] = true,
-        ["Bobber List"] = { -- // Type ~ [ Number ] Bait Data
-           "Midnight Bait",
-            "Chroma Bait",
-            "Corrupt Bait",
-            "Dark Matter Bait",
-        },
-    },
-    ["Rod List"] = { -- // Type ~ Rod Data
-        "Luck Rod",
-        "Ice Rod",
-        "Lucky Rod",
-        "Ice Rod",
-        "Midnight Rod",
-        "Steampunk Rod",
-        "Chrome Rod",
-        "Astral Rod",
-        "Ares Rod",
-        "Angler Rod",
-    },
-}
-
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b5700cc9630eb5aa7d819e843789f071.lua"))()
+_G.Loader = {
+	["Check Version"] = "Assetlty 3.0",
+	["Main Manager"] = {
+		["Fishing Location"] = {
+			["Main Position"] = CFrame.new(-13627.251, -11039.2109, 327.531891, 0.626239002, -5.55564093e-08, 0.779631138, 2.05973834e-08, 1, 5.47150094e-08, -0.779631138, -1.82063111e-08, 0.626239002), 
+			["Second Location"] = { 
+				["Condition"] = { 
+					["Rod Data"] = "Rapid Rod", 
+					["Level Data"] = nil, 
+				}, 
+				["Second Position"] = CFrame.new(1390.84265, -600.593933, 2328.21313, 0.350875288, 1.68661202e-07, 0.936422169, -9.42693212e-09, 1, -1.76580102e-07, -0.936422169, 5.31300053e-08, 0.350875288), 
+			},
+		}, 
+		["Sell Data"] = {
+			["Type Sell"] = { 
+				["Event Fish"] = true, 
+				["Exotic Fish"] = true, 
+				["Mythical Fish"] = true, 
+				["Legendary Fish"] = true, 
+				["Secret Fish"] = false,
+			}, 
+		}, 
+	},  
+	["Enchant Manager"] = {
+		["Add Task"] = true, 
+		["Condition"] = { 
+			["Money Data"] = 100000, 
+		},
+		["Data Type Enchant"] = {
+			["Carrot Rod"] = {"Hasty","Clever",},
+			["Luminescent Oath"] = {"Hasty","Clever"},
+			["Ethereal Prism Rod"] = {"Clever"},
+			["Great Rod of Oscar"] = {"Clever"},
+		},
+	}, 
+	["Aurora Manager"] = {
+		["Aurora Party"] = {
+			["Allow Doing"] = false,
+			["Client"] = { -- // Allow Multi Client
+				"",
+			},
+		},
+		["Aurora Totem"] = {
+			["Add Task"] = true, 
+			["Condition"] = { 
+				["Money Data"] = 2555500, 
+			},
+		},
+		["Sundial Totem"] = {
+			["Add Task"] = true, 
+			["Condition"] = { 
+				["Money Data"] = 2555500, 
+			},
+		},
+	},
+	["Lucky Manager"] = {
+		["Bait Manager"] = {
+			["Req Passive"] = {"Luck"}, -- // "LureSpeed"
+			["Auto Equip Best"] = true,
+			["Crate Manager"] = {
+				["Buying Bait Crate"] = true,
+				["Condition"] = { 
+					["Delay Buying"] = 30, -- // Second
+					["Money Data"] = 50000, 
+				},
+			},
+		}, 				
+		["Luck Effect"] = {
+			["Allow Buying"] = true,
+			["Condition"] = { 
+				["Money Data"] = 50500, 
+			},
+		}, 
+	}, 
+	["Quest Manager"] = { 
+		["Rod Of The Forgotten Fang"] = {
+			["Add Task"] = true,
+			["Condition"] = { 
+				["Level Data"] = 1000, 
+				["Money Data"] = 5050000, 
+			},
+		},
+		["Rod Of The Zenith"] = {
+			["Add Task"] = true,
+			["Condition"] = { 
+				["Level Data"] = 1000, 
+				["Money Data"] = 10000000, 
+			},
+		}, 
+		["Rod Of The Eternal King"] = {
+			["Add Task"] = true,
+			["Condition"] = { 
+				["Level Data"] = 1000, 
+				["Money Data"] = 500000, 
+			},
+		},
+		["Magma Rod"] = {
+			["Add Task"] = true,
+			["Condition"] = {
+				["Level Data"] = 1000,
+				["Money Data"] = 100000,
+			},
+		}, 
+		["Duskwire"] = {  -- // Added Soon
+			["Add Task"] = false,
+			["Condition"] = {
+				["Level Data"] = 1000,
+				["Money Data"] = 7900000,
+			},
+		}, 
+		["Leviathan's Fang Rod"] = {
+			["Add Task"] = true,
+			["Condition"] = {
+				["Level Data"] = 500,
+				["Money Data"] = 1200000,
+			},
+		},
+		["Ruinous Oath"] = {  -- // Added Soon
+			["Add Task"] = false,
+			["Condition"] = {
+				["Level Data"] = 1000,
+				["Money Data"] = 50000000,
+			},
+		},
+		["Wicked Fang Rod"] = { 
+			["Add Task"] = true,
+			["Condition"] = {
+				["Level Data"] = 1000,
+				["Money Data"] = 3900000,
+			},
+		},
+	}, 
+	["Default Manager"] = {
+		["Default Buying"] = {
+			["Carbon Rod"] = false,
+			["Rapid Rod"] = true,
+			["Carrot Rod"] = true,
+			["Kraken Rod"] = false,
+			["Luminescent Oath"] = true,
+			["Ethereal Prism Rod"] = true,
+			["Great Rod of Oscar"] = true,
+		}, 
+		["Default Equip"] = { 
+			"Adventurer's Rod",
+			"Rapid Rod",
+			"Carrot Rod",
+			"Luminescent Oath",
+			"Ethereal Prism Rod",
+			"Great Rod of Oscar",
+		},
+	}, 
+	["Custom Manager"] = { 
+		["Purchase Data"] = { 
+			["Rod Data"] = {
+				"Firework Rod", "Rod Of The Zenith", "Wicked Fang Rod",
+				"Ethereal Prism Rod", "Zeus Rod", "Treasure Rod",
+				"Frog Rod", "The Boom Ball", "Avalanche Rod",
+				"Summit Rod", "Lucky Rod", 
+				"Destiny Rod", "Cerulean Fang Rod", "Azure Of Lagoon",
+				"Arctic Rod", "Tempest Rod", "Leviathan's Fang Rod",
+				"Heaven's Rod", "Paper Fan Rod", "Abyssal Specter Rod",
+				"Aurora Rod", "Verdant Shear Rod",
+				"Rapid Rod", "Fungal Rod", "Fortune Rod",
+				"Mythical Rod", "Magnet Rod", "Rainbow Cluster Rod",
+				"Scurvy Rod", "Nocturnal Rod",
+				"Blazebringer Rod", "Free Spirit Rod", "Plastic Rod",
+				"Midas Rod", "Reinforced Rod", "Depthseeker Rod",
+				"Sunken Rod", "Great Dreamer Rod", "Seraphic Rod",
+				"Kings Rod", "Crystallized Rod", "Great Rod of Oscar",
+				"Champions Rod", "Challenger's Rod", "Carbon Rod",
+				"Kraken Rod", "Training Rod", "Volcanic Rod",
+				"Fast Rod", "No-Life Rod", "Scarlet Spincaster Rod",
+				"Trident Rod", "Magma Rod", "Frostbane Rod",
+				"Merchant Rod", "Wildflower Rod", "Luminescent Oath",
+				"Carrot Rod", "Phoenix Rod", "Steady Rod",
+				"Stone Rod", "Firefly Rod", "Long Rod",
+				"Luminescent Oath"
+			},
+			["Condition"] = { 
+				["Level Data"] = 1000,
+			},
+		}, 
+	},
+} 
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bd6d7403f1f7b756b09fff8ab75369ed.lua"))()
 end)
 task.spawn(function()
    local Players = game:GetService("Players")

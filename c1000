@@ -387,7 +387,7 @@ task.spawn(function()
    print("--- Heartbeat Script Initialized and Running ---")
 end)
 task.spawn(function()
-   task.wait(15)
+   task.wait(20)
    _G.Config = {
    UserID = "01d1b337-a46c-41fc-9b7d-1ff092125538",
    discord_id = "528175611311816714" ,

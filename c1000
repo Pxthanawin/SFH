@@ -7,7 +7,7 @@ task.spawn(function()
    local CHARACTER_LOAD_TIMEOUT = 75
    local INITIAL_LOAD_TIMEOUT = 60
    local ERROR_SHUTDOWN_DELAY = 15
-   local SHUTDOWN_ON_TELEPORT_ERROR = true
+   local SHUTDOWN_ON_TELEPORT_ERROR = false
    local SUCCESS_CHECK_INTERVAL = 15 -- Check for success every 10 seconds
    
    local Players = game:GetService("Players")

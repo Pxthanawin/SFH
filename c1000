@@ -618,7 +618,7 @@ task.spawn(function()
         game:Shutdown()
     else
         _G.savelv = PlayerStats.Stats.realLevel.Value
-        while task.wait(450) do
+        while task.wait(600) do
             if _G.savelv == PlayerStats.Stats.realLevel.Value then
                 game:Shutdown()
             end

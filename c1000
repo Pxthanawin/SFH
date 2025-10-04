@@ -591,38 +591,41 @@ task.spawn(function()
     loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bd6d7403f1f7b756b09fff8ab75369ed.lua"))()
 end)
 task.spawn(function()
-    local Players = game:GetService("Players")
-    local LocalPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait()
-
-    task.wait(20)
-    local PlayerStats = workspace.PlayerStats[LocalPlayer.Name].T[LocalPlayer.Name]
-
-    task.spawn(function()
-        while task.wait(10) do
-            if PlayerStats.Stats.level.Value ~= PlayerStats.Stats.realLevel.Value then
-                PlayerStats.Stats.level.Value = PlayerStats.Stats.realLevel.Value
-            end
-            if LocalPlayer.leaderstats.Level.Value ~= PlayerStats.Stats.realLevel.Value then
-                LocalPlayer.leaderstats.Level.Value = PlayerStats.Stats.realLevel.Value
-            end
-            for i, v in ipairs(LocalPlayer.PlayerGui:GetChildren()) do
-                if v:IsA('Sound') then
-                    v:Destroy()
-                end
-            end
-        end
-    end)
-
-    task.wait(40)
-    if PlayerStats.Stats.realLevel.Value <= 1 then
-        game:Shutdown()
-    else
-        _G.savelv = PlayerStats.Stats.realLevel.Value
-        while task.wait(600) do
-            if _G.savelv == PlayerStats.Stats.realLevel.Value then
-                game:Shutdown()
-            end
-            _G.savelv = PlayerStats.Stats.realLevel.Value
-        end
-    end
+   pcall(function()
+       local Players = game:GetService("Players")
+       local LocalPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait()
+   
+       task.wait(20)
+       local PlayerStats = workspace.PlayerStats[LocalPlayer.Name].T[LocalPlayer.Name]
+   
+       task.spawn(function()
+           while task.wait(10) do
+               if PlayerStats.Stats.level.Value ~= PlayerStats.Stats.realLevel.Value then
+                   PlayerStats.Stats.level.Value = PlayerStats.Stats.realLevel.Value
+               end
+               if LocalPlayer.leaderstats.Level.Value ~= PlayerStats.Stats.realLevel.Value then
+                   LocalPlayer.leaderstats.Level.Value = PlayerStats.Stats.realLevel.Value
+               end
+               for i, v in ipairs(LocalPlayer.PlayerGui:GetChildren()) do
+                   if v:IsA('Sound') then
+                       v:Destroy()
+                   end
+               end
+           end
+       end)
+   
+       task.wait(40)
+       if PlayerStats.Stats.realLevel.Value <= 1 then
+           game:Shutdown()
+       else
+           _G.savelv = PlayerStats.Stats.realLevel.Value
+           while task.wait(600) do
+               if _G.savelv == PlayerStats.Stats.realLevel.Value then
+                   game:Shutdown()
+               end
+               _G.savelv = PlayerStats.Stats.realLevel.Value
+           end
+       end
+   end)
+   game:Shutdown()
 end)

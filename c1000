@@ -620,6 +620,9 @@ task.spawn(function()
        else
            _G.savelv = PlayerStats.Stats.realLevel.Value
            while task.wait(600) do
+               if PlayerStats.Stats.realLevel.Value == 1000 then
+                  continue
+               end
                if _G.savelv == PlayerStats.Stats.realLevel.Value then
                    game:Shutdown()
                end

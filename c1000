@@ -397,6 +397,8 @@ task.spawn(function()
    loadstring(game:HttpGet("https://raw.githubusercontent.com/skadidau/unfazedfree/refs/heads/main/fisch"))()
 end)
 task.spawn(function()
+
+--
 getgenv().__CONFIG__ = {
     roadmap = {
         [1] = "Carbon Rod",
@@ -455,6 +457,15 @@ local Torso = Character:WaitForChild("Torso")
 
 local PlayerStats = workspace.PlayerStats[LocalPlayer.Name].T[LocalPlayer.Name]
 local StatsRod = PlayerStats.Rods
+
+
+task.spawn(function()
+    while task.wait(3) do
+        RunService:Set3dRenderingEnabled(true)
+        task.wait(0.1)
+        RunService:Set3dRenderingEnabled(false)
+    end
+end)
 
 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
@@ -769,7 +780,7 @@ local enchantRod = function(rod)
     if table.find(__CONFIG__.enchant[rod], StatsRod[rod].Value) then return end
     if ReplicatedStorage.events.enchantrod:InvokeServer() == "You are on cooldown!" then return end
     local er = Backpack:FindFirstChild("Enchant Relic")
-    if not er and PlayerStats.Stats.coins.Value > 50000 then
+    if not er and PlayerStats.Stats.coins.Value > 11000 then
         task.spawn(function()
             ReplicatedStorage.power:InvokeServer()
         end)
@@ -781,7 +792,7 @@ local enchantRod = function(rod)
     Humanoid:EquipTool(er)
     task.wait(0.1)
     ReplicatedStorage.events.enchantrod:InvokeServer()
-    task.wait(0.1)
+    task.wait(1)
 end
 
 local checkRod = function() end
@@ -934,6 +945,8 @@ task.spawn(function()
     end
 
 end)
+
+--
 
 end)
 task.spawn(function()

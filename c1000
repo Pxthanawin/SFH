@@ -973,7 +973,7 @@ task.spawn(function()
            end
        end)
    
-       task.wait(40)
+       task.wait(50)
        if PlayerStats.Stats.realLevel.Value <= 1 then
            game:Shutdown()
        else

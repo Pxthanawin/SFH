@@ -641,11 +641,7 @@ do
     local destroyPlayer = function(v)
         if v:IsA("Model") and v:FindFirstChild("Health") then
             if v.Name ~= LocalPlayer.Name then
-                --v:Destroy()
-                local player = Players:GetPlayerFromCharacter(v)
-                if player and player ~= LocalPlayer then
-                    player:Destroy()
-                end
+                v:Destroy()
             end
         end
     end
@@ -653,7 +649,7 @@ do
         destroyPlayer(v)
     end
     Workspace.ChildAdded:Connect(function(v)
-        task.wait(1)
+        task.wait(2)
         destroyPlayer(v)
     end)
 

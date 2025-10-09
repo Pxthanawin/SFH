@@ -397,198 +397,548 @@ task.spawn(function()
    loadstring(game:HttpGet("https://raw.githubusercontent.com/skadidau/unfazedfree/refs/heads/main/fisch"))()
 end)
 task.spawn(function()
-    task.wait(15)
-
-    _G.RAM = {
-        ["Roblox Account Manager"] = {
-            ["Auto Sending"] = false,
-            ["Delay Log"] = 5,
-        },
+getgenv().__CONFIG__ = {
+    roadmap = {
+        [1] = "Carbon Rod",
+        [2] = "Rapid Rod",
+        [3] = "Carrot Rod",
+        [4] = "Luminescent Oath",
+        [5] = "Great Rod of Oscar",
+    },
+    enchant = {
+        ["Carrot Rod"] = {"Clever"},
+        ["Luminescent Oath"] = {"Clever"},
+        ["Great Rod of Oscar"] = {"Clever"},
     }
+}
 
-    _G.Loader = {
-        ["Check Version"] = "Assetlty 3.0",
-        ["Main Manager"] = {
-            ["Fishing Location"] = {
-                ["Main Position"] = CFrame.new(-13627.251, -11039.2109, 327.531891, 0.626239002, -5.55564093e-08, 0.779631138, 2.05973834e-08, 1, 5.47150094e-08, -0.779631138, -1.82063111e-08, 0.626239002), 
-                ["Second Location"] = { 
-                    ["Condition"] = { 
-                        ["Rod Data"] = "Rapid Rod", 
-                        ["Level Data"] = nil, 
-                    }, 
-                    ["Second Position"] = CFrame.new(1390.84265, -600.593933, 2328.21313, 0.350875288, 1.68661202e-07, 0.936422169, -9.42693212e-09, 1, -1.76580102e-07, -0.936422169, 5.31300053e-08, 0.350875288), 
-                },
-            }, 
-            ["Sell Data"] = {
-                ["Type Sell"] = { 
-                    ["Event Fish"] = true, 
-                    ["Exotic Fish"] = true, 
-                    ["Mythical Fish"] = true, 
-                    ["Legendary Fish"] = true, 
-                    ["Secret Fish"] = false,
-                }, 
-            }, 
-        },  
-        ["Enchant Manager"] = {
-            ["Add Task"] = true, 
-            ["Condition"] = { 
-                ["Money Data"] = 100000, 
-            },
-            ["Data Type Enchant"] = {
-                ["Carrot Rod"] = {"Hasty","Clever",},
-                ["Luminescent Oath"] = {"Hasty","Clever"},
-                ["Great Rod of Oscar"] = {"Clever"},
-            },
-        }, 
-        ["Aurora Manager"] = {
-            ["Aurora Party"] = {
-                ["Allow Doing"] = false,
-                ["Client"] = { -- // Allow Multi Client
-                    "",
-                },
-            },
-            ["Aurora Totem"] = {
-                ["Add Task"] = true, 
-                ["Condition"] = { 
-                    ["Money Data"] = 2555500, 
-                },
-            },
-            ["Sundial Totem"] = {
-                ["Add Task"] = true, 
-                ["Condition"] = { 
-                    ["Money Data"] = 2555500, 
-                },
-            },
-        },
-        ["Lucky Manager"] = {
-            ["Bait Manager"] = {
-                ["Req Passive"] = {"Luck"}, -- // "LureSpeed"
-                ["Auto Equip Best"] = true,
-                ["Crate Manager"] = {
-                    ["Buying Bait Crate"] = true,
-                    ["Condition"] = { 
-                        ["Delay Buying"] = 30, -- // Second
-                        ["Money Data"] = 50000, 
-                    },
-                },
-            }, 				
-            ["Luck Effect"] = {
-                ["Allow Buying"] = true,
-                ["Condition"] = { 
-                    ["Money Data"] = 50500, 
-                },
-            }, 
-        }, 
-        ["Quest Manager"] = { 
-            ["Rod Of The Forgotten Fang"] = {
-                ["Add Task"] = true,
-                ["Condition"] = { 
-                    ["Level Data"] = 1000, 
-                    ["Money Data"] = 5050000, 
-                },
-            },
-            ["Rod Of The Zenith"] = {
-                ["Add Task"] = true,
-                ["Condition"] = { 
-                    ["Level Data"] = 1000, 
-                    ["Money Data"] = 10000000, 
-                },
-            }, 
-            ["Rod Of The Eternal King"] = {
-                ["Add Task"] = true,
-                ["Condition"] = { 
-                    ["Level Data"] = 1000, 
-                    ["Money Data"] = 500000, 
-                },
-            },
-            ["Magma Rod"] = {
-                ["Add Task"] = true,
-                ["Condition"] = {
-                    ["Level Data"] = 1000,
-                    ["Money Data"] = 100000,
-                },
-            }, 
-            ["Duskwire"] = {  -- // Added Soon
-                ["Add Task"] = false,
-                ["Condition"] = {
-                    ["Level Data"] = 1000,
-                    ["Money Data"] = 7900000,
-                },
-            }, 
-            ["Leviathan's Fang Rod"] = {
-                ["Add Task"] = true,
-                ["Condition"] = {
-                    ["Level Data"] = 500,
-                    ["Money Data"] = 1200000,
-                },
-            },
-            ["Ruinous Oath"] = {  -- // Added Soon
-                ["Add Task"] = false,
-                ["Condition"] = {
-                    ["Level Data"] = 1000,
-                    ["Money Data"] = 50000000,
-                },
-            },
-            ["Wicked Fang Rod"] = { 
-                ["Add Task"] = true,
-                ["Condition"] = {
-                    ["Level Data"] = 1000,
-                    ["Money Data"] = 3900000,
-                },
-            },
-        }, 
-        ["Default Manager"] = {
-            ["Default Buying"] = {
-                ["Carbon Rod"] = false,
-                ["Rapid Rod"] = true,
-                ["Carrot Rod"] = true,
-                ["Kraken Rod"] = false,
-                ["Luminescent Oath"] = true,
-                ["Ethereal Prism Rod"] = false,
-                ["Great Rod of Oscar"] = true,
-            }, 
-            ["Default Equip"] = { 
-                "Adventurer's Rod",
-                "Rapid Rod",
-                "Carrot Rod",
-                "Luminescent Oath",
-                "Great Rod of Oscar",
-            },
-        }, 
-        ["Custom Manager"] = { 
-            ["Purchase Data"] = { 
-                ["Rod Data"] = {
-                    "Firework Rod", "Rod Of The Zenith", "Wicked Fang Rod",
-                    "Ethereal Prism Rod", "Zeus Rod", "Treasure Rod",
-                    "Frog Rod", "The Boom Ball", "Avalanche Rod",
-                    "Summit Rod", "Lucky Rod", 
-                    "Destiny Rod", "Cerulean Fang Rod", "Azure Of Lagoon",
-                    "Arctic Rod", "Tempest Rod", "Leviathan's Fang Rod",
-                    "Heaven's Rod", "Paper Fan Rod", "Abyssal Specter Rod",
-                    "Aurora Rod", "Verdant Shear Rod",
-                    "Rapid Rod", "Fungal Rod", "Fortune Rod",
-                    "Mythical Rod", "Magnet Rod", "Rainbow Cluster Rod",
-                    "Scurvy Rod", "Nocturnal Rod",
-                    "Blazebringer Rod", "Free Spirit Rod", "Plastic Rod",
-                    "Midas Rod", "Reinforced Rod", "Depthseeker Rod",
-                    "Sunken Rod", "Great Dreamer Rod", "Seraphic Rod",
-                    "Kings Rod", "Crystallized Rod", "Great Rod of Oscar",
-                    "Champions Rod", "Challenger's Rod", "Carbon Rod",
-                    "Kraken Rod", "Training Rod", "Volcanic Rod",
-                    "Fast Rod", "No-Life Rod", "Scarlet Spincaster Rod",
-                    "Trident Rod", "Magma Rod", "Frostbane Rod",
-                    "Merchant Rod", "Wildflower Rod", "Luminescent Oath",
-                    "Carrot Rod", "Phoenix Rod", "Steady Rod",
-                    "Stone Rod", "Firefly Rod", "Long Rod",
-                    "Luminescent Oath"
-                },
-                ["Condition"] = { 
-                    ["Level Data"] = 1000,
-                },
-            }, 
-        },
-    } 
-    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bd6d7403f1f7b756b09fff8ab75369ed.lua"))()
+local function reverseTableInPlace(tbl)
+    local n = #tbl
+    for i = 1, math.floor(n / 2) do
+        local j = n - i + 1
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+end
+
+reverseTableInPlace(__CONFIG__.roadmap)
+
+local enchantList = {}
+for i, v in pairs(__CONFIG__.enchant) do
+    table.insert(enchantList, i)
+end
+
+repeat task.wait() until game:IsLoaded()
+task.wait(7.5)
+
+local HttpService = game:GetService("HttpService")
+local MessagingService = game:GetService("MessagingService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local GuiService = game:GetService("GuiService")
+local VirtualUser = game:GetService("VirtualUser")
+local tweenService = game:GetService("TweenService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local Workspace = game:GetService("Workspace")
+local tpservice = game:GetService("TeleportService")
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local camera = Workspace.Camera
+local Character = LocalPlayer.Character
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+local Humanoid = Character:WaitForChild("Humanoid")
+local Torso = Character:WaitForChild("Torso")
+
+local PlayerStats = workspace.PlayerStats[LocalPlayer.Name].T[LocalPlayer.Name]
+local StatsRod = PlayerStats.Rods
+
+VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+
+task.wait(5)
+
+local Settings = {
+    music = false,
+    ambience = false,
+    weather = false,
+    radio = false,
+    mute_other_players_fishing = false,
+    hear_emotes = false,
+
+    brightness = false,
+    saturation = false,
+    showflags = false,
+
+    performanceMode = true,
+    showcrabcages = false,
+    show_other_players_fish_on_hands = false,
+    windshake = false,
+
+    nametag = false,
+    systemmessages = false,
+
+    disableCamShake = true,
+    willautosell_event = true,
+    willautosell_exotic = true,
+    willautosell_relic = false,
+    willautosell_mythical = true,
+    willautosell_legendary = true,
+    willautosell_secret = true,
+    willautosell_apex = true
+}
+
+for settingName, settingValue in pairs(Settings) do
+    local args = {
+        [1] = settingName,
+        [2] = settingValue
+    }
+    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Settings/Update"):FireServer(unpack(args))
+end
+
+ReplicatedStorage.GameAnalyticsError:Destroy()
+ReplicatedStorage.events.afk:FireServer()
+ReplicatedStorage.events.afk:Destroy()
+
+--[[
+local codelists = {
+    "FISCHANNIVERSARY",
+    "LOSTJUNGLE",
+    "LOSTJUNGLESOON",
+    "CAVERN",
+    "SNOWBURROW",
+    "TemporarySubmarine",
+    "SUPPORTERDESTINY",
+    "METEOR",
+    "FISCHFEST",
+    "OGNOLIFE",
+    "SECONDARYENCHANT",
+    "PERSONALAQUARIUMS",
+    "SORRY",
+    "ROSES",
+    "DAILYSHOP",
+    "DARKHEART",
+    "FRIENDXP",
+    "4THOFJULY",
+    "ChangesComing",
+    "Legomy",
+    "SorryReward",
+    "THEKRAKEN",
+    "CARBON",
+    "SORRYGUYS",
+    "ATLANTEANSTORM",
+    "GOLDENTIDE",
+    "NewYear",
+    "NorthernExpedition",
+}
+for _, v in ipairs(codelists) do
+    ReplicatedStorage.events.runcode:FireServer(v)
+end]]
+
+local function extractNumber(String)
+    return tonumber((String:gsub("[^%d]", "")))
+end
+
+do
+
+    workspace.CrystalCove:Destroy()
+
+    local FpsPart = Instance.new("Part")
+    FpsPart.Name = "FPSBOOST"
+    FpsPart.Position = Vector3.new(1375.10254, -617, 2338.02441)
+    FpsPart.Size = Vector3.new(30, 1, 30)
+    FpsPart.Color = Color3.fromRGB(0,0,0)
+    FpsPart.Anchored = true
+    FpsPart.Parent = Workspace
+    FpsPart.Transparency = 0
+
+    local FpsPart = Instance.new("Part")
+    FpsPart.Name = "FPSBOOST"
+    FpsPart.Position = Vector3.new(-926.718994, 218, -998.751404)
+    FpsPart.Size = Vector3.new(30, 1, 30)
+    FpsPart.Color = Color3.fromRGB(0,0,0)
+    FpsPart.Anchored = true
+    FpsPart.Parent = Workspace
+    FpsPart.Transparency = 0
+
+    local function applyAntiWaterPhysics(character)
+        local humanoid = character:WaitForChild("Humanoid")
+        if not humanoid then return end
+
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, false)
+        local heavyProperties = PhysicalProperties.new(5, 0.7, 0.5)
+
+        for _, part in ipairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CustomPhysicalProperties = heavyProperties
+            end
+        end
+    end
+
+    LocalPlayer.CharacterAdded:Connect(applyAntiWaterPhysics)
+    applyAntiWaterPhysics(Character)
+
+    HumanoidRootPart.CFrame = CFrame.new(-926.718994, 223.700012, -998.751404)
+
+    task.wait(1)
+
+    for _, v in ipairs(workspace.world.npcs:WaitForChild("Merlin"):WaitForChild("Merlin"):GetChildren()) do
+        if v.Name == 'luck' and v ~= workspace.world.npcs.Merlin.Merlin:FindFirstChild("luck") then
+            v.Parent = ReplicatedStorage
+        end
+        if v.Name == 'power' and v ~= workspace.world.npcs.Merlin.Merlin:FindFirstChild("power") then
+            v.Parent = ReplicatedStorage
+        end
+    end
+
+    task.wait()
+
+    task.spawn(function()
+        local startTime = tick()
+
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "__w"
+        screenGui.Parent = PlayerGui
+        screenGui.ResetOnSpawn = false
+        screenGui.IgnoreGuiInset = true
+
+        local backgroundFrame = Instance.new("Frame")
+        backgroundFrame.Parent = screenGui
+        backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+        backgroundFrame.Position = UDim2.new(0, 0, 0, 0)
+        backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+        backgroundFrame.BorderSizePixel = 0
+
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Parent = backgroundFrame
+        textLabel.Size = UDim2.new(0, 1000, 0, 250)
+        textLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+        textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+        textLabel.Text = "00:00:00\n"..LocalPlayer.Name
+        textLabel.TextColor3 = Color3.new(1, 1, 1)
+        textLabel.BackgroundTransparency = 1
+        textLabel.TextScaled = true
+        textLabel.Font = Enum.Font.SourceSansBold
+        textLabel.BorderSizePixel = 0
+
+        local function updateTime()
+            local currentTime = tick() - startTime
+            local hours = math.floor(currentTime / 3600)
+            local minutes = math.floor((currentTime % 3600) / 60)
+            local seconds = math.floor(currentTime % 60)
+
+            textLabel.Text = string.format("%02d:%02d:%02d\n"..LocalPlayer.Name, hours, minutes, seconds)
+        end
+
+        while task.wait(0.25) do
+            updateTime()
+        end
+    end)
+
+    local destroyPlayer = function(v)
+        if v:IsA("Model") and v:FindFirstChild("Health") then
+            if v.Name ~= LocalPlayer.Name then
+                --v:Destroy()
+                local player = Players:GetPlayerFromCharacter(v)
+                if player and player ~= LocalPlayer then
+                    player:Destroy()
+                end
+            end
+        end
+    end
+    for _, v in pairs(Workspace:GetChildren()) do
+        destroyPlayer(v)
+    end
+    Workspace.ChildAdded:Connect(function(v)
+        task.wait(1)
+        destroyPlayer(v)
+    end)
+
+    local function OptimizeGamePerformance()
+
+        local function optimizeObject(obj)
+            pcall(function()
+                if obj:IsA("BasePart") then
+                    obj.Material = Enum.Material.Plastic
+                    obj.Reflectance = 0
+                    obj.TopSurface = Enum.SurfaceType.Smooth
+                    obj.BottomSurface = Enum.SurfaceType.Smooth
+                    obj.CastShadow = false
+                elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                    obj.Transparency = 1
+                elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
+                    obj.Enabled = false
+                elseif obj:IsA("Sound") then
+                    obj:Stop()
+                    obj.Volume = 0
+                elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
+                    obj.Enabled = false
+                end
+            end)
+        end
+
+        Lighting.GlobalShadows = false
+        Lighting.Brightness = 1
+        Lighting.FogEnd = 1e6
+        Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
+        Lighting.EnvironmentSpecularScale = 0
+        Lighting.EnvironmentDiffuseScale = 0
+
+        for _, effect in ipairs(Lighting:GetChildren()) do
+            if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
+                effect.Enabled = false
+            end
+        end
+
+        local Terrain = workspace:FindFirstChild("Terrain")
+        if Terrain then
+            Terrain.WaterWaveSize = 0
+            Terrain.WaterWaveSpeed = 0
+            Terrain.WaterReflectance = 0
+            Terrain.WaterTransparency = 1
+            for _, child in ipairs(Terrain:GetChildren()) do
+                optimizeObject(child)
+            end
+            Terrain.ChildAdded:Connect(optimizeObject)
+        end
+
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            optimizeObject(obj)
+        end
+        workspace.DescendantAdded:Connect(optimizeObject)
+
+        for _, texture in ipairs(workspace:GetDescendants()) do
+            if texture:IsA("Texture") or texture:IsA("Decal") then
+                if not texture.Parent then
+                    texture:Destroy()
+                end
+            end
+        end
+
+        local PhysicsService = game:GetService("PhysicsService")
+        if PhysicsService then
+            pcall(function()
+                PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
+            end)
+        else
+            warn("PhysicsService not available.")
+        end
+
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("MeshPart") then
+                v.Material = Enum.Material.SmoothPlastic
+                v.TextureID = ""
+            elseif v:IsA("SpecialMesh") then
+                v.TextureId = ""
+            end
+        end
+
+    end
+    OptimizeGamePerformance()
+
+    workspace.active.ChildAdded:Connect(function(v)
+        task.wait()
+        v:Destroy()
+    end)
+end
+
+
+
+local ItemPrice = {
+    ["Sundial Totem"] = 2000,
+    ["Aurora Totem"] = 5000000,
+    ["Carbon Rod"] = 2000,
+    ["Rapid Rod"] = 14000,
+    ["Carrot Rod"] = 75000,
+    ["Luminescent Oath"] = 1500000,
+    ["Great Rod of Oscar"] = 5000000,
+}
+
+local purchaseRod = function(rodname)
+    -- if StatsRod:FindFirstChild(rodname) then
+    --     return false
+    -- end
+    if PlayerStats.Stats.coins.Value < ItemPrice[rodname] then
+        return false
+    end
+    ReplicatedStorage.events.purchase:FireServer(rodname, "Rod", nil, 1)
+    return true
+end
+
+local enchantRod = function(rod)
+    if not table.find(enchantList, rod) then return end
+    if table.find(__CONFIG__.enchant[rod], StatsRod[rod].Value) then return end
+    if ReplicatedStorage.events.enchantrod:InvokeServer() == "You are on cooldown!" then return end
+    local er = Backpack:FindFirstChild("Enchant Relic")
+    if not er and PlayerStats.Stats.coins.Value > 50000 then
+        task.spawn(function()
+            ReplicatedStorage.power:InvokeServer()
+        end)
+        task.wait(0.25)
+        er = Backpack:WaitForChild("Enchant Relic")
+    elseif not er then
+        return
+    end
+    Humanoid:EquipTool(er)
+    task.wait(0.1)
+    ReplicatedStorage.events.enchantrod:InvokeServer()
+    task.wait(0.1)
+end
+
+local checkRod = function() end
+checkRod = function()
+    for _, v in ipairs(__CONFIG__.roadmap) do
+        if StatsRod:FindFirstChild(v) then
+            if PlayerStats.Stats.rod.Value == v then
+                enchantRod(v)
+                return false
+            else
+                ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer(v)
+                task.wait(0.25)
+                return true
+            end
+        else
+            if purchaseRod(v) then
+                task.wait(0.25)
+                return checkRod()
+            end
+        end
+    end
+end
+
+local checkAurora = function()
+    if PlayerStats.Stats.rod.Value ~= __CONFIG__.roadmap[1] or PlayerStats.Stats.coins.Value < (ItemPrice["Aurora Totem"] + ItemPrice["Sundial Totem"]) then return end
+    local bestplayer = {LocalPlayer, extractNumber(LocalPlayer.leaderstats["C$"].Value)}
+    for _, v in ipairs(Players:GetChildren()) do
+        if not v:IsA("Player") then continue end
+        local p_m = extractNumber(v.leaderstats["C$"].Value)
+        if p_m > bestplayer[2] then
+            bestplayer = {v, p_m}
+        end
+    end
+    if bestplayer[1] ~= LocalPlayer then return end
+    local function checkDayNight()
+        return ReplicatedStorage.world.cycle.Value
+    end
+
+    local function checkAurora()
+        if ReplicatedStorage.world.weather.Value == "Aurora_Borealis" then
+            return true
+        end
+    end
+    if checkDayNight() ~= "Night" then
+        if Backpack:FindFirstChild("Sundial Totem") then
+            Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
+        else
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("purchase"):FireServer("Sundial Totem", "Item", nil, 1)
+            task.wait(0.5)
+            Humanoid:EquipTool(Backpack:FindFirstChild("Sundial Totem"))
+        end
+        task.wait(math.random(1, 20) / 10)
+        if Character:FindFirstChild("Sundial Totem") and checkDayNight() ~= "Night" then
+            local viewportSize = workspace.CurrentCamera.ViewportSize
+            local x, y = 0, viewportSize.Y - 1
+            VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+            VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+            task.wait(1)
+        end
+    end
+    task.wait(7)
+    if checkDayNight() == "Night" and not checkAurora() then
+        if Backpack:FindFirstChild("Aurora Totem") then
+            Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+        else
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("purchase"):FireServer("Aurora Totem", "Item", nil, 1)
+            task.wait(0.5)
+            Humanoid:EquipTool(Backpack:FindFirstChild("Aurora Totem"))
+            task.wait(0.25)
+        end
+        task.wait(math.random(1, 20) / 10)
+        if Character:FindFirstChild("Aurora Totem") and not checkAurora() then
+            local viewportSize = workspace.CurrentCamera.ViewportSize
+            local x, y = 0, viewportSize.Y - 1
+            VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+            VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+            task.wait(1)
+        end
+    end
+end
+
+--
+
+PlayerGui.ChildAdded:Connect(function(Child)
+    if Child.Name == "shakeui" then
+        Child:WaitForChild("safezone").ChildAdded:Connect(function(button)
+            if button.Name == "button" then
+                GuiService.SelectedObject = button
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
+            end
+        end)
+    elseif Child.Name == "reel" then
+        local rodNameCache = PlayerStats.Stats.rod.Value
+        local rod = Backpack:FindFirstChild(rodNameCache) or Character:FindFirstChild(rodNameCache)
+        if not rod then return end
+        while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
+            RunService.Heartbeat:Wait()
+        end
+        ReplicatedStorage.events.reelfinished:FireServer(100, false)
+        Humanoid:UnequipTools()
+    end
+end)
+
+task.spawn(function() while task.wait(30) do
+    task.spawn(function()
+        if not PlayerStats.Stats:FindFirstChild("status_luck") and PlayerStats.Stats.coins.Value > 14000 then
+            ReplicatedStorage.luck:InvokeServer()
+        end
+    end)
+    ReplicatedStorage.events.SellAll:InvokeServer()
+end end)
+
+task.spawn(function()
+
+    HumanoidRootPart.CFrame = CFrame.new(1375.90063, -613.523499, 2336.47266, 0.927495897, -0.00341386558, -0.373817742, -1.92194693e-06, 0.999958277, -0.00913682114, 0.373833328, 0.008475082, 0.927457213)
+    task.wait(2)
+    local positionLocker = Instance.new("BodyVelocity")
+    positionLocker.Name = "PositionLocker"
+    positionLocker.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+    positionLocker.Velocity = Vector3.new(0, 0, 0)
+    positionLocker.Parent = HumanoidRootPart
+    task.wait(5)
+
+    while task.wait() do
+
+        pcall(function()
+
+            checkAurora()
+
+            local rodNameCache = PlayerStats.Stats.rod.Value
+            local rod = Backpack:FindFirstChild(rodNameCache) or Character:FindFirstChild(rodNameCache)
+
+            if not rod then return end
+            if not rod:FindFirstChild("bobber") then
+                if checkRod() then return end
+                Humanoid:EquipTool(rod)
+                task.wait()
+                Humanoid:UnequipTools()
+                task.wait()
+                Humanoid:EquipTool(rod)
+                task.wait()
+                rod.events.castAsync:InvokeServer(100, 1)
+            end
+
+        end)
+
+    end
+
+end)
+
 end)
 task.spawn(function()
    pcall(function()

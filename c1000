@@ -1032,7 +1032,8 @@ task.spawn(function()
                end
            end
        end)
-   --[[
+
+--[[
        task.wait(50)
        if PlayerStats.Stats.realLevel.Value <= 1 then
            game:Shutdown()
@@ -1049,6 +1050,6 @@ task.spawn(function()
            end
        end]]
    end)
-   game:Shutdown()
+   --game:Shutdown()
 
 end)

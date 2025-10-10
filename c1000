@@ -399,6 +399,7 @@ end)
 task.spawn(function()
 
 --
+
 getgenv().__CONFIG__ = {
     roadmap = {
         [1] = "Carbon Rod",
@@ -413,6 +414,55 @@ getgenv().__CONFIG__ = {
         ["Great Rod of Oscar"] = {"Clever"},
     }
 }
+
+repeat task.wait() until game:IsLoaded()
+task.wait(7.5)
+
+do
+    local function OptimizeGamePerformance_Enhanced()
+
+        local Workspace = game:GetService("Workspace")
+        local Lighting = game:GetService("Lighting")
+        local Players = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+
+        local thisScript = script
+        local player = Players.LocalPlayer
+
+        task.spawn(function()
+            while task.wait(3) do
+                RunService:Set3dRenderingEnabled(true)
+                task.wait(0.1)
+                RunService:Set3dRenderingEnabled(false)
+            end
+        end)
+
+        pcall(function()
+            settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+            settings().Rendering.MaterialQuality = Enum.MaterialQuality.Level01
+        end)
+
+        Lighting.Technology = Enum.Technology.Compatibility
+        Lighting.GlobalShadows = false
+        Lighting.Brightness = 0.5
+        Lighting.OutdoorAmbient = Color3.new(0.1, 0.1, 0.1)
+        Lighting.EnvironmentSpecularScale = 0
+        Lighting.EnvironmentDiffuseScale = 0
+
+        pcall(function()
+            local terrain = Workspace:FindFirstChildOfClass("Terrain")
+            if terrain then
+                terrain.WaterWaveSize = 0
+                terrain.WaterWaveSpeed = 0
+                terrain.WaterReflectance = 0
+                terrain.WaterTransparency = 0.8
+                terrain.Decoration = false
+            end
+        end)
+    end
+
+    OptimizeGamePerformance_Enhanced()
+end
 
 local function reverseTableInPlace(tbl)
     local n = #tbl
@@ -429,9 +479,7 @@ for i, v in pairs(__CONFIG__.enchant) do
     table.insert(enchantList, i)
 end
 
-repeat task.wait() until game:IsLoaded()
-task.wait(7.5)
-
+local ContextActionService = game:GetService("ContextActionService")
 local HttpService = game:GetService("HttpService")
 local MessagingService = game:GetService("MessagingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -458,13 +506,9 @@ local Torso = Character:WaitForChild("Torso")
 local PlayerStats = workspace.PlayerStats[LocalPlayer.Name].T[LocalPlayer.Name]
 local StatsRod = PlayerStats.Rods
 
-
-task.spawn(function()
-    while task.wait(3) do
-        RunService:Set3dRenderingEnabled(true)
-        task.wait(0.1)
-        RunService:Set3dRenderingEnabled(false)
-    end
+LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
 end)
 
 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Return, false, nil)
@@ -556,7 +600,10 @@ end
 do
 
     workspace.CrystalCove:Destroy()
+    workspace.world.map["Roslit Bay"]:Destroy()
+    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/RequestCache"):Destroy()
 
+    --red
     local FpsPart = Instance.new("Part")
     FpsPart.Name = "FPSBOOST"
     FpsPart.Position = Vector3.new(1375.10254, -617, 2338.02441)
@@ -566,6 +613,17 @@ do
     FpsPart.Parent = Workspace
     FpsPart.Transparency = 0
 
+    --blue
+    local FpsPart = Instance.new("Part")
+    FpsPart.Name = "FPSBOOST"
+    FpsPart.Position = Vector3.new(-13627.2509765625, -11061.5, 327.5318908691406)
+    FpsPart.Size = Vector3.new(30, 1, 30)
+    FpsPart.Color = Color3.fromRGB(0,0,0)
+    FpsPart.Anchored = true
+    FpsPart.Parent = Workspace
+    FpsPart.Transparency = 0
+
+    --Merlin
     local FpsPart = Instance.new("Part")
     FpsPart.Name = "FPSBOOST"
     FpsPart.Position = Vector3.new(-926.718994, 218, -998.751404)
@@ -664,91 +722,25 @@ do
         destroyPlayer(v)
     end)
 
-    local function OptimizeGamePerformance()
-
-        local function optimizeObject(obj)
-            pcall(function()
-                if obj:IsA("BasePart") then
-                    obj.Material = Enum.Material.Plastic
-                    obj.Reflectance = 0
-                    obj.TopSurface = Enum.SurfaceType.Smooth
-                    obj.BottomSurface = Enum.SurfaceType.Smooth
-                    obj.CastShadow = false
-                elseif obj:IsA("Decal") or obj:IsA("Texture") then
-                    obj.Transparency = 1
-                elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
-                    obj.Enabled = false
-                elseif obj:IsA("Sound") then
-                    obj:Stop()
-                    obj.Volume = 0
-                elseif obj:IsA("PointLight") or obj:IsA("SpotLight") or obj:IsA("SurfaceLight") then
-                    obj.Enabled = false
-                end
-            end)
-        end
-
-        Lighting.GlobalShadows = false
-        Lighting.Brightness = 1
-        Lighting.FogEnd = 1e6
-        Lighting.OutdoorAmbient = Color3.new(0, 0, 0)
-        Lighting.EnvironmentSpecularScale = 0
-        Lighting.EnvironmentDiffuseScale = 0
-
-        for _, effect in ipairs(Lighting:GetChildren()) do
-            if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("SunRaysEffect") or effect:IsA("ColorCorrectionEffect") then
-                effect.Enabled = false
-            end
-        end
-
-        local Terrain = workspace:FindFirstChild("Terrain")
-        if Terrain then
-            Terrain.WaterWaveSize = 0
-            Terrain.WaterWaveSpeed = 0
-            Terrain.WaterReflectance = 0
-            Terrain.WaterTransparency = 1
-            for _, child in ipairs(Terrain:GetChildren()) do
-                optimizeObject(child)
-            end
-            Terrain.ChildAdded:Connect(optimizeObject)
-        end
-
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            optimizeObject(obj)
-        end
-        workspace.DescendantAdded:Connect(optimizeObject)
-
-        for _, texture in ipairs(workspace:GetDescendants()) do
-            if texture:IsA("Texture") or texture:IsA("Decal") then
-                if not texture.Parent then
-                    texture:Destroy()
-                end
-            end
-        end
-
-        local PhysicsService = game:GetService("PhysicsService")
-        if PhysicsService then
-            pcall(function()
-                PhysicsService.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
-            end)
-        else
-            warn("PhysicsService not available.")
-        end
-
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("MeshPart") then
-                v.Material = Enum.Material.SmoothPlastic
-                v.TextureID = ""
-            elseif v:IsA("SpecialMesh") then
-                v.TextureId = ""
-            end
-        end
-
-    end
-    OptimizeGamePerformance()
-
     workspace.active.ChildAdded:Connect(function(v)
         task.wait()
         v:Destroy()
+    end)
+    task.spawn(function()
+        while task.wait(15) do
+            for _, v in ipairs(Players:GetChildren()) do
+                if v == LocalPlayer then
+                    for _, vv in ipairs(v:GetChildren()) do
+                        if vv.Name == "Passdown" then vv:Destroy() end
+                    end
+                else
+                    for _, vv in ipairs(v:GetChildren()) do
+                        if vv.Name == "leaderstats" then continue end
+                        vv:Destroy()
+                    end
+                end
+            end
+        end
     end)
 end
 
@@ -874,6 +866,43 @@ local checkAurora = function()
     end
 end
 
+local checkBait = function() end
+checkBait = function()
+    if not StatsRod:FindFirstChild(__CONFIG__.roadmap[3]) then return end 
+    local bait = PlayerStats.Stats.bait
+    if bait.Value == "Luminous Larva" then return end
+    if bait:FindFirstChild("bait_Luminous Larva") and bait["bait_Luminous Larva"].Value > 0 then
+        ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Bait/Equip"):FireServer("Luminous Larva")
+        return
+    end
+    if bait.Value == "Sapphire Krill" then return end
+    if bait:FindFirstChild("bait_Sapphire Krill") and bait["bait_Sapphire Krill"].Value > 0 then
+        ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Bait/Equip"):FireServer("Sapphire Krill")
+        return
+    end
+    if PlayerStats.Stats.coins.Value > 1000000 then
+        ReplicatedStorage:WaitForChild("events"):WaitForChild("purchase"):FireServer("Tropical Bait Crate", "Fish", nil, 1000)
+    elseif PlayerStats.Stats.coins.Value > 500000 then
+        ReplicatedStorage:WaitForChild("events"):WaitForChild("purchase"):FireServer("Tropical Bait Crate", "Fish", nil, 500)
+    elseif PlayerStats.Stats.coins.Value > 15000 then
+        ReplicatedStorage:WaitForChild("events"):WaitForChild("purchase"):FireServer("Tropical Bait Crate", "Fish", nil, 100)
+    else
+        return
+    end
+    Backpack:WaitForChild("Tropical Bait Crate")
+    while Character:FindFirstChild("Tropical Bait Crate") or Backpack:FindFirstChild("Tropical Bait Crate") do
+        if not Character:FindFirstChild("Tropical Bait Crate") then
+            Humanoid:EquipTool(Backpack:FindFirstChild("Tropical Bait Crate"))
+        end
+        local viewportSize = workspace.CurrentCamera.ViewportSize
+        local x, y = 0, viewportSize.Y - 1
+        VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+        VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+        task.wait()
+    end
+    checkBait()
+end
+
 --
 
 PlayerGui.ChildAdded:Connect(function(Child)
@@ -887,31 +916,33 @@ PlayerGui.ChildAdded:Connect(function(Child)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, nil)
             end
         end)
-    elseif Child.Name == "reel" then
-        local rodNameCache = PlayerStats.Stats.rod.Value
-        local rod = Backpack:FindFirstChild(rodNameCache) or Character:FindFirstChild(rodNameCache)
-        if not rod then return end
-        while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
-            RunService.Heartbeat:Wait()
-        end
-        ReplicatedStorage.events.reelfinished:FireServer(100, false)
-        Humanoid:UnequipTools()
+    --elseif Child.Name == "reel" then
+        --local rodNameCache = PlayerStats.Stats.rod.Value
+        --local rod = Backpack:FindFirstChild(rodNameCache) or Character:FindFirstChild(rodNameCache)
+        --if not rod then return end
+        --while rod:FindFirstChild("bobber") and not rod.values.bite.Value do
+        --    RunService.Heartbeat:Wait()
+        --end
+        -- ReplicatedStorage.events.reelfinished:FireServer(100, false)
+        --Humanoid:UnequipTools()
     end
 end)
 
-task.spawn(function() while task.wait(30) do
+task.spawn(function() while task.wait(15) do
     task.spawn(function()
         if not PlayerStats.Stats:FindFirstChild("status_luck") and PlayerStats.Stats.coins.Value > 14000 then
             ReplicatedStorage.luck:InvokeServer()
         end
     end)
-    ReplicatedStorage.events.SellAll:InvokeServer()
 end end)
 
 task.spawn(function()
 
+    --HumanoidRootPart.CFrame = CFrame.new(-13627.251, -11058.0029, 327.531921, 0.626280308, 4.53706571e-06, 0.779597938, -1.59229478e-06, 1, -4.54060046e-06, -0.779597938, 1.60233901e-06, 0.626280308)
     HumanoidRootPart.CFrame = CFrame.new(1375.90063, -613.523499, 2336.47266, 0.927495897, -0.00341386558, -0.373817742, -1.92194693e-06, 0.999958277, -0.00913682114, 0.373833328, 0.008475082, 0.927457213)
     task.wait(2)
+    HumanoidRootPart.CFrame = CFrame.new(1375.90063, -613.523499, 2336.47266, 0.927495897, -0.00341386558, -0.373817742, -1.92194693e-06, 0.999958277, -0.00913682114, 0.373833328, 0.008475082, 0.927457213)
+    task.wait(0.25)
     local positionLocker = Instance.new("BodyVelocity")
     positionLocker.Name = "PositionLocker"
     positionLocker.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
@@ -919,28 +950,56 @@ task.spawn(function()
     positionLocker.Parent = HumanoidRootPart
     task.wait(5)
 
-    while task.wait() do
+    local dosell = 0
 
-        pcall(function()
+    while RunService.Heartbeat:Wait() do
 
+        --pcall(function()
+
+        local rodNameCache = PlayerStats.Stats.rod.Value
+        local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
+
+        if not rod then continue end
+        if rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value and not rod.values.bite.Value then
             checkAurora()
+            checkBait()
 
-            local rodNameCache = PlayerStats.Stats.rod.Value
-            local rod = Backpack:FindFirstChild(rodNameCache) or Character:FindFirstChild(rodNameCache)
-
-            if not rod then return end
-            if not rod:FindFirstChild("bobber") then
-                if checkRod() then return end
-                Humanoid:EquipTool(rod)
-                task.wait()
-                Humanoid:UnequipTools()
-                task.wait()
-                Humanoid:EquipTool(rod)
-                task.wait()
-                rod.events.castAsync:InvokeServer(100, 1)
+            if dosell >= 10 then
+                dosell = 0
+                task.spawn(function()
+                    ReplicatedStorage.events.SellAll:InvokeServer()
+                end)
             end
 
-        end)
+            if checkRod() then continue end
+
+            --task.wait()
+            --Humanoid:UnequipTools()
+            --task.wait()
+            --Humanoid:EquipTool(rod)
+            --task.wait()
+            if rod.Parent == Backpack then
+                Humanoid:EquipTool(rod)
+                Character:WaitForChild(rodNameCache)
+                task.wait()
+            end
+            rod.events.castAsync:InvokeServer(100, 1) task.wait(0.1)
+            if not rod.values.casted.Value then
+                Humanoid:UnequipTools()
+                task.wait()
+                continue
+            end
+            --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value ~= "nil"
+            --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value
+            --rod.values.bite:GetPropertyChangedSignal("Value"):Once(function()
+            --    ReplicatedStorage.events.reelfinished:FireServer(100, false)
+            --end)
+            dosell+=1
+        elseif rod.values.bite.Value then
+            ReplicatedStorage.events.reelfinished:FireServer(100, false)
+        end
+
+        --end)
 
     end
 

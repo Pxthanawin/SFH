@@ -949,6 +949,7 @@ end)
 --
 
 end)
+
 task.spawn(function()
    pcall(function()
        local Players = game:GetService("Players")
@@ -972,7 +973,7 @@ task.spawn(function()
                end
            end
        end)
-   
+   --[[
        task.wait(50)
        if PlayerStats.Stats.realLevel.Value <= 1 then
            game:Shutdown()
@@ -987,7 +988,8 @@ task.spawn(function()
                end
                _G.savelv = PlayerStats.Stats.realLevel.Value
            end
-       end
+       end]]
    end)
    game:Shutdown()
+
 end)

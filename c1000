@@ -415,9 +415,12 @@ getgenv().__CONFIG__ = {
     }
 }
 
+dodebug = nil
+
 repeat task.wait() until game:IsLoaded()
 task.wait(7.5)
 
+if not dodebug then
 do
     local function OptimizeGamePerformance_Enhanced()
 
@@ -462,6 +465,7 @@ do
     end
 
     OptimizeGamePerformance_Enhanced()
+end
 end
 
 local function reverseTableInPlace(tbl)
@@ -665,6 +669,7 @@ do
 
     task.wait()
 
+    if not dodebug then
     task.spawn(function()
         local startTime = tick()
 
@@ -706,6 +711,7 @@ do
             updateTime()
         end
     end)
+    end
 
     local destroyPlayer = function(v)
         if v:IsA("Model") and v:FindFirstChild("Health") then
@@ -796,7 +802,7 @@ checkRod = function()
                 return false
             else
                 ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer(v)
-                task.wait(0.25)
+                task.wait()
                 return true
             end
         else
@@ -872,11 +878,13 @@ checkBait = function()
     local bait = PlayerStats.Stats.bait
     if bait.Value == "Luminous Larva" then return end
     if bait:FindFirstChild("bait_Luminous Larva") and bait["bait_Luminous Larva"].Value > 0 then
+        Humanoid:EquipTool(Backpack:FindFirstChild("Equipment Bag"))
         ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Bait/Equip"):FireServer("Luminous Larva")
         return
     end
     if bait.Value == "Sapphire Krill" then return end
     if bait:FindFirstChild("bait_Sapphire Krill") and bait["bait_Sapphire Krill"].Value > 0 then
+        Humanoid:EquipTool(Backpack:FindFirstChild("Equipment Bag"))
         ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RE/Bait/Equip"):FireServer("Sapphire Krill")
         return
     end
@@ -936,6 +944,59 @@ task.spawn(function() while task.wait(15) do
     end)
 end end)
 
+--[[
+task.spawn(function()
+    while task.wait() do
+        local nr
+        local rodNameCache = PlayerStats.Stats.rod.Value
+        local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
+        if not rod then continue end
+        local j = table.find(__CONFIG__.roadmap, rodNameCache)
+        if j and table.find(__CONFIG__.roadmap, rodNameCache) <= 4 then
+            local bobber = rod:FindFirstChild("bobber")
+            if not bobber then continue end
+            for _, v in ipairs(bobber:GetChildren()) do
+                if v:IsA("Model") and (string.find(v.Name, "Minnow") or string.find(v.Name, "Deep") or string.find(v.Name, "Octopus") or string.find(v.Name, "Three")) then
+                    ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer("Flimsy Rod")
+                    checkRod()
+                    nr = true
+                    break
+                end
+            end
+        end
+        if not nr and rod.values.bite.Value then
+            ReplicatedStorage.events.reelfinished:FireServer(100, false)
+            --repeat RunService.Heartbeat:Wait() until not rod.values.bite.Value
+            --Humanoid:UnequipTools()
+        end
+    end
+end)
+
+local Fishing = function()
+    checkRod()
+
+    local rodNameCache = PlayerStats.Stats.rod.Value
+    local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
+
+    if not rod then return end
+
+    if rod.Parent == Backpack then
+        Humanoid:EquipTool(rod)
+        Character:WaitForChild(rodNameCache)
+        task.wait(0.15)
+    end
+
+    rod.events.castAsync:InvokeServer(100, 1)
+
+    task.wait(0.25)
+
+    if not rod.values.casted.Value then
+        Humanoid:UnequipTools()
+        ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer("Flimsy Rod")
+        return
+    end
+end]]
+
 task.spawn(function()
 
     --HumanoidRootPart.CFrame = CFrame.new(-13627.251, -11058.0029, 327.531921, 0.626280308, 4.53706571e-06, 0.779597938, -1.59229478e-06, 1, -4.54060046e-06, -0.779597938, 1.60233901e-06, 0.626280308)
@@ -950,56 +1011,108 @@ task.spawn(function()
     positionLocker.Parent = HumanoidRootPart
     task.wait(5)
 
+    local dfix = false
     local dosell = 0
 
-    while RunService.Heartbeat:Wait() do
+    local rodNameCache = PlayerStats.Stats.rod.Value
+    local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
 
-        --pcall(function()
+    while task.wait() do
 
-        local rodNameCache = PlayerStats.Stats.rod.Value
-        local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
+            rodNameCache = PlayerStats.Stats.rod.Value
+            rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
 
-        if not rod then continue end
-        if rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value and not rod.values.bite.Value then
-            checkAurora()
-            checkBait()
-
-            if dosell >= 10 then
-                dosell = 0
-                task.spawn(function()
-                    ReplicatedStorage.events.SellAll:InvokeServer()
-                end)
-            end
-
-            if checkRod() then continue end
-
-            --task.wait()
-            --Humanoid:UnequipTools()
-            --task.wait()
-            --Humanoid:EquipTool(rod)
-            --task.wait()
-            if rod.Parent == Backpack then
-                Humanoid:EquipTool(rod)
-                Character:WaitForChild(rodNameCache)
-                task.wait()
-            end
-            rod.events.castAsync:InvokeServer(100, 1) task.wait(0.1)
+            if not rod and rod:FindFirstChild("values") then continue end
             if not rod.values.casted.Value then
-                Humanoid:UnequipTools()
-                task.wait()
-                continue
-            end
-            --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value ~= "nil"
-            --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value
-            --rod.values.bite:GetPropertyChangedSignal("Value"):Once(function()
-            --    ReplicatedStorage.events.reelfinished:FireServer(100, false)
-            --end)
-            dosell+=1
-        elseif rod.values.bite.Value then
-            ReplicatedStorage.events.reelfinished:FireServer(100, false)
-        end
 
-        --end)
+                if dosell >= 10 then
+                    dosell = 0
+                    task.spawn(function()
+                        ReplicatedStorage.events.SellAll:InvokeServer()
+                    end)
+                end
+
+                if checkRod() then continue end
+                checkAurora()
+                checkBait()
+
+                --task.wait()
+                --Humanoid:UnequipTools()
+                --task.wait()
+                --Humanoid:EquipTool(rod)
+                --task.wait()
+                if rod.Parent == Backpack then
+                    Humanoid:EquipTool(rod)
+                    Character:WaitForChild(rodNameCache)
+                    continue
+                end
+                rod.events.castAsync:InvokeServer(100, 1)
+
+                task.spawn(function()
+                    if dfix then return end
+                    dfix = true
+                    local DURATION = 1
+                    local startTime = tick()
+                    local endTime = startTime + DURATION
+
+                    pcall(function()
+                        while tick() < endTime do
+                            if rod.values.casted.Value then
+                                return
+                            end
+                            task.wait()
+                        end
+
+                        if not rod.values.casted.Value then
+                            Humanoid:UnequipTools()
+                        end
+                    end)
+                    dfix = false
+                end)
+
+                --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value ~= "nil"
+                --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value
+                --rod.values.bite:GetPropertyChangedSignal("Value"):Once(function()
+                --    ReplicatedStorage.events.reelfinished:FireServer(100, false)
+                --end)
+            else
+                local nr
+                local j = table.find(__CONFIG__.roadmap, rodNameCache)
+                if j and table.find(__CONFIG__.roadmap, rodNameCache) <= 4 then
+                    local bobber = rod:FindFirstChild("bobber")
+                    if not bobber then continue end
+                    for _, v in ipairs(bobber:GetChildren()) do
+                        if v:IsA("Model") and (string.find(v.Name, "Minnow") or string.find(v.Name, "Deep") or string.find(v.Name, "Octopus") or string.find(v.Name, "Three")) then
+                            ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer("Flimsy Rod")
+                            checkRod()
+                            nr = true
+                            break
+                        end
+                    end
+                end
+                if not nr then
+                    repeat ReplicatedStorage.events.reelfinished:FireServer(100, false) RunService.Heartbeat:Wait() until not rod.values.casted.Value
+                    --Humanoid:UnequipTools()
+                    dosell+=1
+                end
+--                if table.find(__CONFIG__.roadmap, rodNameCache) <= 4 then
+--                    local bobber = rod:FindFirstChild("bobber")
+--                    if not bobber then return end
+--                    for _, v in ipairs(bobber:GetChildren()) do
+--                        if v:IsA("Model") and (string.find(v.Name, "Minnow") or string.find(v.Name, "Deep") or string.find(v.Name, "Octopus") or string.find(v.Name, "Three")) then
+--                            ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer("Flimsy Rod")
+--                            checkRod()
+--                            return
+--                        end
+--                    end
+--                end
+--                if rod.values.bite.Value then
+--                    ReplicatedStorage.events.reelfinished:FireServer(100, false)
+--                    --repeat RunService.Heartbeat:Wait() until not rod.values.bite.Value
+--                    --Humanoid:UnequipTools()
+--                end
+            end
+
 
     end
 

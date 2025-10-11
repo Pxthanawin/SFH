@@ -1090,7 +1090,7 @@ task.spawn(function()
                         end
                     end
                 end
-                if not nr then
+                if not nr and rod.values.bite.Value then
                     repeat ReplicatedStorage.events.reelfinished:FireServer(100, false) RunService.Heartbeat:Wait() until not rod.values.casted.Value
                     --Humanoid:UnequipTools()
                     dosell+=1
@@ -1117,7 +1117,6 @@ task.spawn(function()
     end
 
 end)
-
 --
 
 end)

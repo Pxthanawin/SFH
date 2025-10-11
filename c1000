@@ -1033,8 +1033,8 @@ task.spawn(function()
                 end
 
                 if checkRod() then continue end
-                checkAurora()
-                checkBait()
+                pcall(checkAurora)
+                pcall(checkBait)
 
                 --task.wait()
                 --Humanoid:UnequipTools()
@@ -1117,6 +1117,7 @@ task.spawn(function()
     end
 
 end)
+
 --
 
 end)

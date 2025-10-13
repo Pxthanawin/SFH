@@ -1017,7 +1017,7 @@ task.spawn(function()
     local rodNameCache = PlayerStats.Stats.rod.Value
     local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
 
-    while task.wait() do
+    while task.wait(0.1) do
 
             rodNameCache = PlayerStats.Stats.rod.Value
             rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)

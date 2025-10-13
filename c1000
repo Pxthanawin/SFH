@@ -415,7 +415,7 @@ getgenv().__CONFIG__ = {
     }
 }
 
-dodebug = nil
+dodebug = tru
 
 repeat task.wait() until game:IsLoaded()
 task.wait(7.5)
@@ -1051,13 +1051,14 @@ task.spawn(function()
                 task.spawn(function()
                     if dfix then return end
                     dfix = true
-                    local DURATION = 1
+                    local DURATION = 2
                     local startTime = tick()
                     local endTime = startTime + DURATION
 
                     pcall(function()
                         while tick() < endTime do
                             if rod.values.casted.Value then
+                                dosell+=1
                                 return
                             end
                             task.wait()
@@ -1069,6 +1070,7 @@ task.spawn(function()
                     end)
                     dfix = false
                 end)
+                
 
                 --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value ~= "nil"
                 --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value
@@ -1076,24 +1078,24 @@ task.spawn(function()
                 --    ReplicatedStorage.events.reelfinished:FireServer(100, false)
                 --end)
             else
-                local nr
-                local j = table.find(__CONFIG__.roadmap, rodNameCache)
-                if j and table.find(__CONFIG__.roadmap, rodNameCache) <= 4 then
-                    local bobber = rod:FindFirstChild("bobber")
-                    if not bobber then continue end
-                    for _, v in ipairs(bobber:GetChildren()) do
-                        if v:IsA("Model") and (string.find(v.Name, "Minnow") or string.find(v.Name, "Deep") or string.find(v.Name, "Octopus") or string.find(v.Name, "Three")) then
-                            ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer("Flimsy Rod")
-                            checkRod()
-                            nr = true
-                            break
-                        end
-                    end
-                end
-                if not nr and rod.values.bite.Value then
+                --local nr
+                --local j = table.find(__CONFIG__.roadmap, rodNameCache)
+                --if j and table.find(__CONFIG__.roadmap, rodNameCache) <= 4 then
+                --    local bobber = rod:FindFirstChild("bobber")
+                --    if not bobber then continue end
+                --    for _, v in ipairs(bobber:GetChildren()) do
+                --        if v:IsA("Model") and (string.find(v.Name, "Minnow") or string.find(v.Name, "Deep") or string.find(v.Name, "Octopus") or string.find(v.Name, "Three")) then
+                --            ReplicatedStorage:WaitForChild("packages"):WaitForChild("Net"):WaitForChild("RF/Rod/Equip"):InvokeServer("Flimsy Rod")
+                --            checkRod()
+                --            nr = true
+                --            break
+                --        end
+                --    end
+                --end
+                if --[[not nr and]] rod.values.bite.Value then
                     repeat ReplicatedStorage.events.reelfinished:FireServer(100, false) RunService.Heartbeat:Wait() until not rod.values.casted.Value
                     --Humanoid:UnequipTools()
-                    dosell+=1
+                    --dosell+=1
                 end
 --                if table.find(__CONFIG__.roadmap, rodNameCache) <= 4 then
 --                    local bobber = rod:FindFirstChild("bobber")

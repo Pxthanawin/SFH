@@ -1011,6 +1011,12 @@ task.spawn(function()
     positionLocker.Parent = HumanoidRootPart
     task.wait(5)
 
+    task.spawn(function()
+        while task.wait(10) do
+            HumanoidRootPart.CFrame = CFrame.new(1375.90063, -613.523499, 2336.47266, 0.927495897, -0.00341386558, -0.373817742, -1.92194693e-06, 0.999958277, -0.00913682114, 0.373833328, 0.008475082, 0.927457213)
+        end
+    end)
+
     local dfix = false
     local dosell = 0
 

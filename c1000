@@ -1031,6 +1031,38 @@ task.spawn(function()
             rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
 
             if not rod and rod:FindFirstChild("values") then return end
+
+            task.spawn(function()
+                if dfix then return end
+                dfix = true
+                local DURATION = 60
+                local startTime = tick()
+                local endTime = startTime + DURATION
+
+                pcall(function()
+                    while tick() < endTime do
+                        if rod:FindFirstChild("bobber") then
+                            dosell+=1
+                            return
+                        end
+                        task.wait()
+                    end
+
+                    local viewportSize = workspace.CurrentCamera.ViewportSize
+                    local x, y = 0, viewportSize.Y - 1
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
+                    task.wait(0.1)
+                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
+
+                    task.wait(3)
+
+                    if not rod:FindFirstChild("bobber") then
+                        Humanoid:UnequipTools()
+                    end
+                end)
+                dfix = false
+            end)
+
             if not rod:FindFirstChild("bobber") --[[rod.values.casted.Value]] then
 
                 if dosell >= 10 then
@@ -1056,28 +1088,7 @@ task.spawn(function()
                 end
                 rod.events.castAsync:InvokeServer(100, 1)
 
-                task.spawn(function()
-                    if dfix then return end
-                    dfix = true
-                    local DURATION = 3
-                    local startTime = tick()
-                    local endTime = startTime + DURATION
 
-                    pcall(function()
-                        while tick() < endTime do
-                            if rod:FindFirstChild("bobber") then
-                                dosell+=1
-                                return
-                            end
-                            task.wait()
-                        end
-
-                        if not rod:FindFirstChild("bobber") then
-                            Humanoid:UnequipTools()
-                        end
-                    end)
-                    dfix = false
-                end)
 
                 --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value ~= "nil"
                 --repeat RunService.Heartbeat:Wait() until rod.values.bobberzone.Value == "nil" and not rod.values.casted.Value

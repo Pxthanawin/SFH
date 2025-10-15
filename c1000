@@ -997,6 +997,23 @@ local Fishing = function()
     end
 end]]
 
+local dfix = false
+local dosell = 0
+
+
+task.spawn(function()
+    while task.wait(60) do
+        pcall(function()
+            local rodNameCache = PlayerStats.Stats.rod.Value
+            local rod = Character:FindFirstChild(rodNameCache)
+
+            if not rod then return end
+
+            Humanoid:UnequipTools()
+        end)
+    end
+end)
+
 task.spawn(function()
 
     --HumanoidRootPart.CFrame = CFrame.new(-13627.251, -11058.0029, 327.531921, 0.626280308, 4.53706571e-06, 0.779597938, -1.59229478e-06, 1, -4.54060046e-06, -0.779597938, 1.60233901e-06, 0.626280308)
@@ -1017,8 +1034,7 @@ task.spawn(function()
         end
     end)
 
-    local dfix = false
-    local dosell = 0
+    
 
     local rodNameCache = PlayerStats.Stats.rod.Value
     local rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
@@ -1031,37 +1047,6 @@ task.spawn(function()
             rod = Character:FindFirstChild(rodNameCache) or Backpack:FindFirstChild(rodNameCache)
 
             if not rod and rod:FindFirstChild("values") then return end
-
-            task.spawn(function()
-                if dfix then return end
-                dfix = true
-                local DURATION = 60
-                local startTime = tick()
-                local endTime = startTime + DURATION
-
-                pcall(function()
-                    while tick() < endTime do
-                        if rod:FindFirstChild("bobber") then
-                            dosell+=1
-                            return
-                        end
-                        task.wait()
-                    end
-
-                    local viewportSize = workspace.CurrentCamera.ViewportSize
-                    local x, y = 0, viewportSize.Y - 1
-                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, nil, 0)
-                    task.wait(0.1)
-                    VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, nil, 0)
-
-                    task.wait(3)
-
-                    if not rod:FindFirstChild("bobber") then
-                        Humanoid:UnequipTools()
-                    end
-                end)
-                dfix = false
-            end)
 
             if not rod:FindFirstChild("bobber") --[[rod.values.casted.Value]] then
 

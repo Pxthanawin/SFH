@@ -1072,6 +1072,7 @@ task.spawn(function()
                     return
                 end
                 rod.events.castAsync:InvokeServer(100, 1)
+                dosell+=1
 
 
 

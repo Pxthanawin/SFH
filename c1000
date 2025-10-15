@@ -1002,7 +1002,7 @@ local dosell = 0
 
 
 task.spawn(function()
-    while task.wait(60) do
+    while task.wait(100) do
         pcall(function()
             local rodNameCache = PlayerStats.Stats.rod.Value
             local rod = Character:FindFirstChild(rodNameCache)
